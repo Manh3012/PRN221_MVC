@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PRN221_MVC.Models;
+﻿using PRN221_MVC.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PRN221_MVC.Controllers
 {
