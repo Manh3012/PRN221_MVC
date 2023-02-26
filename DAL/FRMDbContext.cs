@@ -1,26 +1,16 @@
-﻿using System;
-using DAL.Config;
-using System.Linq;
-using System.Text;
+﻿using DAL.Config;
 using DAL.Entities;
-using System.Xml.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace DAL
-{
-    public class FRMDbContext : IdentityDbContext<User>
-    {
-        public FRMDbContext()
-        {
+namespace DAL {
+    public class FRMDbContext : IdentityDbContext<User> {
+        public FRMDbContext() {
 
         }
 
-        public FRMDbContext(DbContextOptions<FRMDbContext> options) : base(options)
-        {
+        public FRMDbContext(DbContextOptions<FRMDbContext> options) : base(options) {
         }
 
 
@@ -37,10 +27,8 @@ namespace DAL
 
         public DbSet<Transaction> TransactionShared { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            if (!optionsBuilder.IsConfigured) {
                 IConfiguration config = new ConfigurationBuilder()
                                             .SetBasePath(Directory.GetCurrentDirectory())
                                             .AddJsonFile("appsettings.json").Build();
@@ -50,19 +38,23 @@ namespace DAL
             }
             base.OnConfiguring(optionsBuilder);
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new RoleConfig());
+            modelBuilder.ApplyConfiguration(new RoleClaimConfig());
+            modelBuilder.ApplyConfiguration(new UserConfig());
+            modelBuilder.ApplyConfiguration(new UserClaimConfig());
+            modelBuilder.ApplyConfiguration(new UserLoginConfig());
+            modelBuilder.ApplyConfiguration(new UserRoleConfig());
+            modelBuilder.ApplyConfiguration(new UserTokenConfig());
+
             #region Orders
             modelBuilder.Entity<Orders>().Property(x => x.ID).HasDefaultValueSql("NEWID()");
             #endregion
             #region Transaction
             modelBuilder.Entity<Transaction>().Property(x => x.ID).HasDefaultValueSql("NEWID()");
             #endregion
-          
+
         }
-
-
     }
 }

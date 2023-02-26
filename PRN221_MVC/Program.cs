@@ -1,14 +1,14 @@
+using BAL.Services.Implements;
 using DAL;
-using System.Text;
 using DAL.Entities;
 using DAL.Infacstucture;
-using BAL.Services.Implements;
-using DAL.Repositories.Interface;
 using DAL.Repositories.Implements;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
+using DAL.Repositories.Interface;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,18 +23,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FRMDbContext>()
     .AddDefaultTokenProviders();
-builder.Services.AddAuthentication(options =>
-{
+builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 }
-    ).AddJwtBearer(options =>
-    {
+    ).AddJwtBearer(options => {
         options.SaveToken = true;
         options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-        {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidAudience = builder.Configuration["JWT:ValidAudience"],
@@ -46,8 +43,7 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
+if (!app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();

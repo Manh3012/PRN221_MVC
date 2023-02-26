@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(FRMDbContext))]
-    [Migration("20230225103640_1")]
-    partial class _1
+    [Migration("20230226173544_init create")]
+    partial class initcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -260,7 +260,7 @@ namespace DAL.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -292,15 +292,15 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7243a026-32ed-4c74-bfff-b14eac3f59e2",
-                            ConcurrencyStamp = "2d9b7ce0-d4a1-4acc-852a-44fda0b52aea",
+                            Id = "8c561f25-de26-4006-ab3a-e5421fbf5b59",
+                            ConcurrencyStamp = "768579c2-b83f-4e5a-9810-244a1dff5866",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         },
                         new
                         {
-                            Id = "def58921-300a-4953-933c-fea30420cf74",
-                            ConcurrencyStamp = "87c01477-901c-4cf7-a536-f8c9b37f2e3d",
+                            Id = "e8931795-86de-4321-b1ea-12f494a70da3",
+                            ConcurrencyStamp = "6f706e99-60c3-4817-847d-63c3d4ea0f5a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -328,7 +328,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaim", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -353,7 +353,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaim", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -375,7 +375,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogin", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -390,7 +390,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRole", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -409,7 +409,7 @@ namespace DAL.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserToken", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
