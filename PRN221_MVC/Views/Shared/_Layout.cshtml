@@ -33,7 +33,7 @@
     <div class="left-sidenav">
         <!-- LOGO -->
         <div class="brand">
-            <a href="~/admin/index.html" class="logo">
+            <a href="@Url.Action("Index", "Admin")" class="logo">
              
                 <span>
                     <img src="~/admin/assets/images/logo-sm.png" alt="logo-small" class="logo-sm">
@@ -51,27 +51,20 @@
                 <li>
                     <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Dashboard</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-                        <li class="nav-item"><a class="nav-link" href="~/admin/index.html"><i class="ti-control-record"></i>Analytics</a></li>
-                        <li class="nav-item"><a class="nav-link" href="~/admin/sales-index.html"><i class="ti-control-record"></i>Sales</a></li>
+                        <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Admin")"><i class="ti-control-record"></i>Analytics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="@Url.Action("Sales_Analytics", "Admin")"><i class="ti-control-record"></i>Sales</a></li>
                     </ul>
                 </li>
 
                 <li>
                     <a href="javascript: void(0);"><i data-feather="grid" class="align-self-center menu-icon"></i><span>Apps</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                     <ul class="nav-second-level" aria-expanded="false">
-
-
-                        <li class="nav-item"><a class="nav-link" href="apps-invoice.html"><i class="ti-control-record"></i>Invoice</a></li>
-
                         <li>
                             <a href="javascript: void(0);"><i class="ti-control-record"></i>Ecommerce <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
                             <ul class="nav-second-level" aria-expanded="false">
-                                <li><a href="~/admin/apps-ecommerce-products.html">Products</a></li>
-                                <li><a href="~/admin/apps-ecommerce-product-list.html">Product List</a></li>
-                                <li><a href="~/admin/apps-ecommerce-product-detail.html">Product Detail</a></li>
-                                <li><a href="~/admin/apps-ecommerce-cart.html">Cart</a></li>
-                                <li><a href="~/admin/apps-ecommerce-checkout.html">Checkout</a></li>
-
+                                <li><a href="@Url.Action("Users", "Admin")">Users</a></li>
+                                <li><a href="@Url.Action("UserList", "Admin")">User List</a></li>
+                                <li><a href="@Url.Action("UserDetail", "Admin")">User Detail</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -84,6 +77,9 @@
     </div>
     <!-- end left-sidenav-->
 
+    <div>
+        @RenderBody()
+    </div>
 
     <div class="page-wrapper">
         <!-- Top Bar Start -->
@@ -200,10 +196,9 @@
                             <img src="~/admin/assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="pages-profile.html"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
-                            <a class="dropdown-item" href="apps-contact-list.html"><i data-feather="users" class="align-self-center icon-xs icon-dual me-1"></i> Contacts</a>
+                            <a class="dropdown-item" href="@Url.Action("AdminProfile", "Admin")"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
                             <div class="dropdown-divider mb-0"></div>
-                            <a class="dropdown-item" href="auth-login.html"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
+                            <a class="dropdown-item" href="@Url.Action("Login", "Admin")"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
                         </div>
                     </li>
                 </ul><!--end topbar-nav-->

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace PRN221_MVC.Controllers
 {
@@ -19,6 +19,38 @@ namespace PRN221_MVC.Controllers
 
         // GET: AdminController/Create
         public ActionResult Create()
+        {
+            return View();
+        }
+        public ActionResult UserList()
+        {
+            return View();
+        }
+        public ActionResult Users()
+        {
+            return View();
+        }
+        public ActionResult Login()
+        {
+            return View();
+        }
+        public ActionResult Recover_Password()
+        {
+            return View();
+        }
+        public ActionResult UserDetail()
+        {
+            return View();
+        }
+        public ActionResult Error()
+        {
+            return View();
+        }
+        public ActionResult AdminProfile()
+        {
+            return View();
+        }
+        public ActionResult Sales_Analytics()
         {
             return View();
         }
@@ -43,6 +75,7 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+
 
         // POST: AdminController/Edit/5
         [HttpPost]
