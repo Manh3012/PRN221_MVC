@@ -16,5 +16,29 @@ namespace DAL.Repositories.Implements
         {
             _dbContext = dbFactory.Init();
         }
+
+        public List<Orders> GetTotalOrderToday()
+        {
+            DateTime today = DateTime.Today;
+
+            var orders = _dbContext.Orders.Where(o => o.CreatedDate == today);
+            return orders.ToList();
+        }
+
+        public List<Orders> GetTotalOrderWeek()
+        {
+            DateTime today = DateTime.Today;
+
+            var orders = _dbContext.Orders.Where(o => o.CreatedDate >= today.AddDays(-7) && o.CreatedDate <= today);
+            return orders.ToList();
+        }
+
+        public List<Orders> GetTotalOrderLastThirtyDays()
+        {
+            DateTime today = DateTime.Today;
+
+            var orders = _dbContext.Orders.Where(o => o.CreatedDate >= today.AddDays(-30) && o.CreatedDate <= today);
+            return orders.ToList();
+        }
     }
 }

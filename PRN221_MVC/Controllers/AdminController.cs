@@ -1,13 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using DAL.Repositories.Interface;
 
 namespace PRN221_MVC.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly IOrdersService ordersService;
+
+        public float TotalSalesToday { get; set; }
+
+        public AdminController(IOrdersService ordersService)
+        {
+            this.ordersService = ordersService;
+        }
+
+
         // GET: AdminController
         public ActionResult Index()
         {
+            var totalToday = ordersService.GetTotalOrderToday();
+            var totalWeek = ordersService.GetTotalOrdersWeek();
+            var total30Days = ordersService.GetTotalOrderLastThirtyDays();
+            var countOrders30Days = ordersService.CountOrderLastThirtyDays();
+
+
+
+            ViewBag.TotalSalesToday = totalToday;
+
+            ViewBag.TotalSalesWeek = totalWeek;
+
+            ViewBag.Total30Days = total30Days;
+
+            ViewBag.CountOrders30Days = countOrders30Days;
             return View();
         }
 
@@ -52,6 +77,7 @@ namespace PRN221_MVC.Controllers
         }
         public ActionResult Sales_Analytics()
         {
+            
             return View();
         }
 
