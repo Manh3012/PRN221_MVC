@@ -11,12 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\admin\apps-ecommerce-cart.html" />
-    <None Include="wwwroot\admin\apps-ecommerce-checkout.html" />
-    <None Include="wwwroot\admin\apps-ecommerce-product-detail.html" />
-    <None Include="wwwroot\admin\apps-ecommerce-product-list.html" />
-    <None Include="wwwroot\admin\apps-ecommerce-products.html" />
-    <None Include="wwwroot\admin\apps-invoice.html" />
     <None Include="wwwroot\admin\assets\css\app.min.css" />
     <None Include="wwwroot\admin\assets\css\bootstrap.min.css" />
     <None Include="wwwroot\admin\assets\css\icons.min.css" />
@@ -217,13 +211,6 @@
     <None Include="wwwroot\admin\assets\pages\jquery.treeview.init.js" />
     <None Include="wwwroot\admin\assets\pages\jquery.validation.init.js" />
     <None Include="wwwroot\admin\assets\pages\jquery.widgets.init.js" />
-    <None Include="wwwroot\admin\auth-404.html" />
-    <None Include="wwwroot\admin\auth-login.html" />
-    <None Include="wwwroot\admin\auth-recover-pw.html" />
-    <None Include="wwwroot\admin\auth-register.html" />
-    <None Include="wwwroot\admin\index.html" />
-    <None Include="wwwroot\admin\pages-faqs.html" />
-    <None Include="wwwroot\admin\pages-profile.html" />
     <None Include="wwwroot\admin\plugins\animate\animate.css" />
     <None Include="wwwroot\admin\plugins\apex-charts\apexcharts.min.js" />
     <None Include="wwwroot\admin\plugins\apex-charts\irregular-data-series.js" />
@@ -354,7 +341,6 @@
     <None Include="wwwroot\admin\plugins\x-editable\img\clear.png" />
     <None Include="wwwroot\admin\plugins\x-editable\img\loading.gif" />
     <None Include="wwwroot\admin\plugins\x-editable\js\bootstrap-editable.min.js" />
-    <None Include="wwwroot\admin\sales-index.html" />
     <None Include="wwwroot\client\catalog\language\ar\ar.png" />
     <None Include="wwwroot\client\catalog\language\en-gb\en-gb.png" />
     <None Include="wwwroot\client\catalog\view\javascript\bootstrap\css\bootstrap.min.css" />
@@ -534,31 +520,6 @@
     <None Include="wwwroot\client\image\catalog\icon\thumb-up-button.png" />
     <None Include="wwwroot\client\image\catalog\loader.gif" />
     <None Include="wwwroot\client\image\catalog\logo.png" />
-    <None Include="wwwroot\client\index.html" />
-    <None Include="wwwroot\client\index1647.html" />
-    <None Include="wwwroot\client\index1679.html" />
-    <None Include="wwwroot\client\index1766.html" />
-    <None Include="wwwroot\client\index20ed.html" />
-    <None Include="wwwroot\client\index2724.html" />
-    <None Include="wwwroot\client\index47ef.html" />
-    <None Include="wwwroot\client\index5502.html" />
-    <None Include="wwwroot\client\index68a7.html" />
-    <None Include="wwwroot\client\index68ea.html" />
-    <None Include="wwwroot\client\index70dc.html" />
-    <None Include="wwwroot\client\index73b3.html" />
-    <None Include="wwwroot\client\index74a7.html" />
-    <None Include="wwwroot\client\index7fa3.html" />
-    <None Include="wwwroot\client\index8733.html" />
-    <None Include="wwwroot\client\index8816.html" />
-    <None Include="wwwroot\client\index98dc.html" />
-    <None Include="wwwroot\client\index99e4.html" />
-    <None Include="wwwroot\client\indexacda.html" />
-    <None Include="wwwroot\client\indexb35e.html" />
-    <None Include="wwwroot\client\indexd773.html" />
-    <None Include="wwwroot\client\indexe177.html" />
-    <None Include="wwwroot\client\indexe223.html" />
-    <None Include="wwwroot\client\indexe356.html" />
-    <None Include="wwwroot\client\indexe80d.html" />
   </ItemGroup>
 
   <ItemGroup>

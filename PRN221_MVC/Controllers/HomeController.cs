@@ -17,8 +17,34 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+        public IActionResult WishList()
+        {
+            return View();
+        }
+        public IActionResult Cart()
+        {
+            return View();
+        }
+        public IActionResult CheckOut()
+        {
+            return View();
+        }
+
+        public IActionResult LoginClient()
+        {
+            return View();
+        }
+        public IActionResult Category()
+        {
+            return View();
+        }
+
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+        public IActionResult Details(int id)
         {
             return View();
         }

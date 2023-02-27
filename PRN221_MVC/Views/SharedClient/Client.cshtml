@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+
+}
+<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <!--[if IE 8 ]><html dir="ltr" lang="en" class="ie8"><![endif]-->
 <!--[if IE 9 ]><html dir="ltr" lang="en" class="ie9"><![endif]-->
@@ -774,7 +777,8 @@
     <div class="row">
       <div class="col-xs-2 col-sm-1 hidden-md hidden-lg hidden-xl appmenu"></div>
         <div id="logo" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 text-left">
-          <a href="index9328.html?route=common/home"><img src="~/client/catalog/logo.png" title="upbasket" alt="upbasket" class="img-responsive" /></a>        </div>
+                        <a href="@Url.Content("users/admin/onedrive/desktop/prn221_mvc/prn221_mvc/prn221_mvc/views/shared/error404.cshtml")?route=common/home"><img src="~/client/image/catalog/logo.png" title="upbasket" alt="upbasket" class="img-responsive" /></a>
+                    </div>
          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 rightac headsearch">
           <div id="search" class="desktop-search">
 <div id="search" class="wbSearch">
@@ -828,7 +832,7 @@
                       </ul>
     </div>
     <input type="hidden" name="code" value="" />
-    <input type="hidden" name="redirect" value="index9328.html?route=common/home" />
+    <input type="hidden" name="redirect" value="@Url.Content("~/Home/index9328.cshtml")?route=common/home" />
   </form>
  </li>
             <li class="xscu">  <form action="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=common/language/language" method="post" enctype="multipart/form-data" id="form-language">
@@ -847,7 +851,7 @@
               </ul>
     </div>
     <input type="hidden" name="code" value="" />
-    <input type="hidden" name="redirect" value="index9328.html?route=common/home" />
+    <input type="hidden" name="redirect" value="@Url.Content("~/Home/index9328.cshtml")?route=common/home" />
   </form>
 </li>
           </ul>
@@ -1014,7 +1018,7 @@ jQuery(window).scroll(function() {headermenu();});
 </script></div>
       <div id="right-colume-1" class="clo-lg-7 col-md-7 col-sm-7 col-xs-5 rightmenu text-left">
         <ul class="sblock">
-          <li><a href="index9328.html?route=common/home">Home</a></li>
+          <li><a href="@Url.Content("~/Home/index9328.cshtml")?route=common/home">Home</a></li>
            <li><a href="indexf110.html?route=product/special">specials</a></li>                 
            <li><a href="index2724.html?route=information/contact">contact</a></li>
            <li><a href="index7cb2.html?route=information/sitemap">sitemap</a></li>
@@ -3510,7 +3514,6 @@ $("#newsletter_63f78f1b621c6").webiNewsletter().work(  'Email is not valid!' );
     </div>
 </div>
 
-<footer>
 
 
 
@@ -3583,79 +3586,6 @@ $("#newsletter_63f78f1b621c6").webiNewsletter().work(  'Email is not valid!' );
 </div>
 </div>
 
-<div class="container">
-  <div class="row fbottom">
-      <div class="footsocial col-md-4 col-sm-4 text-left">
-<div class="newsl webi-newsletter " id="newsletter_63f78f1b68524" data-mode="default">
-        <form id="formNewLestter" method="post" action="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=extension/module/webinewsletter/subscribe" class="formNewLestter" >
-            <div class="inner">
-                <div id="newsletter">
-                    <div class="new-ti d-inline-block hidden-xs">
-                    <h5>Newsletter</h5>
-
-                    <div class="description-top">															Get now free 20% discount for all products on your first order! 
-                                                        </div>
-                    </div>
-                    <div id="new" class="footer-collapse">
-
-                <div><div class="input-group">
-                    <input type="text" class="form-control input-md inputNew"  onblur="javascript:if(this.value=='')this.value='Your email address';" onfocus="javascript:if(this.value=='Your email address')this.value='';" value="Your email address" size="18" name="email" placeholder="Your email address">
-
-                    <div class="input-group-btn"><button type="submit" name="submitNewsletter" class="newsbtn btn btn-primary">Subscribe</button></div>
-                    </div>
-                    <input type="hidden" value="1" name="action">
-                <div class="valid"></div>
-                </div>
-
-                 </div>
-        </div>
-
-        </div>
-        </form>
-</div>
-</div>
-<script type="text/javascript"><!--
-$("#newsletter_63f78f1b68524").webiNewsletter().work(  'Email is not valid!' );
---></script>
-<div>  <div class="col-md-4 col-sm-4 col-xs-12 text-center">
-<div class="storeinfo">  <h5><span>Contact us</span></h5>
-<div id="contact" class="footer-collapse footcontact">
-<ul class="list-unstyled f-left">
-  <li>9070Green Lake Drive Chevy Chase, MD 20815 india.</li>
-  <li class="fcall">
-      <svg><use xlink:href="#phone"></use></svg>
-      <span>0123-456-789</span>
-  </li>
-</ul>
-
-  </div>
-</div>
-  </div></div>
-
-
-<div>  <div class="col-md-4 col-sm-4 col-xs-12 text-right social-left">
-<h5 class="c-info">Follow us</h5>
-     <ul class="list-unstyled fsocial list-inline">
-        <li><a href="#"><svg width="35px" height="35px"><use xlink:href="#facebook"></use></svg></a></li>
-        <li><a href="#"><svg width="35px" height="35px"><use xlink:href="#instagram"></use></svg></a></li>
-        <li><a href="#"><svg width="35px" height="35px"><use xlink:href="#pinterest"></use></svg></a></li>
-    </ul>
-  <div class="fpayment">
-  <h5 class="c-info">payment</h5>
-  <ul class="list-inline list-unstyled foot-payment">
-  <li><svg width="35px" height="35px"><use xlink:href="#ae"></use></svg></li>
-      <li><svg width="35px" height="35px"><use xlink:href="#mc"></use></svg></li>
-      <li><svg width="35px" height="35px"><use xlink:href="#dis"></use></svg></li>
-      <li><svg width="35px" height="35px"><use xlink:href="#visa"></use></svg></li>
-  </ul>
-    </div>
-</div>
-            </div>
-
-
-
-  </div>
-</div>
 
 <div class="copy text-center">
   <div class="container">
