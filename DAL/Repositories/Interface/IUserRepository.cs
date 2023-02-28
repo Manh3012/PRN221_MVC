@@ -9,6 +9,6 @@ namespace DAL.Repositories.Interface
 {
     public interface IUserRepository
     {
-       
+        Task<List<User>> GetAll();
     }
 }

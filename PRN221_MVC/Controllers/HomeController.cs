@@ -17,10 +17,14 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-      
-       
-       
-
+        public IActionResult Register()
+        {
+            return View();
+        }
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
         public IActionResult LoginClient()
         {
             return View();
