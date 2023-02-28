@@ -441,13 +441,29 @@
                             <div class="card-header">
                                 <div class="row align-items-center">
                                     <div class="col">
-                                        <h4 class="card-title">Audience Overview</h4>
+                                        <h4 class="card-title">Earning Each Month</h4>
                                     </div><!--end col-->
                                 </div>  <!--end row-->
                             </div><!--end card-header-->
                             <div class="card-body">
                                 <div class="">
-                                    <div id="chart" class="apex-charts"></div>
+                                    <div id="chartLine" class="apex-charts"></div>
+                                </div>
+                            </div><!--end card-body-->
+                        </div><!--end card-->
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h4 class="card-title">Earning Each Month</h4>
+                                    </div><!--end col-->
+                                </div>  <!--end row-->
+                            </div><!--end card-header-->
+                            <div class="card-body">
+                                <div class="">
+                                    <div id="chartPie" class="apex-charts"></div>
                                 </div>
                             </div><!--end card-body-->
                         </div><!--end card-->
@@ -479,25 +495,26 @@
 <script src="~/admin/plugins/apex-charts/apexcharts.min.js"></script>
 
 <Script>
-    var options = {
+    var optionsChartLine = {
         chart: {
             type: 'bar'
         },
         series: [{
-            name: 'sales',
+            name: '',
             data: [
                 @foreach (var item in orderValuesInEachMonth)
                 {
-        @item.Value,
+        @: '@item.Value',
     }
               ]
         }],
         xaxis: {
             categories: [
-                @foreach (var item in orderValuesInEachMonth)
-                {
-        @item.Key,
-    }
+    @foreach (var item in orderValuesInEachMonth)
+        {
+            @: '@item.Key',
+        }
+                
               ]
         },
         yaxis: {
@@ -507,7 +524,29 @@
         }
     };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    var chartLine = new ApexCharts(document.querySelector("#chartLine"), optionsChartLine);
+    chartLine.render();
+
+
+    var options = {
+        chart: {
+            type: 'pie'
+        },
+        series: [
+             @foreach (var item in topSellingProducts) {
+                    @: @item.TotalAmount,
+                }
+        ],
+
+        labels: [
+            @foreach (var item in topSellingProducts) {
+            @: '@item.Product.Name',
+        }
+        ]
+    }
+
+    var chart = new ApexCharts(document.querySelector('#chartPie'), options)
+    chart.render()
+
 </Script>
 
