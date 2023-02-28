@@ -5,6 +5,9 @@ using DAL.Infacstucture;
 using System.Threading.Tasks;
 using DAL.Repositories.Interface;
 using System.Collections.Generic;
+using DAL.Entities;
+using DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace BAL.Services.Implements
 {
@@ -13,10 +16,36 @@ namespace BAL.Services.Implements
         private IProductRepository _productRepository;
         private IUnitOfWork _unitOfWork;
 
+        public ProductService()
+        {
+        }
+
         public ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
             _unitOfWork = unitOfWork;
+        }
+
+        public List<Product> Filter(string type)
+        {
+            using (var context = new FRMDbContext())
+            {
+                var products = context.Product
+                                .Where(p => p.Category.Name == type || p.Category.ShortName == type)
+                                .ToList();
+                return products;
+            }
+        }
+
+        public List<Product> Search(string searchItems)
+        {
+            using (var context = new FRMDbContext())
+            {
+                var results = context.Product
+                                .Where(p => p.Name.Contains(searchItems))
+                                .ToList();
+                return results;
+            }
         }
     }
 }

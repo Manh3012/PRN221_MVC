@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using DAL;
+using DAL.Entities;
 
 namespace PRN221_MVC.Controllers
 {
@@ -11,6 +13,8 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
+        public List<User> users { get; set; }
+
         // GET: AdminController/Details/5
         public ActionResult Details(int id)
         {
@@ -20,7 +24,7 @@ namespace PRN221_MVC.Controllers
         // GET: AdminController/Create
         public ActionResult Create()
         {
-            return View();
+            return RedirectToAction("Create");
         }
         public ActionResult UserList()
         {
@@ -62,6 +66,23 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
+                if (ModelState.IsValid)
+                {
+                    var newUser = new User
+                    {
+                        Name = collection["Name"],
+                        DoB = DateTime.TryParse(collection["Dob"], out var dob) ? dob : (DateTime?)null ?? DateTime.MinValue,
+                        Address = collection["Address"],
+                        Gender = collection["Gender"],
+                        Phone = collection["Phone"]
+                    };
+
+                    using (var db = new FRMDbContext())
+                    {
+                        db.Users.Add(newUser);
+                        db.SaveChanges();
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -84,6 +105,22 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
+                var getUserbyId = users.FirstOrDefault(u => Int32.Parse(u.Id) == id);
+                if(getUserbyId != null)
+                {
+                    getUserbyId.Name = collection["Name"];
+                    getUserbyId.Phone = collection["Phone"];
+                    getUserbyId.Address = collection["Address"];
+                    getUserbyId.Gender = collection["Gender"];
+                    getUserbyId.DoB = DateTime.TryParse(collection["Dob"], out var dob) ? dob : (DateTime?)null ?? DateTime.MinValue;
+                }
+
+                using (var db = new FRMDbContext())
+                {
+                    db.Users.Update(getUserbyId);
+                    db.SaveChanges();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
             catch

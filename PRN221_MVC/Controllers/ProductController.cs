@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BAL.Services.Implements;
+using DAL.Repositories.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PRN221_MVC.Controllers
 {
     public class ProductController : Controller
     {
+        readonly IProductService productService = new ProductService();
+
         // GET: ProductController
         public ActionResult Index()
         {
@@ -78,6 +82,18 @@ namespace PRN221_MVC.Controllers
             {
                 return View();
             }
+        }
+
+        public ActionResult SearchProduct(string searchItems)
+        {
+            var items = productService.Search(searchItems);
+            return View("Search", items);
+        }
+
+        public ActionResult FilterProduct(string categoryName)
+        {
+            var products = productService.Filter(categoryName);
+            return View(products);
         }
     }
 }
