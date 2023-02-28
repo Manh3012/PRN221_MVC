@@ -1,7 +1,7 @@
 ﻿using BAL.Services.Implements;
 using DAL.Repositories.Interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace PRN221_MVC.Controllers
 {

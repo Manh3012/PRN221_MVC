@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class initcreate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,11 +48,10 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DoB = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DoB = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -279,8 +278,8 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "8c561f25-de26-4006-ab3a-e5421fbf5b59", "768579c2-b83f-4e5a-9810-244a1dff5866", "Visitor", "VISITOR" },
-                    { "e8931795-86de-4321-b1ea-12f494a70da3", "6f706e99-60c3-4817-847d-63c3d4ea0f5a", "Administrator", "ADMINISTRATOR" }
+                    { "021fd955-6628-4623-8aec-4f06ca59b4b1", "45f6dd68-726a-48ee-bbdb-4a2f008a9cdb", "Administrator", "ADMINISTRATOR" },
+                    { "3957699f-423b-4e08-b48b-28934ca132d6", "50cca603-ec24-4c7d-82c3-0de2be4f58e3", "Visitor", "VISITOR" }
                 });
 
             migrationBuilder.CreateIndex(

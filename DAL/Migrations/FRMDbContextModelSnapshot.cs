@@ -182,14 +182,13 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DoB")
+                    b.Property<DateTime?>("DoB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -200,7 +199,6 @@ namespace DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -224,10 +222,6 @@ namespace DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -244,7 +238,7 @@ namespace DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -289,15 +283,15 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8c561f25-de26-4006-ab3a-e5421fbf5b59",
-                            ConcurrencyStamp = "768579c2-b83f-4e5a-9810-244a1dff5866",
+                            Id = "3957699f-423b-4e08-b48b-28934ca132d6",
+                            ConcurrencyStamp = "50cca603-ec24-4c7d-82c3-0de2be4f58e3",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         },
                         new
                         {
-                            Id = "e8931795-86de-4321-b1ea-12f494a70da3",
-                            ConcurrencyStamp = "6f706e99-60c3-4817-847d-63c3d4ea0f5a",
+                            Id = "021fd955-6628-4623-8aec-4f06ca59b4b1",
+                            ConcurrencyStamp = "45f6dd68-726a-48ee-bbdb-4a2f008a9cdb",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });

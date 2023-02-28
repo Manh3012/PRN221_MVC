@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace PRN221_MVC.Controllers
 {
@@ -7,6 +7,10 @@ namespace PRN221_MVC.Controllers
     {
         // GET: OrderController
         public ActionResult Index()
+        {
+            return View();
+        }
+        public IActionResult WishList()
         {
             return View();
         }

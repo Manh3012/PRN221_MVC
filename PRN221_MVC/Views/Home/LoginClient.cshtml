@@ -1,30 +1,15 @@
 ﻿
 @{
     ViewData["Title"] = "LoginClient";
-    Layout = "~/Views/SharedClient/LayoutClient.cshtml";
+    Layout = "~/Views/Shared/LayoutClient.cshtml";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="breadbg">
     <div class="container">
         <div class="row">
             <ul class="breadcrumb">
                 <li><a href="index9328.html?route=common/home"><i class="fa fa-home"></i></a></li>
                 <li><a href="indexe223.html?route=account/account">Account</a></li>
-                <li><a href="indexe223.html?route=account/login">Login</a></li>
+                <li><a href="@Url.Action("Login","User")">Login</a></li>
             </ul>
         </div>
     </div>
@@ -58,6 +43,7 @@
                             </div>
                             <input type="submit" value="Login" class="btn btn-primary" />
                             <input type="hidden" name="redirect" value="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=account/wishlist" />
+                            <a class="btn btn-primary" href="@Url.Action("GoogleLogin", "User")">Log In With Google</a>
                         </form>
                     </div>
                 </div>

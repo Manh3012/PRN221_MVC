@@ -17,19 +17,14 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public IActionResult WishList()
+        public IActionResult Register()
         {
             return View();
         }
-        public IActionResult Cart()
+        public IActionResult ForgotPassword()
         {
             return View();
         }
-        public IActionResult CheckOut()
-        {
-            return View();
-        }
-
         public IActionResult LoginClient()
         {
             return View();
