@@ -69,5 +69,35 @@ namespace BAL.Services.Implements
 
             return orders.Count;
         }
+
+        public List<(int Month, int TotalItems, float TotalAmount)> GetMonthlySalesData(int year)
+        {
+            var list = _ordersRepository.GetMonthlySalesData(year);
+            return list;
+        }
+
+        public List<(Product Product, float TotalAmount, int TotalQuantity)> GetTopSellingProductsByMonth()
+        {
+            var list = _ordersRepository.GetTopSellingProductsByMonth();
+            return list;
+        }
+        public List<(Product Product, float TotalAmount, int TotalQuantity)> GetTopSellingProductsByWeek()
+        {
+            var list = _ordersRepository.GetTopSellingProductsByWeek();
+            return list;
+        }
+
+        public List<Orders> GetOrders()
+        {
+            var list = _ordersRepository.GetOrders();
+            return list;
+        }
+
+        public Dictionary<string, float> GetOrderValuesInEachMonth()
+        {
+            var list = _ordersRepository.GetOrderValuesInEachMonth();
+            
+            return list;
+        }
     }
 }

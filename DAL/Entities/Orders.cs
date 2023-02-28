@@ -16,5 +16,6 @@ namespace DAL.Entities
         public float Total { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool isDeleted { get; set; }
+
     }
 }

@@ -19,7 +19,7 @@
     <link href="~/admin/plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet">
 
     <!-- App css -->
-    
+
     <link href="~/admin/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/admin/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="~/admin/assets/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
@@ -34,7 +34,7 @@
         <!-- LOGO -->
         <div class="brand">
             <a href="@Url.Action("Index", "Admin")" class="logo">
-             
+
                 <span>
                     <img src="~/admin/assets/images/logo-sm.png" alt="logo-small" class="logo-sm">
                 </span>
@@ -53,6 +53,7 @@
                     <ul class="nav-second-level" aria-expanded="false">
                         <li class="nav-item"><a class="nav-link" href="@Url.Action("Index", "Admin")"><i class="ti-control-record"></i>Analytics</a></li>
                         <li class="nav-item"><a class="nav-link" href="@Url.Action("Sales_Analytics", "Admin")"><i class="ti-control-record"></i>Sales</a></li>
+                        <li class="nav-item"><a class="nav-link" href="@Url.Action("OrderHistory", "Admin")"><i class="ti-control-record"></i>Order History</a></li>
                     </ul>
                 </li>
 
@@ -80,7 +81,7 @@
         @RenderBody()
     </div>
 
-   
+
     <!-- end page-wrapper -->
     <!-- jQuery  -->
     <script src="~/admin/assets/js/jquery.min.js"></script>
@@ -95,8 +96,8 @@
     <script src="~/admin/plugins/apex-charts/apexcharts.min.js"></script>
     <script src="~/admin/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
     <script src="~/admin/plugins/jvectormap/jquery-jvectormap-us-aea-en.js"></script>
-    <script src="assets/pages/jquery.analytics_dashboard.init.js"></script>
-    
+    <script src="~/admin/assets/pages/jquery.analytics_dashboard.init.js"></script>
+
 
     <!-- App js -->
     <script src="~/admin/assets/js/app.js"></script>
