@@ -99,5 +99,10 @@ namespace BAL.Services.Implements
             
             return list;
         }
+        public List<(int Month, int TotalOrders, int TotalProducts)> GetSalesDataMonthly(int year)
+        {
+            var list = _ordersRepository.GetSalesDataMonthly(year);
+            return list;
+        }
     }
 }

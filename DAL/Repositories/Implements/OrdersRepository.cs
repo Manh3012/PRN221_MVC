@@ -128,5 +128,29 @@ namespace DAL.Repositories.Implements
 
             return result;
         }
+
+        public List<(int Month, int TotalOrders, int TotalProducts)> GetSalesDataMonthly(int year)
+        {
+            var monthlySalesData = new List<(int Month, int TotalOrders, int TotalProducts)>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                int month = i;
+                int totalOrders = _dbContext.Orders
+                    .Where(o => !o.isDeleted
+                        && o.CreatedDate.Year == year
+                        && o.CreatedDate.Month == month)
+                    .Count();
+                int totalProducts = _dbContext.OrderDetail
+                    .Where(od => !od.isDeleted && !od.Order.isDeleted && !od.Product.isDeleted
+                        && od.Order.CreatedDate.Year == year
+                        && od.Order.CreatedDate.Month == month)
+                    .Sum(od => od.Quantity);
+
+                monthlySalesData.Add((month, totalOrders, totalProducts));
+            }
+
+            return monthlySalesData;
+        }
     }
 }

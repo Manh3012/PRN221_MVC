@@ -10,6 +10,7 @@
     var topSellingProducts = ViewBag.TopSellingProductByMonth as List<(Product Product, float TotalAmount, int TotalQuantity)>;
     var topSellingProductsWeek = ViewBag.TopSellingProductByWeek as List<(Product Product, float TotalAmount, int TotalQuantity)>;
     var orderValuesInEachMonth = ViewBag.OrderValuesInEachMonth as Dictionary<string, float>;
+    var salesDataInEachMonth = ViewBag.SalesDataInEachMonth as List<(int Month, int TotalOrders, int TotalProducts)>;
 }
 <div class="page-wrapper">
     <!-- Top Bar Start -->
@@ -469,6 +470,23 @@
                         </div><!--end card-->
                     </div>
 
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h4 class="card-title">Earning Each Month</h4>
+                                    </div><!--end col-->
+                                </div>  <!--end row-->
+                            </div><!--end card-header-->
+                            <div class="card-body">
+                                <div class="">
+                                    <div id="chartStackBar" class="apex-charts"></div>
+                                </div>
+                            </div><!--end card-body-->
+                        </div><!--end card-->
+                    </div>
+
 
                 </div><!--end row-->
 
@@ -545,8 +563,81 @@
         ]
     }
 
-    var chart = new ApexCharts(document.querySelector('#chartPie'), options)
-    chart.render()
+    var chartPie = new ApexCharts(document.querySelector('#chartPie'), options)
+    chartPie.render();
+
+     var options = {
+          series: [{
+          name: 'PRODUCT',
+          data: [
+          @foreach (var item in salesDataInEachMonth) {
+            @: '@item.TotalProducts',
+          }
+          ]
+        }, {
+          name: 'ORDER',
+          data: [
+           @foreach (var item in salesDataInEachMonth) {
+            @: '@item.TotalOrders',
+          }
+          ]
+        }],
+          chart: {
+          type: 'bar',
+          height: 350,
+          stacked: true,
+          toolbar: {
+            show: true
+          },
+          zoom: {
+            enabled: true
+          }
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }],
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            borderRadius: 10,
+            dataLabels: {
+              total: {
+                enabled: true,
+                style: {
+                  fontSize: '13px',
+                  fontWeight: 900
+                }
+              }
+            }
+          },
+        },
+        xaxis: {
+          type: 'month',
+          categories: [
+          @foreach (var item in salesDataInEachMonth) {
+            @: '@item.Month',
+          }
+          ],
+        },
+        legend: {
+          position: 'right',
+          offsetY: 40
+        },
+        fill: {
+          opacity: 1
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chartStackBar"), options);
+        chart.render();
+
 
 </Script>
 

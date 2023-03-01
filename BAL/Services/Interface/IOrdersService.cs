@@ -18,7 +18,7 @@ namespace DAL.Repositories.Interface
         List<(Product Product, float TotalAmount, int TotalQuantity)> GetTopSellingProductsByWeek();
         List<Orders> GetOrders();
         Dictionary<string, float> GetOrderValuesInEachMonth();
-
+        List<(int Month, int TotalOrders, int TotalProducts)> GetSalesDataMonthly(int year);
 
     }
 }
