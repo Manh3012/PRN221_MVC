@@ -31,16 +31,22 @@ namespace PRN221_MVC.Controllers {
             if (info == null)
                 return RedirectToAction(nameof(Login));
             var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, false);
-            string[] userInfo = { info.Principal.FindFirst(ClaimTypes.Name).Value, info.Principal.FindFirst(ClaimTypes.Email).Value };
+            string name = info.Principal.FindFirst(ClaimTypes.Name)!.Value;
+            string email = info.Principal.FindFirst(ClaimTypes.Email)!.Value;
+            string[] userInfo = { name, email };
+            // Set user info to session
+            HttpContext.Session.SetString("_Name", name);
+            HttpContext.Session.SetString("_Email", email);
             // login with Google if user is not existed -> create
             // redirect to userInfo View (return user info JSON)
             if (result.Succeeded)
-                return View(userInfo);
+                return RedirectToAction("Index", "Home");
+            //return View(userInfo);
             else {
                 User user = new User {
-                    Email = info.Principal.FindFirst(ClaimTypes.Email)!.Value,
-                    Name = info.Principal.FindFirst(ClaimTypes.Name)!.Value,
-                    UserName = info.Principal.FindFirst(ClaimTypes.Email)!.Value
+                    Email = email,
+                    Name = name,
+                    UserName = email
                 };
 
                 IdentityResult identResult = await userManager.CreateAsync(user);
@@ -48,11 +54,12 @@ namespace PRN221_MVC.Controllers {
                     identResult = await userManager.AddLoginAsync(user, info);
                     if (identResult.Succeeded) {
                         await signInManager.SignInAsync(user, false);
-                        return View(userInfo);
+                        //return View(userInfo);
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 // Access denied
-                return View();
+                return View("/Views/Home/LoginClient.cshtml");
             }
         }
     }
