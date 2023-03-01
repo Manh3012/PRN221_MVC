@@ -84,7 +84,16 @@ namespace PRN221_MVC.Controllers
                     Name = HttpContext.Request.Form["username"],
                     Email = HttpContext.Request.Form["useremail"],
                     PasswordHash = HttpContext.Request.Form["userpassword"].GetHashCode().ToString(),
-                    PhoneNumber = HttpContext.Request.Form["mobile number"]
+                    PhoneNumber = HttpContext.Request.Form["mobile number"],
+                    DoB = DateTime.Parse("01/01/2000"),
+                    Gender = "F",
+                    Address = "NaN",
+                    isDeleted = false,
+                    UserName = "",
+                    PhoneNumberConfirmed = false,
+                    AccessFailedCount = 0,
+                    ConcurrencyStamp = "",
+                    EmailConfirmed = false,
                 };
                 using (var db = new FRMDbContext())
                 {

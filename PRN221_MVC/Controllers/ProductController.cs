@@ -27,6 +27,11 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
+        public ActionResult filter()
+        {
+            return View("CatergoryProduct");
+        }
+
         // POST: ProductController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
