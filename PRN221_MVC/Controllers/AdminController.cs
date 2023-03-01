@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
 using DAL;
 using DAL.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace PRN221_MVC.Controllers
 {
@@ -20,7 +21,7 @@ namespace PRN221_MVC.Controllers
         // GET: AdminController
         public ActionResult Index()
         {
-          
+
             return View();
         }
 
@@ -35,12 +36,12 @@ namespace PRN221_MVC.Controllers
         // GET: AdminController/Create
         public ActionResult Create()
         {
-            return RedirectToAction("Create");
+            return View();
         }
         public async Task<ActionResult> UserList()
         {
             List<User> users = await _userService.GetAll();
-            return View(model:users);
+            return View(model: users);
         }
         public ActionResult Users()
         {
@@ -78,24 +79,19 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                var newUser = new User
                 {
-                    var newUser = new User
-                    {
-                        Name = collection["Name"],
-                        DoB = DateTime.TryParse(collection["Dob"], out var dob) ? dob : (DateTime?)null ?? DateTime.MinValue,
-                        Address = collection["Address"],
-                        Gender = collection["Gender"],
-                        Phone = collection["Phone"]
-                    };
-
-                    using (var db = new FRMDbContext())
-                    {
-                        db.Users.Add(newUser);
-                        db.SaveChanges();
-                    }
+                    Name = HttpContext.Request.Form["username"],
+                    Email = HttpContext.Request.Form["useremail"],
+                    PasswordHash = HttpContext.Request.Form["userpassword"].GetHashCode().ToString(),
+                    PhoneNumber = HttpContext.Request.Form["mobile number"]
+                };
+                using (var db = new FRMDbContext())
+                {
+                    db.Users.Add(newUser);
+                    db.SaveChanges();
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             catch
             {
@@ -118,13 +114,9 @@ namespace PRN221_MVC.Controllers
             try
             {
                 var getUserbyId = users.FirstOrDefault(u => Int32.Parse(u.Id) == id);
-                if(getUserbyId != null)
+                if (getUserbyId != null)
                 {
-                    getUserbyId.Name = collection["Name"];
-                    getUserbyId.Phone = collection["Phone"];
-                    getUserbyId.Address = collection["Address"];
-                    getUserbyId.Gender = collection["Gender"];
-                    getUserbyId.DoB = DateTime.TryParse(collection["Dob"], out var dob) ? dob : (DateTime?)null ?? DateTime.MinValue;
+                    getUserbyId.PasswordHash = collection["password"].GetHashCode().ToString();
                 }
 
                 using (var db = new FRMDbContext())

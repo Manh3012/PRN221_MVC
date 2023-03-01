@@ -84,10 +84,15 @@ namespace PRN221_MVC.Controllers
             }
         }
 
-        public ActionResult SearchProduct(string searchItems)
+        public ActionResult SearchProduct(string search)
         {
-            var items = productService.Search(searchItems);
-            return View("Search", items);
+            var items = productService.Search(search);
+            if (items.Count == 0)
+            {
+                ViewBag.Message = "Nothing Found";
+                return View("/Views/Home/Index.cshtml");
+            }
+            return RedirectToAction("Create", items);
         }
 
         public ActionResult FilterProduct(string categoryName)
