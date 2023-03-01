@@ -11,8 +11,8 @@ namespace PRN221_MVC.Controllers {
         }
 
         public IActionResult Index() {
-            //return View("/Views/Home/LoginClient.cshtml");
-            return View();
+            return View("/Views/Home/LoginClient.cshtml");
+            //return View();
         }
 
         public IActionResult LoginClient() {

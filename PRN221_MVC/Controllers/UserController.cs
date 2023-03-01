@@ -1,21 +1,76 @@
-﻿using DAL.Entities;
+﻿using BAL.Helpers;
+using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PRN221_MVC.Models;
 using System.Security.Claims;
 
 namespace PRN221_MVC.Controllers {
     public class UserController : Controller {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
+        private IPasswordHasher<User> passwordHasher;
 
-        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr) {
+
+        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher) {
             userManager = userMgr;
             signInManager = signinMgr;
+            this.passwordHasher = passwordHasher;
         }
-        public IActionResult Index() {
-            return View();
+
+        public async Task<IActionResult> Logout() {
+            await signInManager.SignOutAsync();
+            HttpContext.Session.Remove("UserInfo.Session");
+            Response.Cookies.Delete("UserInfo.Session");
+            return RedirectToAction("Index", "Home");
         }
+        public IActionResult Register() => View("/Views/Client/User/Register.cshtml");
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterUserViewModel user) {
+            if (ModelState.IsValid) {
+                User appUser = new User {
+                    Name = user.Name,
+                    UserName = user.Username,
+                    Email = user.Email,
+                    TwoFactorEnabled = true
+                };
+
+                IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
+
+                if (result.Succeeded) {
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                    var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+
+                    EmailHelper emailHelper = new EmailHelper();
+                    bool emailResponse = emailHelper.SendEmail(user.Email, confirmationLink);
+
+                    if (emailResponse)
+                        return RedirectToAction("Index", "Home");
+                    else {
+                        // log email failed 
+                        return View("/Views/Client/Email/Unconfirm.cshtml");
+                    }
+                }
+                else {
+                    // Input fields are not valid
+                    //string error = string.Join(", ", result.Errors);
+                    //ModelState.AddModelError("error", error);
+                    foreach (IdentityError error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
+                    //return RedirectToAction("Register");
+                    ViewData["error"] = result.Errors;
+                    return View("/Views/Client/User/Register.cshtml", user);
+                }
+            }
+            else {
+                // Null fields
+                // send back inputed value
+                return RedirectToAction("Register");
+            }
+        }
+
         public IActionResult Login() {
             return View("/Views/Home/LoginClient.cshtml");
         }
