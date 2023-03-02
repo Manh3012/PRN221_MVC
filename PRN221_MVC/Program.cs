@@ -19,6 +19,7 @@ builder.Services.AddScoped<IDbFactory, DbFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ILogger>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FRMDbContext>()
@@ -44,6 +45,12 @@ builder.Services.AddAuthentication(options => {
     // default callback uri: /signin-google
 });
 
+builder.Services.AddSession(options => {
+    options.Cookie.Name = "UserInfo.Session";
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -60,6 +67,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseAuthentication();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

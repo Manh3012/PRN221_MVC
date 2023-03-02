@@ -796,77 +796,61 @@
 </div>
 </div>
       </div>
-      <div id="top-links" class="col-lg-4 col-md-4 col-sm-7 col-xs-5 text-right">
-        <ul class="list-inline">
-       <li class="wishcom hidden-md hidden-sm hidden-xs wishpad"><a href="indexe223.html?route=account/wishlist" id="wishlist-total"><svg width="22px" height="20px"><use xlink:href="#hwish"></use></svg>
-         <span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">0</span></a></li>
-
-          <li class="dropdown inuser">
-          <a href="@Url.Action("Login","User")" title="Account" class="dropdown-toggle" data-toggle="dropdown">
-            <svg><use xlink:href="#huser"></use></svg><span class="hdis text-left nav-link  d-inline-block"> 
-            <span><span id="cartme">sign in</span></span><span class="cart-sub">Account</span> </span>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-right user-down haccount  hlogout ">
-                        <h5 class="text-left">Your Account</h5>
-            <h6 class="text-left">Access account and manage orders</h6>
-            <li class="acd"><a href="index5502.html?route=account/register"><i class="fa fa-user-plus"></i> Register</a></li>
-                                    <li class="acd"><a href="@Url.Action("Login","User")"><i class="fa fa-lock"></i> Login</a></li>
-                        <li class=" wishcom"><a href="index6431.html?route=product/compare"><i class="fa fa-compress"></i>compare</a></li>
-            <li class="wishcom hidden-lg"><a href="indexe223.html?route=account/wishlist" id="wishlist-total"><i class="fa fa-heart"></i><span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">0</span></a></li>
-            <li class="xsla">  <form action="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=common/currency/currency" method="post" enctype="multipart/form-data" id="form-currency">
-    <div class="btn-group">
-      <button class="btn-link dropdown-toggle test" data-toggle="dropdown">                               <strong>$</strong>        <span>Currency</span>&nbsp;<i class="fa fa-angle-down"></i></button>
-      <ul class="dropdown-menu dropdown-menu-right langcdrop">
-                        <li>
-          <button class="currency-select btn btn-link" type="button" name="EUR">€ Euro</button>
-        </li>
-                                <li>
-          <button class="currency-select btn btn-link" type="button" name="GBP">£ Pound Sterling</button>
-        </li>
-                                <li>
-          <button class="currency-select btn btn-link" type="button" name="USD">$ US Dollar</button>
-        </li>
-                      </ul>
-    </div>
-    <input type="hidden" name="code" value="" />
-    <input type="hidden" name="redirect" value="@Url.Content("~/Home/index9328.cshtml")?route=common/home" />
-  </form>
- </li>
-            <li class="xscu">  <form action="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=common/language/language" method="post" enctype="multipart/form-data" id="form-language">
-    <div class="btn-group">
-      <button class="btn-link dropdown-toggle test" data-toggle="dropdown">
-
-      <span>English</span>
-                              &nbsp;<i class="fa fa-angle-down"></i></button>
-      <ul class="dropdown-menu dropdown-menu-right langcdrop">
-                <li>
-          <button class="btn btn-link language-select" type="button" name="en-gb"><img src="~/client/catalog/language/en-gb/en-gb.png" alt="English" title="English" /> English</button>
-        </li>
-                <li>
-          <button class="btn btn-link language-select" type="button" name="ar"><img src="~/client/catalog/language/ar/ar.png" alt="Arabic" title="Arabic" /> Arabic</button>
-        </li>
-              </ul>
-    </div>
-    <input type="hidden" name="code" value="" />
-    <input type="hidden" name="redirect" value="@Url.Content("~/Home/index9328.cshtml")?route=common/home" />
-  </form>
-</li>
-          </ul>
-
-          </li>
-
-          <li><div id="cart" class="btn-group btn-block">
-  <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="dropdown-toggle">
-    <svg><use xlink:href="#hcart"></use></svg><span id="cart-total"> <span class="cartt">0</span><span class="hidden-xs cartna">my cart</span><strong>$0.00</strong></span></button>
-  <ul class="dropdown-menu pull-right">
-        <li>
-      <p class="text-center">Your shopping cart is empty!</p>
-    </li>
-      </ul>
-</div>
-</li>
-        </ul>
-        </div>
+                    <div id="top-links" class="col-lg-4 col-md-4 col-sm-7 col-xs-5 text-right">
+                        <ul class="list-inline">
+                            <li class="wishcom hidden-md hidden-sm hidden-xs wishpad">
+                                <a href="indexe223.html?route=account/wishlist" id="wishlist-total">
+                                    <svg width="22px" height="20px">
+                                        <use xlink:href="#hwish"></use>
+                                    </svg>
+                                    <span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">0</span>
+                                </a>
+                            </li>
+                            @{
+                                var name = @ViewData["_Name"];
+                                if (name== null) {
+                                    <li class="dropdown inuser">
+                                        <a href="@Url.Action("Login","User")" title="Account" class="dropdown-toggle" data-toggle="dropdown">
+                                            <svg>
+                                                <use xlink:href="#huser"></use>
+                                            </svg>
+                                            <span class="hdis text-left nav-link  d-inline-block">
+                                                <span><span id="cartme">sign in</span></span><span class="cart-sub">Account</span>
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right user-down haccount  hlogout ">
+                                            <h5 class="text-left">Your Account</h5>
+                                            <h6 class="text-left">Access account and manage orders</h6>
+                                            <li class="acd"><a href="index5502.html?route=account/register"><i class="fa fa-user-plus"></i> Register</a></li>
+                                            <li class="acd"><a href="@Url.Action("Login","User")"><i class="fa fa-lock"></i> Login</a></li>
+                                            <li class="wishcom hidden-lg"><a href="indexe223.html?route=account/wishlist" id="wishlist-total"><i class="fa fa-heart"></i><span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">0</span></a></li>
+                                        </ul>
+                                    </li>
+                                }
+                                else {
+                                    <span class="hdis text-left nav-link  d-inline-block">
+                                    <span class="cart-sub">@Accessor.HttpContext.Session.GetString("_Name")</span>
+                                    <span class="cart-sub"><a href="@Url.Action("Logout","User")">Logout</a> </span>
+                                    </span>
+                                }
+                            }
+                            <li>
+                                <div id="cart" class="btn-group btn-block">
+                                    <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="dropdown-toggle">
+                                        <svg>
+                                            <use xlink:href="#hcart"></use>
+                                        </svg>
+                                        <span id="cart-total"> <span class="cartt">0</span><span class="hidden-xs cartna">my cart</span><strong>$0.00</strong></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <p class="text-center">Your shopping cart is empty!</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
 
 
@@ -1041,16 +1025,6 @@ jQuery(window).scroll(function() {headermenu();});
 </div> 
 
 </header>
-
-
-
-
-
-
-
-
-
-
 
 <div>
     @RenderBody()
