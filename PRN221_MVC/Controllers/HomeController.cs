@@ -18,14 +18,21 @@ namespace PRN221_MVC.Controllers {
             ViewData["_Email"] = email;
             return View();
         }
-
-        public IActionResult LoginClient() {
+        public IActionResult Register()
+        {
+            return View();
+        }
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+        public IActionResult LoginClient()
+        {
             return View();
         }
         public IActionResult Category() {
             return View();
         }
-
 
         public IActionResult Privacy() {
             return View();

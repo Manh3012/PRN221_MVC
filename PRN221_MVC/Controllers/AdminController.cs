@@ -1,13 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BAL;
+using DAL.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using DAL.Repositories.Interface;
 
 namespace PRN221_MVC.Controllers
 {
     public class AdminController : Controller
     {
+        private readonly IUserService _userService;
+
+        public AdminController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         // GET: AdminController
         public ActionResult Index()
         {
+          
             return View();
         }
 
@@ -22,9 +33,10 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public ActionResult UserList()
+        public async Task<ActionResult> UserList()
         {
-            return View();
+            List<User> users = await _userService.GetAll();
+            return View(model:users);
         }
         public ActionResult Users()
         {

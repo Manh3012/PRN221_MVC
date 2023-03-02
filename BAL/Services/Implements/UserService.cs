@@ -19,6 +19,10 @@ namespace BAL.Services.Implements
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
-      
+      public async Task<List<User>> GetAll()
+        {
+            List<User> users = null;
+            return  users= await _userRepository.GetAll();
+        }
     }
 }
