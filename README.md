@@ -25,4 +25,4 @@ Open **Package Manager Console** in **Visual Studio** IDE and run `Update-Databa
 2. `Drop-Database`
 3. `Remove-Migration`
 4. `Add-Migration "name of migration"` (after this step, if your database doesn't update, continue to step 5
-In case step 4 is not working, add Update-Database command
+5. In case step 4 is not working, add `Update-Database` command
