@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Entities {
-    public class Orders {
-
+    public class Comment {
         [Key]
         public Guid ID { get; set; }
-
-        public float Total { get; set; }
-        public DateTime CreatedDate { get; set; }
+        [Required]
+        public string Content { get; set; }
         public bool isDeleted { get; set; }
     }
 }

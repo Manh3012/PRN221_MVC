@@ -46,6 +46,34 @@ namespace DAL.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ProductID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comment");
+                });
+
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
                 {
                     b.Property<float>("Amount")
@@ -283,15 +311,15 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3957699f-423b-4e08-b48b-28934ca132d6",
-                            ConcurrencyStamp = "50cca603-ec24-4c7d-82c3-0de2be4f58e3",
+                            Id = "d7a53b7e-eecf-4f99-96d0-69bdad264a58",
+                            ConcurrencyStamp = "24411731-77ee-4e15-a157-00f40613a426",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         },
                         new
                         {
-                            Id = "021fd955-6628-4623-8aec-4f06ca59b4b1",
-                            ConcurrencyStamp = "45f6dd68-726a-48ee-bbdb-4a2f008a9cdb",
+                            Id = "3484d1fc-f402-4625-b0ba-33588d73272c",
+                            ConcurrencyStamp = "818389de-9903-4fcf-b281-53bdf2d0b563",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -403,6 +431,17 @@ namespace DAL.Migrations
                     b.ToTable("UserToken", (string)null);
                 });
 
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("DAL.Entities.Product", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("DAL.Entities.User", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
                 {
                     b.HasOne("DAL.Entities.Orders", "Order")
@@ -500,8 +539,15 @@ namespace DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DAL.Entities.Product", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
