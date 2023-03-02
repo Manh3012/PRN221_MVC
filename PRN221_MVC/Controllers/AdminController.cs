@@ -64,11 +64,6 @@ namespace PRN221_MVC.Controllers
 
             var orders = ordersService.GetOrders();
 
-            foreach(var order in orders)
-            {
-                Console.WriteLine($"Username: {order.User.Name}");
-            }
-
 
             ViewBag.Orders = orders;
 
