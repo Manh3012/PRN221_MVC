@@ -1,10 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DAL;
+using DAL.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace PRN221_MVC.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly FRMDbContext _dbContext;
+
+        public ProductController(FRMDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         // GET: ProductController
         public ActionResult Index()
         {
@@ -14,70 +26,85 @@ namespace PRN221_MVC.Controllers
         // GET: ProductController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var productDetail = _dbContext.Product.FirstOrDefault(x => x.ID == id);
+            if(productDetail==null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            return View(productDetail);
         }
+        [BindProperty]
+        public Product Product { get; set; }
 
-        // GET: ProductController/Create
-        public ActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> ViewProduct(int id)
         {
-            return View();
+            var productDetail= await _dbContext.Product.FirstOrDefaultAsync(x => x.ID == id);
+            return View(productDetail);
         }
-
-        // POST: ProductController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> ViewProduct(Product product)
         {
-            try
+            var productDetail=await _dbContext.Product.FindAsync(product.ID);
+            if(productDetail!=null)
             {
-                return RedirectToAction(nameof(Index));
+                productDetail.Name= product.Name;
+                productDetail.Price= product.Price;
+                productDetail.imgPath = product.imgPath;
+                productDetail.isDeleted = product.isDeleted;
+                productDetail.isAvailable= product.isAvailable;
+                await _dbContext.SaveChangesAsync();
             }
-            catch
+            return RedirectToAction("ListProduct");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(Product product)
+        {
+            var productdetail = await _dbContext.Product.FindAsync(product.ID);
+            if(productdetail!=null)
             {
-                return View();
-            }
+                productdetail.isDeleted = true;
+                 _dbContext.Product.Update(productdetail);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction("ListProduct");
+            }else
+            { return RedirectToAction("ListProduct"); }
         }
 
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<IActionResult> ListProduct()
+        {
+            var productList= await _dbContext.Product.ToListAsync();
+            return View(productList);
+        }
+
+        [HttpGet]
+        public IActionResult CreateProduct()
         {
             return View();
         }
-
-        // POST: ProductController/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> CreateProduct(Product product)
         {
-            try
+            var products = new Product()
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                Name = product.Name,
+                Price = product.Price,
+                imgPath = product.imgPath,
+                isAvailable = product.isAvailable,
+                isDeleted = product.isDeleted,
+            };
+            await _dbContext.Product.AddAsync(products);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("CreateProduct");
         }
+  
 
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+       
+       
+
+
+      
     }
 }

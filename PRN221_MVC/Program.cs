@@ -1,14 +1,14 @@
-using BAL.Services.Implements;
 using DAL;
+using System.Text;
 using DAL.Entities;
 using DAL.Infacstucture;
-using DAL.Repositories.Implements;
+using BAL.Services.Implements;
 using DAL.Repositories.Interface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DAL.Repositories.Implements;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 

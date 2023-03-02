@@ -1,0 +1,30 @@
+﻿@model DAL.Entities.Product
+
+@{
+    ViewData["Title"] = "CreateProduct";
+    Layout = "~/Views/Shared/LayoutClient.cshtml";
+}
+<form method="post" action="CreateProduct" class="mt-5">
+    <div class="mb-3">
+        <label for="" class="form-label">Name</label>
+        <input type="text" class="form-control" asp-for="Name">
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Price</label>
+        <input type="number" class="form-control" asp-for="Price">
+    </div>
+      <div class="mb-3">
+    <label for="" class="form-label">imgPath</label>
+        <input type="text" class="form-control" asp-for="imgPath">
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">isAvailable</label>
+        <input type="checkbox" class="form-control" asp-for="isAvailable">
+    </div>
+      <div class="mb-3">
+        <label for="" class="form-label">isDeleted</label>
+        <input type="checkbox" class="form-control" asp-for="isDeleted">
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
