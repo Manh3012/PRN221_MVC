@@ -109,5 +109,10 @@ namespace BAL.Services.Implements
         {
             return _ordersRepository.GetOrderDetailsByOrderId(orderId);
         }
+
+        public Orders GetOrderById(Guid id)
+        {
+            return _ordersRepository.GetOrderById(id);
+        }
     }
 }

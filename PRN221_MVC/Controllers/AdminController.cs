@@ -70,14 +70,19 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        public ActionResult OrderDetails(Guid order)
+        public ActionResult OrderDetails(Guid id)
         {
-            var orderDetails = ordersService.GetOrderDetailsByOrderId(order);
-            
+            var orderDetails = ordersService.GetOrderDetailsByOrderId(id);
+            var order = ordersService.GetOrderById(id);
+            float subtotals = 0;
             foreach(var item in orderDetails)
             {
-                Console.WriteLine("details: ", item.Amount);
+                subtotals += + item.Product.Price * item.Quantity;
             }
+
+            ViewBag.Order = order;
+            ViewBag.OrderDetails = orderDetails;
+            ViewBag.SubTotals = subtotals;
 
             return View();
         }

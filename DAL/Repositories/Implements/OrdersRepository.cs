@@ -161,5 +161,13 @@ namespace DAL.Repositories.Implements
                 .Include(od => od.Product)
                 .ToList();
         }
+
+        public Orders GetOrderById(Guid id)
+        {
+            var order = _dbContext.Orders
+                        .Include(o => o.User)
+                        .FirstOrDefault(o => o.ID == id);
+            return order;
+        }
     }
 }
