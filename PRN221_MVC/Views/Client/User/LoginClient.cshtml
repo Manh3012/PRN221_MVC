@@ -3,6 +3,8 @@
     ViewData["Title"] = "LoginClient";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
 }
+@model LoginUserViewModel
+
 <div class="breadbg">
     <div class="container">
         <div class="row">
@@ -31,18 +33,16 @@
                     <div class="well">
                         <h1>Returning Customer</h1>
                         <p><strong>I am a returning customer</strong></p>
-                        <form action="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=account/login" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label class="control-label" for="input-email">E-Mail Address</label>
-                                <input type="text" name="email" value="" placeholder="E-Mail Address" id="input-email" class="form-control" />
+                        <form asp-controller="User" asp-action="Login" method="post" enctype="multipart/form-data">
+                            <div class="form-group required">
+                                <label class="control-label" asp-for="Email">E-Mail</label>
+                                <input type="email" name="email" value="binhvqse161554@fpt.edu.vn" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
                             </div>
-                            <div class="form-group">
-                                <label class="control-label" for="input-password">Password</label>
-                                <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control" />
-                                <div class="text-right"><a href="indexacda.html?route=account/forgotten">Forgotten Password</a></div>
+                            <div class="form-group required">
+                                <label class="control-label" asp-for="Password">Password</label>
+                                <input type="password" name="password" asp-for="Password" value="123@abcABC" placeholder="Password" id="input-password" class="form-control" />
                             </div>
                             <input type="submit" value="Login" class="btn btn-primary" />
-                            <input type="hidden" name="redirect" value="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=account/wishlist" />
                             <a class="btn btn-primary" href="@Url.Action("GoogleLogin", "User")">Log In With Google</a>
                         </form>
                     </div>

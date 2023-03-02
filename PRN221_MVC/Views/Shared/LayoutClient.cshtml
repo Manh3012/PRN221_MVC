@@ -807,7 +807,8 @@
                                 </a>
                             </li>
                             @{
-                                if (Accessor.HttpContext.Session.GetString("_Name") == null) {
+                                var name = @ViewData["_Name"];
+                                if (name== null) {
                                     <li class="dropdown inuser">
                                         <a href="@Url.Action("Login","User")" title="Account" class="dropdown-toggle" data-toggle="dropdown">
                                             <svg>

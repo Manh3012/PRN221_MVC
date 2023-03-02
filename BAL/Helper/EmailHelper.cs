@@ -1,10 +1,17 @@
 ﻿using MailKit.Security;
+using Microsoft.Extensions.Logging;
 using MimeKit;
 using MimeKit.Text;
 using System.Net.Mail;
 
 namespace BAL.Helpers {
     public class EmailHelper {
+        private readonly ILogger<EmailHelper> _logger;
+        public EmailHelper(ILogger<EmailHelper> logger) => _logger = logger;
+
+        public EmailHelper() {
+        }
+
         public bool SendEmailTwoFactorCode(string userEmail, string code) {
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
@@ -26,6 +33,7 @@ namespace BAL.Helpers {
             }
             catch (Exception ex) {
                 // log exception
+                _logger.LogError(ex.Message);
             }
             return false;
         }
@@ -57,7 +65,7 @@ namespace BAL.Helpers {
             mailMessage.IsBodyHtml = true;
             mailMessage.Body = link;
 
-            System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+            SmtpClient client = new System.Net.Mail.SmtpClient();
             client.Credentials = new System.Net.NetworkCredential("care@yogihosting.com", "yourpassword");
             client.Host = "smtpout.secureserver.net";
             client.Port = 80;
@@ -68,6 +76,7 @@ namespace BAL.Helpers {
             }
             catch (Exception ex) {
                 // log exception
+                _logger.LogError(ex.Message);
             }
             return false;
         }
