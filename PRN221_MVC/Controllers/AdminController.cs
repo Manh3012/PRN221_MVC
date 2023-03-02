@@ -12,10 +12,11 @@ namespace PRN221_MVC.Controllers
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
-
-        public AdminController(IUserService userService)
+        private UserManager<User> _userManager;
+        public AdminController(IUserService userService, UserManager<User> userManager)
         {
             _userService = userService;
+            _userManager = userManager;
         }
 
         // GET: AdminController
@@ -75,31 +76,28 @@ namespace PRN221_MVC.Controllers
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
             try
             {
+                string password = "A1@ahdsgflifg";
                 var newUser = new User
                 {
                     Name = HttpContext.Request.Form["username"],
                     Email = HttpContext.Request.Form["useremail"],
-                    PasswordHash = HttpContext.Request.Form["userpassword"].GetHashCode().ToString(),
                     PhoneNumber = HttpContext.Request.Form["mobile number"],
                     DoB = DateTime.Parse("01/01/2000"),
                     Gender = "F",
                     Address = "NaN",
                     isDeleted = false,
-                    UserName = "",
-                    PhoneNumberConfirmed = false,
-                    AccessFailedCount = 0,
-                    ConcurrencyStamp = "",
-                    EmailConfirmed = false,
+                    UserName = "erererere",
                 };
-                using (var db = new FRMDbContext())
-                {
-                    db.Users.Add(newUser);
-                    db.SaveChanges();
-                }
+              IdentityResult re = await _userManager.CreateAsync(newUser, password);
+                //using (var db = new FRMDbContext())
+                //{
+                //    db.Users.Add(newUser);
+                //    db.SaveChanges();
+                //}
                 return RedirectToAction("Index");
             }
             catch
@@ -133,7 +131,6 @@ namespace PRN221_MVC.Controllers
                     db.Users.Update(getUserbyId);
                     db.SaveChanges();
                 }
-
                 return RedirectToAction(nameof(Index));
             }
             catch

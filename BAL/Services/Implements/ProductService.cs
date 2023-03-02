@@ -26,12 +26,12 @@ namespace BAL.Services.Implements
             _unitOfWork = unitOfWork;
         }
 
-        public List<Product> Filter(string type)
+        public List<Product> Filter(int id)
         {
             using (var context = new FRMDbContext())
             {
                 var products = context.Product
-                                .Where(p => p.Category.Name == type || p.Category.ShortName == type)
+                                .Where(p => p.Category.ID == id)
                                 .ToList();
                 return products;
             }

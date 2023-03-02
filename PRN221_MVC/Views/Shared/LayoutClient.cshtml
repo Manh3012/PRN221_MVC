@@ -783,19 +783,25 @@
                         <a href="@Url.Content("users/admin/onedrive/desktop/prn221_mvc/prn221_mvc/prn221_mvc/views/shared/error404.cshtml")?route=common/home"><img src="~/client/image/catalog/logo.png" title="upbasket" alt="upbasket" class="img-responsive" /></a>
                     </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 rightac headsearch">
-                    <form action="@Url.Action("SearchProduct", "Product")" method="GET">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 rightac headsearch">
+                        <form action="@Url.Action("SearchProduct", "Product")" method="GET">
                             <div id="search" class="desktop-search">
                                 <div id="search" class="wbSearch">
                                     <div id="search_block_top">
                                         <div class="input-group">
-                                            <input type="text" id="search" name="search" value="" placeholder="Search" class="search_query form-control input-lg madebyhand-search" />
-                                            <div class="input-group-btn">
-                                                <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search  hidden-sm hidden-md hidden-lg hidden-xs"></i> <span>Search</span> </button>
-                                            </div>
-                                            @if (ViewBag.Message != null)
+
+                                            @if (TempData["Message"] != null)
                                             {
-                                                <script>alert("@ViewBag.Message");</script>
+                                                <input type="text" id="search" name="search" value="" placeholder="@TempData["Message"]" class="search_query form-control input-lg madebyhand-search" />
+                                                <div class="input-group-btn">
+                                                    <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search  hidden-sm hidden-md hidden-lg hidden-xs"></i> <span>Search</span> </button>
+                                                </div>
+                                            }
+                                            @if (TempData["Message"] == null){
+                                                <input type="text" id="search" name="search" value="" placeholder="search" class="search_query form-control input-lg madebyhand-search" />
+                                                <div class="input-group-btn">
+                                                    <button type="submit" class="btn btn-primary btn-lg"><i class="fa fa-search  hidden-sm hidden-md hidden-lg hidden-xs"></i> <span>Search</span> </button>
+                                                </div>
                                             }
                                             <!-- madebyhand Search Start  -->
                                             @*<div class="madebyhand-search text-left">
@@ -925,7 +931,7 @@
                                             </div>
                                             <div class="collapse navbar-collapse navbar-ex1-collapse">
                                                 <ul class="nav navbar-nav">
-                                                    <li class="m-menu"><a href="@Url.Action("filter", "Product")">meats &amp; sea foods</a></li>
+                                                    <li class="m-menu"><a href="@Url.Action("filter", "Product", new {id = 1})">meats &amp; sea foods</a></li>
                                                     <li class="m-menu"><a href="@Url.Action("filter", "Product")">breads &amp; bakery</a></li>
                                                     <li class="dropdown m-menu">
                                                         <a href="index73b3.html?route=product/category&amp;path=59" class="dropdown-toggle header-menu" data-toggle="dropdown">breakfast &amp; dairy<i class="fa fa-angle-down enaleng"></i></a>
@@ -1078,14 +1084,6 @@
         </div>
 
     </header>
-
-
-
-
-
-
-
-
 
 
 

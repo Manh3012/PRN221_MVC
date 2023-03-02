@@ -10,6 +10,6 @@ namespace DAL.Repositories.Interface
     public interface IProductService
     {
         List<Product> Search(string searchItems);
-        List<Product> Filter(string type);
+        List<Product> Filter(int id);
     }
 }

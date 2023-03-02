@@ -27,10 +27,6 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        public ActionResult filter()
-        {
-            return View("CatergoryProduct");
-        }
 
         // POST: ProductController/Create
         [HttpPost]
@@ -95,15 +91,18 @@ namespace PRN221_MVC.Controllers
             if (items.Count == 0)
             {
                 ViewBag.Message = "Nothing Found";
+                TempData["Message"] = ViewBag.Message;
                 return View("/Views/Home/Index.cshtml");
             }
-            return RedirectToAction("Create", items);
+            ViewBag.Search = items;
+            return View("Filter");
         }
 
-        public ActionResult FilterProduct(string categoryName)
+        public ActionResult Filter(int id)
         {
-            var products = productService.Filter(categoryName);
-            return View(products);
+            var products = productService.Filter(id);
+            ViewBag.Show = products;
+            return View("Filter");
         }
     }
 }
