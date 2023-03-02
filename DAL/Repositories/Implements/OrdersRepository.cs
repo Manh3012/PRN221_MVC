@@ -107,7 +107,8 @@ namespace DAL.Repositories.Implements
 
         public List<Orders> GetOrders()
         {
-            return _dbContext.Orders.ToList();
+            return _dbContext.Orders
+                .Include(m => m.User).ToList();
         }
 
         public Dictionary<string, float> GetOrderValuesInEachMonth()
@@ -151,6 +152,14 @@ namespace DAL.Repositories.Implements
             }
 
             return monthlySalesData;
+        }
+
+        public List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId)
+        {
+            return _dbContext.OrderDetail
+                .Where(od => od.Order.ID == orderId)
+                .Include(od => od.Product)
+                .ToList();
         }
     }
 }

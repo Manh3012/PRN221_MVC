@@ -104,5 +104,10 @@ namespace BAL.Services.Implements
             var list = _ordersRepository.GetSalesDataMonthly(year);
             return list;
         }
+
+        public List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId)
+        {
+            return _ordersRepository.GetOrderDetailsByOrderId(orderId);
+        }
     }
 }

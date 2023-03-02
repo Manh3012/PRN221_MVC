@@ -55,6 +55,13 @@ namespace DAL {
             modelBuilder.Entity<Transaction>().Property(x => x.ID).HasDefaultValueSql("NEWID()");
             #endregion
 
+            //configuration for relationship entitu
+            modelBuilder.Entity<User>()
+                .HasMany(m => m.Orders)
+                .WithOne(m => m.User)
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

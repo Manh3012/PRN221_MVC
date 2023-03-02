@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
+using DAL.Entities;
 
 namespace PRN221_MVC.Controllers
 {
@@ -63,8 +64,25 @@ namespace PRN221_MVC.Controllers
 
             var orders = ordersService.GetOrders();
 
+            foreach(var order in orders)
+            {
+                Console.WriteLine($"Username: {order.User.Name}");
+            }
+
 
             ViewBag.Orders = orders;
+
+            return View();
+        }
+
+        public ActionResult OrderDetails(Guid order)
+        {
+            var orderDetails = ordersService.GetOrderDetailsByOrderId(order);
+            
+            foreach(var item in orderDetails)
+            {
+                Console.WriteLine("details: ", item.Amount);
+            }
 
             return View();
         }

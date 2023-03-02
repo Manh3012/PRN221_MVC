@@ -18,6 +18,7 @@ namespace DAL.Repositories.Interface
         List<Orders> GetOrders();
         Dictionary<string, float> GetOrderValuesInEachMonth();
         List<(int Month, int TotalOrders, int TotalProducts)> GetSalesDataMonthly(int year);
+        List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId);
 
     }
 }
