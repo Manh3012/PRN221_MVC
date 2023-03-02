@@ -86,17 +86,27 @@ namespace PRN221_MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProduct(Product product)
         {
-            var products = new Product()
+            if(_dbContext.Product.Any(p=>p.Name == product.Name))
             {
-                Name = product.Name,
-                Price = product.Price,
-                imgPath = product.imgPath,
-                isAvailable = product.isAvailable,
-                isDeleted = product.isDeleted,
-            };
-            await _dbContext.Product.AddAsync(products);
-            await _dbContext.SaveChangesAsync();
-            return RedirectToAction("CreateProduct");
+                ModelState.AddModelError($"Name", "A product with this name already exists.");
+                return View(product);
+            }
+            if (ModelState.IsValid)
+            {
+
+                var products = new Product()
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    imgPath = product.imgPath,
+                    isAvailable = product.isAvailable,
+                    isDeleted = product.isDeleted,
+                };
+                await _dbContext.Product.AddAsync(products);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction("CreateProduct");
+            }
+            return View(product);
         }
   
 
