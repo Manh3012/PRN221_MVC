@@ -101,7 +101,14 @@ namespace PRN221_MVC.Controllers
         public ActionResult Filter(int id)
         {
             var products = productService.Filter(id);
-            ViewBag.Show = products;
+            if (products.Count > 0)
+            {
+                ViewBag.Show = products;
+            }
+            else
+            {
+                ViewBag.Error = "No Item Found";
+            }
             return View("Filter");
         }
     }

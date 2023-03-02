@@ -780,7 +780,7 @@
                 <div class="row">
                     <div class="col-xs-2 col-sm-1 hidden-md hidden-lg hidden-xl appmenu"></div>
                     <div id="logo" class="col-lg-2 col-md-2 col-sm-2 col-xs-3 text-left">
-                        <a href="@Url.Content("users/admin/onedrive/desktop/prn221_mvc/prn221_mvc/prn221_mvc/views/shared/error404.cshtml")?route=common/home"><img src="~/client/image/catalog/logo.png" title="upbasket" alt="upbasket" class="img-responsive" /></a>
+                        <a href="@Url.Content("/")"><img src="~/client/image/catalog/logo.png" title="upbasket" alt="upbasket" class="img-responsive" /></a>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 rightac headsearch">
@@ -932,10 +932,10 @@
                                             <div class="collapse navbar-collapse navbar-ex1-collapse">
                                                 <ul class="nav navbar-nav">
                                                     <li class="m-menu"><a href="@Url.Action("filter", "Product", new {id = 1})">meats &amp; sea foods</a></li>
-                                                    <li class="m-menu"><a href="@Url.Action("filter", "Product")">breads &amp; bakery</a></li>
-                                                    <li class="dropdown m-menu">
-                                                        <a href="index73b3.html?route=product/category&amp;path=59" class="dropdown-toggle header-menu" data-toggle="dropdown">breakfast &amp; dairy<i class="fa fa-angle-down enaleng"></i></a>
-                                                        <div class="dropdown-menu">
+                                                    <li class="m-menu"><a href="@Url.Action("filter", "Product", new {id = 2})">breads &amp; bakery</a></li>
+                                                    <li class="@*dropdown*@ m-menu">
+                                                        <a href="@Url.Action("filter", "Product", new {id = 3})" @*class="dropdown-toggle header-menu" data-toggle="dropdown"*@>breakfast &amp; dairy@*<i class="fa fa-angle-down enaleng">*@</i></a>
+                                                        @*<div class="dropdown-menu">
                                                             <div class="dropdown-inner">
                                                                 <ul class="list-unstyled">
                                                                     <!--3rd level-->
@@ -951,7 +951,7 @@
                                                                 <ul class="list-unstyled">
                                                                     <!--3rd level-->
                                                                     <li class="dropdown-submenu">
-                                                                        <a href="index8733.html?route=product/category&amp;path=59_90" class="submenu-title"> fruits (5) </a>
+                                                                        <a href="@Url.Action("filter", "Product", new {id = 4})" class="submenu-title"> fruits (5) </a>
                                                                         <ul class="list-unstyled grand-child">
                                                                             <li> <a href="indexa297.html?route=product/category&amp;path=90_96"> juice (1) </a> </li>
                                                                             <li> <a href="index4e40.html?route=product/category&amp;path=90_97"> mango (1) </a> </li>
@@ -960,12 +960,12 @@
                                                                     <!--3rd level over-->
                                                                 </ul>
                                                             </div>
-                                                            <a href="index73b3.html?route=product/category&amp;path=59" class="see-all hidden-md hidden-lg">Show All breakfast &amp; dairy</a>
-                                                        </div>
+                                                            <a href="@Url.Action("filter", "Product", new {id = 3})" class="see-all hidden-md hidden-lg">Show All breakfast &amp; dairy</a>
+                                                        </div>*@
                                                     </li>
-                                                    <li class="dropdown m-menu">
-                                                        <a href="index1647.html?route=product/category&amp;path=25" class="dropdown-toggle header-menu" data-toggle="dropdown">fruits &amp; juice<i class="fa fa-angle-down enaleng"></i></a>
-                                                        <div class="dropdown-menu">
+                                                    <li class="@*dropdown *@m-menu">
+                                                        <a href="@Url.Action("filter", "Product", new {id = 3})" @*class="dropdown-toggle header-menu" data-toggle="dropdown"*@>fruits &amp; juice@*<i class="fa fa-angle-down enaleng"></i>*@</a>
+                                                        @*<div class="dropdown-menu">
                                                             <div class="dropdown-inner">
                                                                 <ul class="list-unstyled">
                                                                     <!--3rd level-->
@@ -1029,9 +1029,9 @@
                                                                 </ul>
                                                             </div>
                                                             <a href="index1647.html?route=product/category&amp;path=25" class="see-all hidden-md hidden-lg">Show All fruits &amp; juice</a>
-                                                        </div>
+                                                        </div>*@
                                                     </li>
-                                                    <li class="m-menu"><a href="index68ea.html?route=product/category&amp;path=33">fruits &amp; vegetables</a></li>
+                                                    <li class="m-menu"><a href="@Url.Action("filter", "Product", new {id = 5})">fruits &amp; vegetables</a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -1090,6 +1090,7 @@
     <div>
         @RenderBody()
     </div>
+
     <footer>
         <div class="middle-footer">
             <div class="container">

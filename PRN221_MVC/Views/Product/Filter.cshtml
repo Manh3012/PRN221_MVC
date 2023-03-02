@@ -4,43 +4,51 @@
 }
 
 
-<div>
+<div style="display: block; overflow: auto">
     @if (ViewBag.Show != null)
     {
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var product in ViewBag.Show)
-                {
-                    <tr>
-                        <td>@product.Name</td>
-                        <td>@product.Price</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    } @if(ViewBag.Search != null){
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var product in ViewBag.Search)
-                {
-                    <tr>
-                        <td>@product.Name</td>
-                        <td>@product.Price</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @foreach (var v in ViewBag.Show)
+        {
+            <div class="col-xs-4 mb-3 text-center">
+                <div>
+                    <a href="">
+                        <img src="~/client/image/cache/catalog/category/1-120x120.png" class="img-responsive center-block" alt="">
+                        <div>
+                            <h2><span>@v.Name</span></h2>
+                            <h6>Price: @v.Price</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    }
+    @if (ViewBag.Search != null)
+    {
+        @foreach (var v in ViewBag.Search)
+        {
+            <div class="col-xs-4 mb-3 text-center">
+                <div>
+                    <a href="">
+                        <img src="~/client/image/cache/catalog/category/1-120x120.png" class="img-responsive center-block" alt="">
+
+                        <div>
+                            <h2><span>@v.Name</span></h2>
+                            <h6>Price: @v.Price</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    }
+    @if (ViewBag.Error != null)
+    {
+        <div class="text-center">
+            <div class="inner">
+                <div class="description-top">
+                    <h1>@ViewBag.Error</h1>
+                    <p>We really sorry about this problem</p>
+                </div>
+            </div>
+        </div>
     }
 </div>

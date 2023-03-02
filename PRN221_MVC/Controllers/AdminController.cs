@@ -6,6 +6,7 @@ using DAL.Repositories.Interface;
 using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PRN221_MVC.Controllers
 {
@@ -13,10 +14,12 @@ namespace PRN221_MVC.Controllers
     {
         private readonly IUserService _userService;
         private UserManager<User> _userManager;
-        public AdminController(IUserService userService, UserManager<User> userManager)
+        private RoleManager<IdentityUserRole<string>> _roleManager;
+        public AdminController(IUserService userService, UserManager<User> userManager, RoleManager<IdentityUserRole<string>> roleManager)
         {
             _userService = userService;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: AdminController
@@ -78,26 +81,26 @@ namespace PRN221_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection)
         {
+
             try
             {
                 string password = "A1@ahdsgflifg";
                 var newUser = new User
                 {
-                    Name = HttpContext.Request.Form["username"],
+                    UserName = HttpContext.Request.Form["username"],
                     Email = HttpContext.Request.Form["useremail"],
                     PhoneNumber = HttpContext.Request.Form["mobile number"],
                     DoB = DateTime.Parse("01/01/2000"),
                     Gender = "F",
                     Address = "NaN",
                     isDeleted = false,
-                    UserName = "erererere",
+                    Name = "erererere",
                 };
-              IdentityResult re = await _userManager.CreateAsync(newUser, password);
-                //using (var db = new FRMDbContext())
-                //{
-                //    db.Users.Add(newUser);
-                //    db.SaveChanges();
-                //}
+                IdentityResult re = await _userManager.CreateAsync(newUser, password);
+
+                //IdentityResult re1 = await _userManager.AddToRoleAsync(newUser, "admin");
+                //IdentityResult a = await _roleManager.CreateAsync(new IdentityUserRole<string>().RoleId = newUser.Id);
+                //await _userManager.AddToRoleAsync(newUser, "Visitor");
                 return RedirectToAction("Index");
             }
             catch

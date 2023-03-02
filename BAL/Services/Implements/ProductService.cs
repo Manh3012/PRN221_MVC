@@ -42,7 +42,7 @@ namespace BAL.Services.Implements
             using (var context = new FRMDbContext())
             {
                 var results = context.Product
-                                .Where(p => p.Name.Contains(searchItems))
+                                .Where(p => p.Name.Contains(searchItems) || p.Category.Name.Equals(searchItems))
                                 .ToList();
                 return results;
             }
