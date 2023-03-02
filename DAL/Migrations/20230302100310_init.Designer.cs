@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(FRMDbContext))]
-    [Migration("20230302095323_init")]
+    [Migration("20230302100310_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -314,15 +314,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d7a53b7e-eecf-4f99-96d0-69bdad264a58",
-                            ConcurrencyStamp = "24411731-77ee-4e15-a157-00f40613a426",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
+                            Id = "4d876dfd-3b11-46e6-ab92-a6e16f622929",
+                            ConcurrencyStamp = "3551a43d-33b5-46d5-a79e-a2b2a141177a",
+                            Name = "ShopOwner",
+                            NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "3484d1fc-f402-4625-b0ba-33588d73272c",
-                            ConcurrencyStamp = "818389de-9903-4fcf-b281-53bdf2d0b563",
+                            Id = "d3e186c7-4d8a-431a-82d9-f035694c1fad",
+                            ConcurrencyStamp = "203dc6ff-f3dc-429a-80b5-ebfc2298a77e",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "c81b05ed-c4f4-4902-850a-ea6705f4ee5c",
+                            ConcurrencyStamp = "5d102afc-9e79-49a7-aa75-88c8a939ad6b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
