@@ -7,35 +7,150 @@
 <div style="display: block; overflow: auto">
     @if (ViewBag.Show != null)
     {
+        <h3 class="text-right" style="font-weight:300">@ViewBag.Count items found</h3>
         @foreach (var v in ViewBag.Show)
         {
-            <div class="col-xs-4 mb-3 text-center">
-                <div>
-                    <a href="">
-                        <img src="~/client/image/cache/catalog/category/1-120x120.png" class="img-responsive center-block" alt="">
-                        <div>
-                            <h2><span>@v.Name</span></h2>
-                            <h6>Price: @v.Price</h6>
+            <div class="product-layout col-xs-4 cless">
+                <div class="product-thumb transition">
+                    <div class="image">
+                        <a href="indexbb02.html?route=product/product&amp;product_id=42"><img src="~/client/image/cache/catalog/product/10-315x315.jpg" alt="Organic Cold Pressed Sunflower Cooking Oil" title="Organic Cold Pressed Sunflower Cooking Oil" class="img-responsive center-block" /></a>
+                        <!-- Images Start -->
+                        <a href="indexbb02.html?route=product/product&amp;product_id=42"><img src="~/client/image/cache/catalog/product/2-315x315.jpg" class="img-responsive second-img" alt="hover image" /></a>
+
+                    </div>
+
+                    <div class="caption text-center">
+                        <h4 class="protitle"><a href="">@v.Name</a></h4>
+                        <div class="webi-main">
+                            <input type="hidden" name="product_id" value="@v.ID" />
                         </div>
-                    </a>
+                        <div class="rating comments_note wb-list-product-reviews">
+                            <span class="or-rate">
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                            </span>
+
+                        </div>
+                        <p class="price">
+                            <span data-update='price-42' class="price">$@v.Price</span>
+                        </p>
+
+                        <div class="homeqtinner text-center">
+                            <div class="homeqt">
+                                <button type="button" onclick="qty.minus('42')" class="form-control pull-left btn-number btnminus dis-42" disabled="disabled">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                                <input name="quantity" class="addhqty" type="text" value="1" size="2" min="1" max="999" id="input-quantity-42" class="form-control input-number pull-left" />
+                                <button type="button" onclick="qty.plus('42')" class="form-control pull-left btn-number btnplus">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                            <input type="hidden" name="product_id" value="42" />
+                            <button type="button" class="cartb add-to-cart webi-cart"><svg><use xlink:href="#pcart"></use></svg></button>
+                            <input type="hidden" name="hid-qty-msg" value="Quantity At Least One or More">
+                        </div>
+                        <div class="button-group">
+                            <div class="absbtn">
+                                <button type="button" class="btn-wishlist" data-toggle="tooltip" title="Add to Wish List" onclick="wishlist.add('42');"><svg><use xlink:href="#heart" /></svg></button>
+                                <button type="button" class="btn-compare" data-toggle="tooltip" title="Compare this Product" onclick="compare.add('42');"><svg><use xlink:href="#compare" /></svg></button>
+                                <div data-toggle="tooltip" title="Quickview" class="bquickv"></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         }
     }
     @if (ViewBag.Search != null)
     {
+        <h3 class="text-right" style="font-weight:300">@ViewBag.Count items found</h3>
         @foreach (var v in ViewBag.Search)
         {
-            <div class="col-xs-4 mb-3 text-center">
-                <div>
-                    <a href="">
-                        <img src="~/client/image/cache/catalog/category/1-120x120.png" class="img-responsive center-block" alt="">
+            <div class="product-layout col-xs-4 cless">
+                <div class="product-thumb transition">
+                    <div class="image">
+                        <a href="indexbb02.html?route=product/product&amp;product_id=42"><img src="~/client/image/cache/catalog/product/10-315x315.jpg" alt="Organic Cold Pressed Sunflower Cooking Oil" title="Organic Cold Pressed Sunflower Cooking Oil" class="img-responsive center-block" /></a>
+                        <!-- Images Start -->
+                        <a href="indexbb02.html?route=product/product&amp;product_id=42"><img src="~/client/image/cache/catalog/product/2-315x315.jpg" class="img-responsive second-img" alt="hover image" /></a>
 
-                        <div>
-                            <h2><span>@v.Name</span></h2>
-                            <h6>Price: @v.Price</h6>
+                    </div>
+
+                    <div class="caption text-center">
+                        <h4 class="protitle"><a href="">@v.Name</a></h4>
+                        <div class="webi-main">
+                            <input type="hidden" name="product_id" value="@v.ID" />
                         </div>
-                    </a>
+                        <div class="rating comments_note wb-list-product-reviews">
+                            <span class="or-rate">
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                                <span class="fa fa-stack">
+                                    <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+
+                            </span>
+
+                        </div>
+                        <p class="price">
+                            <span data-update='price-42' class="price">$@v.Price</span>
+                        </p>
+
+                        <div class="homeqtinner text-center">
+                            <div class="homeqt">
+                                <button type="button" onclick="qty.minus('42')" class="form-control pull-left btn-number btnminus dis-42" disabled="disabled">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                                <input name="quantity" class="addhqty" type="text" value="1" size="2" min="1" max="999" id="input-quantity-42" class="form-control input-number pull-left" />
+                                <button type="button" onclick="qty.plus('42')" class="form-control pull-left btn-number btnplus">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                            <input type="hidden" name="product_id" value="42" />
+                            <button type="button" class="cartb add-to-cart webi-cart"><svg><use xlink:href="#pcart"></use></svg></button>
+                            <input type="hidden" name="hid-qty-msg" value="Quantity At Least One or More">
+                        </div>
+                        <div class="button-group">
+                            <div class="absbtn">
+                                <button type="button" class="btn-wishlist" data-toggle="tooltip" title="Add to Wish List" onclick="wishlist.add('42');"><svg><use xlink:href="#heart" /></svg></button>
+                                <button type="button" class="btn-compare" data-toggle="tooltip" title="Compare this Product" onclick="compare.add('42');"><svg><use xlink:href="#compare" /></svg></button>
+                                <div data-toggle="tooltip" title="Quickview" class="bquickv"></div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         }
@@ -45,7 +160,7 @@
         <div class="text-center">
             <div class="inner">
                 <div class="description-top">
-                    <h1>@ViewBag.Error</h1>
+                    <h1 style="color: red">@ViewBag.Error</h1>
                     <p>We really sorry about this problem</p>
                 </div>
             </div>

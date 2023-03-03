@@ -2,6 +2,7 @@
 using DAL.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using DAL.Entities;
 
 namespace PRN221_MVC.Controllers
 {
@@ -90,11 +91,16 @@ namespace PRN221_MVC.Controllers
             var items = productService.Search(search);
             if (items.Count == 0)
             {
-                ViewBag.Message = "Nothing Found";
-                TempData["Message"] = ViewBag.Message;
-                return View("/Views/Home/Index.cshtml");
+                //ViewBag.Message = "Nothing Found";
+                //TempData["Message"] = ViewBag.Message;
+                //return View("/Views/Home/Index.cshtml");
+                ViewBag.Error = "No Item Found";
             }
-            ViewBag.Search = items;
+            else
+            {
+                ViewBag.Count = items.Count;
+                ViewBag.Search = items;
+            }
             return View("Filter");
         }
 
@@ -103,6 +109,7 @@ namespace PRN221_MVC.Controllers
             var products = productService.Filter(id);
             if (products.Count > 0)
             {
+                ViewBag.Count = products.Count;
                 ViewBag.Show = products;
             }
             else
