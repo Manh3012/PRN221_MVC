@@ -3,7 +3,7 @@
 @using Newtonsoft.Json;
 @inject IHttpContextAccessor HttpContextAccessor
 @{
-    var wishlistJson = HttpContextAccessor.HttpContext.Session.GetString("WishList");
+    var wishlistJson = HttpContextAccessor.HttpContext.Session.GetString("Wishlist");
     var wishlist = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
 }
 

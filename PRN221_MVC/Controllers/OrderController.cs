@@ -17,7 +17,7 @@ namespace PRN221_MVC.Controllers
             var session = HttpContext.Session;
 
             // Retrieve the wishlist from session state
-            var wishlistJson = session.GetString("WishList");
+            var wishlistJson = session.GetString("Wishlist");
             var listProduct = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
 
             // Pass the wishlist to the view
@@ -27,7 +27,7 @@ namespace PRN221_MVC.Controllers
         public IActionResult RemoveFromWishList(int id)
         {
             // Retrieve the current wishlist from session state
-            var wishlistJson = HttpContext.Session.GetString("WishList");
+            var wishlistJson = HttpContext.Session.GetString("Wishlist");
             var wishlist = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
 
             // Remove the product with the specified ID from the wishlist
@@ -37,7 +37,7 @@ namespace PRN221_MVC.Controllers
                 wishlist.Remove(productToRemove);
 
                 // Store the updated wishlist back in session state
-                HttpContext.Session.SetString("WishList", JsonConvert.SerializeObject(wishlist));
+                HttpContext.Session.SetString("Wishlist", JsonConvert.SerializeObject(wishlist));
             }
 
             // Redirect back to the wishlist page

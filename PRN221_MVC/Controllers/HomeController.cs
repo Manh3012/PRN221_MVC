@@ -7,6 +7,7 @@ using PRN221_MVC.Models;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Evaluation;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -44,30 +45,50 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public IActionResult AddToWishList(string sessionValue)
+        [HttpPost]
+        public IActionResult AddToWishList(int id)
         {
 
-            var product = JsonConvert.DeserializeObject<Product>(sessionValue);
-
-            // Get the session object from the HttpContext
-            var session = HttpContext.Session;
-
-            // Retrieve the current wishlist from session state
-            var wishlistJson = session.GetString("WishList");
-            var wishlist = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
-
-            // Check if the wishlist already contains the product being added
-            if (!wishlist.Any(p => p.ID == product.ID))
+            var product = _dbContext.Product.Include(x => x.Category).FirstOrDefault(x=>x.ID == id);
+            if (product == null)
             {
-                // Add the new product to the wishlist
-                wishlist.Add(product);
-
-                // Store the updated wishlist back in session state
-                session.SetString("WishList", JsonConvert.SerializeObject(wishlist));
+                return NotFound();
             }
-                RedirectToAction("WishList", "Order");
-            // Redirect to the wishlist page
-            return RedirectToAction("Category",new { id= product.Category.ID});
+
+            // Get the existing wishlist from the session, or create a new one if it doesn't exist
+            List<Product> wishlist;
+            var wishlistJson = HttpContext.Session.GetString("Wishlist");
+            if (wishlistJson == null)
+            {
+                wishlist = new List<Product>();
+            }
+            else
+            {
+                wishlist = JsonConvert.DeserializeObject<List<Product>>(wishlistJson);
+            }
+
+            // Check if the product is already in the wishlist
+            if (wishlist.Any(p => p.ID == product.ID))
+            {
+                return RedirectToAction("Category", new { id = product.Category.ID });
+            }
+
+            // Add the product to the wishlist
+            var wishlistProduct = new Product
+            {
+                ID = product.ID,
+                Name = product.Name,
+                Price = product.Price,
+                imgPath = product.imgPath,
+                Category = product.Category,
+                // Add any other product properties you need
+            };
+            wishlist.Add(wishlistProduct);
+
+            // Save the updated wishlist to the session
+            HttpContext.Session.SetString("Wishlist", JsonConvert.SerializeObject(wishlist));
+
+            return RedirectToAction("Category",new { id = product.Category.ID});
         }
 
 

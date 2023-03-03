@@ -182,7 +182,8 @@
           <div class="row cpagerow">
               @foreach (var product in Model)
               {
-                    Accessor.HttpContext.Session.SetString("MySessionValue", JsonConvert.SerializeObject(product));
+                    var json = JsonConvert.SerializeObject(product);
+                    accessor.Session.SetString($"Product_{product.ID}", json);
                     if(product.isDeleted == false)
                   {
             <div class="product-layout product-list col-xs-12">
@@ -302,28 +303,59 @@
                   </div>
                   <div class="button-group">
                     <div class="absbtn">
-                                            <form method="post" asp-action="AddToWishList" id="addToWishListForm">
-                                                <input type="hidden" name="sessionValue" value="@Accessor.HttpContext.Session.GetString("MySessionValue")" />
-                                                <button type="submit"
-                                                class="btn-wishlist"
-                                                title="Add to Wish List">
+                                            <form method="post" asp-action="AddToWishList" id="addToWishListForm" >
+                                                <input type="hidden" name="id" value="@product.ID" />
+                                                <button type="submit" class="btn-wishlist" title="Add to Wish List" onclick="submitForm(event)">
                                                     <svg><use xlink:href="#heart" /></svg>
                                                 </button>
                                             </form>
+                                            <script>
+                                                function submitForm(event) {
+                                                    event.preventDefault();
+                                                    var form = event.target.closest('form');
+                                                    var formData = new FormData(form);
+                                                    fetch(form.action, {
+                                                        method: 'POST',
+                                                        body: formData
+                                                    })
+                                                        .then(function (response) {
+                                                            if (response.ok) {
+                                                                // Show success message as a popup
+                                                                Swal.fire({
+                                                                    icon: 'success',
+                                                                    title: 'Item added to Wish List!',
+                                                                    showConfirmButton: false,
+                                                                    timer: 1500
+                                                                }).then(function () {
+                                                                    // Reload the page after the popup is closed
+                                                                    location.reload();
+                                                                });
+                                                            }
+                                                        });
+                                                }
+                                            </script>
 
 
 
-                   
 
-                    </div>
+
+
+
+
+                                        </div>
+                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+                                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+                                
+
                   </div>
 
-         
                 </div>
               </div>
                         </div>
+                      
                     }
             }
+          
           </div>
           <div class="row pagi">
             <div class="col-sm-6 col-xs-6 text-left"></div>
@@ -334,6 +366,7 @@
         </div>
       </div>
     </div>
+
 
 
 
