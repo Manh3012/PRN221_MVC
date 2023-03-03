@@ -1,5 +1,10 @@
-﻿@{
-
+﻿@using DAL.Entities;
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json;
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var wishlistJson = HttpContextAccessor.HttpContext.Session.GetString("WishList");
+    var wishlist = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
 }
 
 <!DOCTYPE html>
@@ -811,8 +816,10 @@
       </div>
       <div id="top-links" class="col-lg-4 col-md-4 col-sm-7 col-xs-5 text-right">
         <ul class="list-inline">
-       <li class="wishcom hidden-md hidden-sm hidden-xs wishpad"><a href="indexe223.html?route=account/wishlist" id="wishlist-total"><svg width="22px" height="20px"><use xlink:href="#hwish"></use></svg>
-         <span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">0</span></a></li>
+       <li class="wishcom hidden-md hidden-sm hidden-xs wishpad"><a href="@Url.ActionLink("WishList","Order")" id="wishlist-total"><svg width="22px" height="20px"><use xlink:href="#hwish"></use></svg>
+                                    <span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">@wishlist.Count</span>
+                                </a>
+                            </li>
 
           <li class="dropdown inuser">
           <a href="@Url.Action("Login","User")" title="Account" class="dropdown-toggle" data-toggle="dropdown">

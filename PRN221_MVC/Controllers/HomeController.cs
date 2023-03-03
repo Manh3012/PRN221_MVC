@@ -1,11 +1,16 @@
 ﻿using DAL;
 using BAL.Model;
+using System.Linq;
 using DAL.Entities;
+using Newtonsoft.Json;
 using PRN221_MVC.Models;
 using System.Diagnostics;
+using Microsoft.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace PRN221_MVC.Controllers
 {
@@ -39,7 +44,33 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-  
+        public IActionResult AddToWishList(string sessionValue)
+        {
+
+            var product = JsonConvert.DeserializeObject<Product>(sessionValue);
+
+            // Get the session object from the HttpContext
+            var session = HttpContext.Session;
+
+            // Retrieve the current wishlist from session state
+            var wishlistJson = session.GetString("WishList");
+            var wishlist = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
+
+            // Check if the wishlist already contains the product being added
+            if (!wishlist.Any(p => p.ID == product.ID))
+            {
+                // Add the new product to the wishlist
+                wishlist.Add(product);
+
+                // Store the updated wishlist back in session state
+                session.SetString("WishList", JsonConvert.SerializeObject(wishlist));
+            }
+                RedirectToAction("WishList", "Order");
+            // Redirect to the wishlist page
+            return RedirectToAction("Category",new { id= product.Category.ID});
+        }
+
+
         [HttpGet]
         public IActionResult Category(int sortId,int id)
         {

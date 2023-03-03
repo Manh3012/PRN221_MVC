@@ -1,7 +1,12 @@
-﻿@model List<DAL.Entities.Product>
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor Accessor
+@model List<DAL.Entities.Product>
 @{
     ViewData["Title"] = "Category";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
+    var accessor = Context.Request.HttpContext;
+    string productJson = JsonConvert.SerializeObject(Model);
 }
 
     <div class="breadbg">
@@ -177,7 +182,8 @@
           <div class="row cpagerow">
               @foreach (var product in Model)
               {
-                  if(product.isDeleted == false)
+                    Accessor.HttpContext.Session.SetString("MySessionValue", JsonConvert.SerializeObject(product));
+                    if(product.isDeleted == false)
                   {
             <div class="product-layout product-list col-xs-12">
               <div class="product-thumb transition">
@@ -232,6 +238,7 @@
                       </div>
                     </div>
                   </div>
+                  
                   <div class="rating comments_note wb-list-product-reviews">
                     <span class="or-rate">
                       <span class="fa fa-stack"
@@ -295,36 +302,27 @@
                   </div>
                   <div class="button-group">
                     <div class="absbtn">
-                      <button
-                        type="button"
-                        class="btn-wishlist"
-                        data-toggle="tooltip"
-                        title="Add to Wish List"
-                        onclick="wishlist.add('44');"
-                      >
-                        <svg><use xlink:href="#heart" /></svg>
-                      </button>
-                      <button
-                        type="button"
-                        class="btn-compare"
-                        data-toggle="tooltip"
-                        title="Compare this Product"
-                        onclick="compare.add('44');"
-                      >
-                        <svg><use xlink:href="#compare" /></svg>
-                      </button>
+                                            <form method="post" asp-action="AddToWishList" id="addToWishListForm">
+                                                <input type="hidden" name="sessionValue" value="@Accessor.HttpContext.Session.GetString("MySessionValue")" />
+                                                <button type="submit"
+                                                class="btn-wishlist"
+                                                title="Add to Wish List">
+                                                    <svg><use xlink:href="#heart" /></svg>
+                                                </button>
+                                            </form>
 
-                      <div
-                        data-toggle="tooltip"
-                        title="Quickview"
-                        class="bquickv"
-                      ></div>
+
+
+                   
+
                     </div>
                   </div>
+
+         
                 </div>
               </div>
-            </div>
-            }
+                        </div>
+                    }
             }
           </div>
           <div class="row pagi">
@@ -336,6 +334,8 @@
         </div>
       </div>
     </div>
+
+
 
 
 

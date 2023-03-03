@@ -21,6 +21,7 @@ builder.Services.AddSession(options =>
     // Make the session cookie essential.
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<FRMDbContext>(options
     => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IDbFactory, DbFactory>();
