@@ -4,16 +4,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
 using DAL.Entities;
+<<<<<<< HEAD
+=======
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Collections.Specialized;
+using System.Security.Cryptography;
+using System.Text;
+using System.Data.OleDb;
+using System.Text.Unicode;
+using NuGet.Protocol.Plugins;
+using PRN221_MVC.Models;
+>>>>>>> parent of 1f234ae (Check role in AsyncLogin in Admin Controller)
 
 namespace PRN221_MVC.Controllers
 {
     public class AdminController : Controller
     {
+<<<<<<< HEAD
         private readonly IOrdersService ordersService;
 
         public float TotalSalesToday { get; set; }
 
         public AdminController(IOrdersService ordersService)
+=======
+        private readonly IUserService _userService;
+        private UserManager<User> _userManager;
+        private SignInManager<User> signInManager;
+        public AdminController(IUserService userService, UserManager<User> userManager, SignInManager<User> signInManager)
+>>>>>>> parent of 1f234ae (Check role in AsyncLogin in Admin Controller)
         {
             this.ordersService = ordersService;
         }
@@ -111,7 +130,43 @@ namespace PRN221_MVC.Controllers
         }
         public ActionResult Login()
         {
+<<<<<<< HEAD
             return View();
+=======
+            if (ModelState.IsValid)
+            {
+                User appUser = await _userManager.FindByEmailAsync(login.Email);
+                if (appUser != null)
+                {
+                    await signInManager.SignOutAsync();
+                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+
+                    if (result.Succeeded)
+                        //return Redirect(login.ReturnUrl ?? "/");
+                        return RedirectToAction("Index", "Home");
+
+                    // Two Factor Authentication
+                    if (result.RequiresTwoFactor)
+                    {
+                        //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
+                        return RedirectToAction("LoginTwoStep", new { appUser.Email });
+                    }
+
+                    // Email confirmation 
+                    bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
+                    if (emailStatus == false)
+                    {
+                        ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
+                    }
+
+                    // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
+                    /*if (result.IsLockedOut)
+                        ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
+                }
+                ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+            }
+            return RedirectToAction("Login");
+>>>>>>> parent of 1f234ae (Check role in AsyncLogin in Admin Controller)
         }
         public ActionResult Recover_Password()
         {
