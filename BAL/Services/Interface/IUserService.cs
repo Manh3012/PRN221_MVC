@@ -12,5 +12,6 @@ namespace DAL.Repositories.Interface
         Task<List<User>> GetAll();
 
         Task<User> GetById(string id);
+
     }
 }

@@ -12,6 +12,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Data.OleDb;
 using System.Text.Unicode;
+using NuGet.Protocol.Plugins;
+using PRN221_MVC.Models;
 
 namespace PRN221_MVC.Controllers
 {
@@ -19,18 +21,23 @@ namespace PRN221_MVC.Controllers
     {
         private readonly IUserService _userService;
         private UserManager<User> _userManager;
-        //private RoleManager<IdentityUserRole<string>> _roleManager;
-        public AdminController(IUserService userService, UserManager<User> userManager)
+        private SignInManager<User> signInManager;
+        public AdminController(IUserService userService, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userService = userService;
             _userManager = userManager;
-            //_roleManager = roleManager;
+            this.signInManager = signInManager;
         }
 
         // GET: AdminController
         public ActionResult Index()
         {
 
+            return View();
+        }
+
+        public ActionResult Login()
+        {
             return View();
         }
 
@@ -56,9 +63,41 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public ActionResult Login()
+        public async Task<ActionResult> AsyncLogin(LoginUserViewModel login)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                User appUser = await _userManager.FindByEmailAsync(login.Email);
+                if (appUser != null)
+                {
+                    await signInManager.SignOutAsync();
+                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+
+                    if (result.Succeeded)
+                        //return Redirect(login.ReturnUrl ?? "/");
+                        return RedirectToAction("Index", "Home");
+
+                    // Two Factor Authentication
+                    if (result.RequiresTwoFactor)
+                    {
+                        //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
+                        return RedirectToAction("LoginTwoStep", new { appUser.Email });
+                    }
+
+                    // Email confirmation 
+                    bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
+                    if (emailStatus == false)
+                    {
+                        ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
+                    }
+
+                    // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
+                    /*if (result.IsLockedOut)
+                        ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
+                }
+                ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+            }
+            return RedirectToAction("Login");
         }
         public ActionResult Recover_Password()
         {
