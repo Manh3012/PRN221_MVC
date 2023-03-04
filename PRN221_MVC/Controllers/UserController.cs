@@ -137,10 +137,6 @@ namespace PRN221_MVC.Controllers {
                     await signInManager.SignOutAsync();
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
 
-                    if (result.Succeeded)
-                        //return Redirect(login.ReturnUrl ?? "/");
-                        return RedirectToAction("Index", "Home");
-
                     // Two Factor Authentication
                     if (result.RequiresTwoFactor) {
                         //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
@@ -152,12 +148,16 @@ namespace PRN221_MVC.Controllers {
                     if (emailStatus == false) {
                         ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                     }
+                    // set user login info to session cookie
 
-                    // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
                     /*if (result.IsLockedOut)
                         ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
+                    //return Redirect(login.ReturnUrl ?? "/");
+                    return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+                else {
+                    ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+                }
             }
             return RedirectToAction("Login");
         }
@@ -165,14 +165,13 @@ namespace PRN221_MVC.Controllers {
         //public async Task<IActionResult> LoginTwoStep(string email, string returnUrl) {
         public async Task<IActionResult> LoginTwoStep(string email) {
             var user = await userManager.FindByEmailAsync(email);
-            // set user login info to session cookie
+            var token = await userManager.GenerateTwoFactorTokenAsync(user, "Email");
+
             HttpContext.Session.SetString("_Name", user.Name);
             HttpContext.Session.SetString("_Email", email);
 
-            var token = await userManager.GenerateTwoFactorTokenAsync(user, "Email");
-
             EmailHelper emailHelper = new EmailHelper();
-            bool emailResponse = emailHelper.SendEmailTwoFactorCode(user.Email, token);
+            emailHelper.SendEmailTwoFactorCode(user.Email, token);
 
             return View("/Views/Client/User/LoginTwoStep.cshtml");
         }
