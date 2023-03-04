@@ -13,10 +13,8 @@ using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http.Extensions;
 
-namespace PRN221_MVC.Controllers
-{
-    public class HomeController : Controller
-    {
+namespace PRN221_MVC.Controllers {
+    public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
         private readonly FRMDbContext _dbContext;
 
@@ -26,11 +24,13 @@ namespace PRN221_MVC.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
-           var category =_dbContext.Category.ToList();
-
-
+        public IActionResult Index() {
+            // return View("/Views/Home/LoginClient.cshtml");
+            var category = _dbContext.Category.ToList();
+            string name = HttpContext.Session.GetString("_Name");
+            string email = HttpContext.Session.GetString("_Email");
+            ViewData["_Name"] = name;
+            ViewData["_Email"] = email;
             return View(category);
         }
         public IActionResult Register()
@@ -137,19 +137,15 @@ namespace PRN221_MVC.Controllers
             return View(sort);
         }
 
-
-        public IActionResult Privacy()
-        {
+        public IActionResult Privacy() {
             return View();
         }
-        public IActionResult Details(int id)
-        {
+        public IActionResult Details(int id) {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
+        public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

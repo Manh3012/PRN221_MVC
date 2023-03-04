@@ -8,5 +8,6 @@ namespace DAL.Entities {
         public string? Gender { get; set; }
         public bool? isDeleted { get; set; }
         public virtual IEnumerable<Orders>? Orders { get; set; }
+        public virtual IEnumerable<Comment>? Comments { get; set; }
     }
 }

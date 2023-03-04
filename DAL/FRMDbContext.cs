@@ -17,15 +17,10 @@ namespace DAL {
         public DbSet<Category> Category { get; set; }
         public DbSet<User> Customer { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
-
-
         public DbSet<Orders> Orders { get; set; }
-
         public DbSet<Product> Product { get; set; }
-
-
-
         public DbSet<Transaction> TransactionShared { get; set; }
+        public DbSet<Comment> Comment { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
