@@ -20,7 +20,7 @@ namespace BAL.Helpers {
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse("learning.fpt.edu@gmail.com"));
                 email.To.Add(MailboxAddress.Parse(userEmail));
-                email.Subject = "Comfirm email";
+                email.Subject = "Login 2 factor code";
                 email.Body = new TextPart(TextFormat.Html) { Text = $"<h1>{code}</h1>" };
 
                 // send email
@@ -44,7 +44,7 @@ namespace BAL.Helpers {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse("learning.fpt.edu@gmail.com"));
             email.To.Add(MailboxAddress.Parse(userEmail));
-            email.Subject = "Comfirm email";
+            email.Subject = "Comfirm your email";
             email.Body = new TextPart(TextFormat.Html) { Text = $"<h1>{confirmationLink}</h1>" };
 
             // send email
