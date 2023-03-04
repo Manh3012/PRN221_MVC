@@ -1,18 +1,27 @@
-using BAL.Services.Implements;
 using DAL;
+using System.Text;
 using DAL.Entities;
 using DAL.Infacstucture;
-using DAL.Repositories.Implements;
+using BAL.Services.Implements;
 using DAL.Repositories.Interface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DAL.Repositories.Implements;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSession(options =>
+{
+    // Set a short timeout for easy testing.
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    // Make the session cookie essential.
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<FRMDbContext>(options
     => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IDbFactory, DbFactory>();
@@ -21,9 +30,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
-
-
-builder.Services.AddScoped<ILogger>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FRMDbContext>()
@@ -56,7 +62,7 @@ builder.Services.AddSession(options => {
 });
 
 var app = builder.Build();
-
+app.UseSession();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Home/Error");
