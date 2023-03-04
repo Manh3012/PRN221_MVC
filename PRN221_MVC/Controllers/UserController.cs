@@ -156,7 +156,9 @@ namespace PRN221_MVC.Controllers {
                     /*if (result.IsLockedOut)
                         ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
                     //return Redirect(login.ReturnUrl ?? "/");
-                    return RedirectToAction("Index", "Home");
+                    if (result.Succeeded) {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 else {
                     ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
@@ -242,7 +244,7 @@ namespace PRN221_MVC.Controllers {
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPassword resetPassword) {
             if (!ModelState.IsValid)
-                return View(resetPassword);
+                return View("/Views/Client/User/ResetPassword.cshtml", resetPassword);
 
             var user = await userManager.FindByEmailAsync(resetPassword.Email);
             if (user == null)
@@ -252,7 +254,7 @@ namespace PRN221_MVC.Controllers {
             if (!resetPassResult.Succeeded) {
                 foreach (var error in resetPassResult.Errors)
                     ModelState.AddModelError(error.Code, error.Description);
-                return View();
+                return RedirectToAction("ResetPassword");
             }
 
             return RedirectToAction("ResetPasswordConfirmation");

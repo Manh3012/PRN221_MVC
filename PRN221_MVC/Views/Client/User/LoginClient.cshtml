@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "LoginClient";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
 }
@@ -33,6 +32,9 @@
                     <div class="well">
                         <h1>Returning Customer</h1>
                         <p><strong>I am a returning customer</strong></p>
+
+                        <p>Error: @Html.ValidationMessageFor(m => m.Email)</p>
+
                         <form asp-controller="User" asp-action="Login" method="post" enctype="multipart/form-data">
                             <div class="form-group required">
                                 <label class="control-label" asp-for="Email">E-Mail</label>
