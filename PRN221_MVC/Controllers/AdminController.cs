@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BAL;
+using DAL.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
 using DAL.Entities;
@@ -98,9 +100,10 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public ActionResult UserList()
+        public async Task<ActionResult> UserList()
         {
-            return View();
+            List<User> users = await _userService.GetAll();
+            return View(model:users);
         }
         public ActionResult Users()
         {

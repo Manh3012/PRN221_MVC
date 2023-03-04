@@ -23,6 +23,7 @@ builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 
+builder.Services.AddScoped<ILogger>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FRMDbContext>()
@@ -31,18 +32,28 @@ builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}
-    ).AddJwtBearer(options => {
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidAudience = builder.Configuration["JWT:ValidAudience"],
-            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
-        };
-    });
+}).AddJwtBearer(options => {
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["JWT:ValidAudience"],
+        ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+    };
+}).AddGoogle(opts => {
+    opts.ClientId = "668982921016-ok1keqertrt4rsmfb4rke5euumhj3m24.apps.googleusercontent.com";
+    opts.ClientSecret = "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";
+    opts.SignInScheme = IdentityConstants.ExternalScheme;
+    // default callback uri: /signin-google
+});
+
+builder.Services.AddSession(options => {
+    options.Cookie.Name = "UserInfo.Session";
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -59,6 +70,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseAuthentication();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

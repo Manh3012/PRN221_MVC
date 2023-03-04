@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class initcreate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,11 +48,10 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DoB = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    isDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DoB = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -223,6 +222,31 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    ProductID = table.Column<long>(type: "bigint", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Comment_Product_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Product",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_Comment_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderDetail",
                 columns: table => new
                 {
@@ -279,9 +303,20 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "8c561f25-de26-4006-ab3a-e5421fbf5b59", "768579c2-b83f-4e5a-9810-244a1dff5866", "Visitor", "VISITOR" },
-                    { "e8931795-86de-4321-b1ea-12f494a70da3", "6f706e99-60c3-4817-847d-63c3d4ea0f5a", "Administrator", "ADMINISTRATOR" }
+                    { "4d876dfd-3b11-46e6-ab92-a6e16f622929", "3551a43d-33b5-46d5-a79e-a2b2a141177a", "ShopOwner", "SHOPOWNER" },
+                    { "c81b05ed-c4f4-4902-850a-ea6705f4ee5c", "5d102afc-9e79-49a7-aa75-88c8a939ad6b", "Administrator", "ADMINISTRATOR" },
+                    { "d3e186c7-4d8a-431a-82d9-f035694c1fad", "203dc6ff-f3dc-429a-80b5-ebfc2298a77e", "Customer", "CUSTOMER" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_ProductID",
+                table: "Comment",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_UserId",
+                table: "Comment",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_OrderID",
@@ -351,6 +386,9 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Comment");
+
             migrationBuilder.DropTable(
                 name: "OrderDetail");
 

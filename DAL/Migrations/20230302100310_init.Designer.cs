@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(FRMDbContext))]
-    [Migration("20230226173544_init create")]
-    partial class initcreate
+    [Migration("20230302100310_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,34 @@ namespace DAL.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ProductID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
@@ -185,14 +213,13 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DoB")
+                    b.Property<DateTime?>("DoB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -203,7 +230,6 @@ namespace DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -227,10 +253,6 @@ namespace DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -247,7 +269,7 @@ namespace DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -292,15 +314,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8c561f25-de26-4006-ab3a-e5421fbf5b59",
-                            ConcurrencyStamp = "768579c2-b83f-4e5a-9810-244a1dff5866",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
+                            Id = "4d876dfd-3b11-46e6-ab92-a6e16f622929",
+                            ConcurrencyStamp = "3551a43d-33b5-46d5-a79e-a2b2a141177a",
+                            Name = "ShopOwner",
+                            NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "e8931795-86de-4321-b1ea-12f494a70da3",
-                            ConcurrencyStamp = "6f706e99-60c3-4817-847d-63c3d4ea0f5a",
+                            Id = "d3e186c7-4d8a-431a-82d9-f035694c1fad",
+                            ConcurrencyStamp = "203dc6ff-f3dc-429a-80b5-ebfc2298a77e",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "c81b05ed-c4f4-4902-850a-ea6705f4ee5c",
+                            ConcurrencyStamp = "5d102afc-9e79-49a7-aa75-88c8a939ad6b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -412,6 +441,17 @@ namespace DAL.Migrations
                     b.ToTable("UserToken", (string)null);
                 });
 
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("DAL.Entities.Product", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("DAL.Entities.User", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
                 {
                     b.HasOne("DAL.Entities.Orders", "Order")
@@ -509,8 +549,15 @@ namespace DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DAL.Entities.Product", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

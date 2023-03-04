@@ -1,4 +1,4 @@
-﻿
+﻿@model List<DAL.Entities.User>
 @{
     ViewData["Title"] = "UserList";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -192,7 +192,7 @@
                                     <td>
                                         <img src="assets/images/products/img-1.png" alt="" height="40">
                                         <p class="d-inline-block align-middle mb-0">
-                                            <a href="#" class="d-inline-block align-middle mb-0 product-name">Bata Shoes</a>
+                                            <a href="#" class="d-inline-block align-middle mb-0 product-name">@foreach (var item in Model){@item.Name}</a>
                                             <br>
                                             <span class="text-muted font-13">size-08 (Model 2020)</span>
                                         </p>
