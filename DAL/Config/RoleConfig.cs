@@ -8,12 +8,14 @@ namespace DAL.Config {
             builder.ToTable("Role");
             builder.HasData(
                   new IdentityRole {
-                      Name = "Visitor",
-                      NormalizedName = "VISITOR"
+                      Name = "ShopOwner",
+                      NormalizedName = "SHOPOWNER"
+                  }, new IdentityRole {
+                      Name = "Customer",
+                      NormalizedName = "CUSTOMER"
                   }, new IdentityRole {
                       Name = "Administrator",
                       NormalizedName = "ADMINISTRATOR"
-
                   });
         }
     }

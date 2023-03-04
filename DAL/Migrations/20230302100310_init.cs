@@ -222,6 +222,31 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    ProductID = table.Column<long>(type: "bigint", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Comment_Product_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Product",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_Comment_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderDetail",
                 columns: table => new
                 {
@@ -278,9 +303,20 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "021fd955-6628-4623-8aec-4f06ca59b4b1", "45f6dd68-726a-48ee-bbdb-4a2f008a9cdb", "Administrator", "ADMINISTRATOR" },
-                    { "3957699f-423b-4e08-b48b-28934ca132d6", "50cca603-ec24-4c7d-82c3-0de2be4f58e3", "Visitor", "VISITOR" }
+                    { "4d876dfd-3b11-46e6-ab92-a6e16f622929", "3551a43d-33b5-46d5-a79e-a2b2a141177a", "ShopOwner", "SHOPOWNER" },
+                    { "c81b05ed-c4f4-4902-850a-ea6705f4ee5c", "5d102afc-9e79-49a7-aa75-88c8a939ad6b", "Administrator", "ADMINISTRATOR" },
+                    { "d3e186c7-4d8a-431a-82d9-f035694c1fad", "203dc6ff-f3dc-429a-80b5-ebfc2298a77e", "Customer", "CUSTOMER" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_ProductID",
+                table: "Comment",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_UserId",
+                table: "Comment",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_OrderID",
@@ -350,6 +386,9 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Comment");
+
             migrationBuilder.DropTable(
                 name: "OrderDetail");
 

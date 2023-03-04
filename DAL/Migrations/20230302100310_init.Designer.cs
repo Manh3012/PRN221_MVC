@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(FRMDbContext))]
-    [Migration("20230227164419_init")]
+    [Migration("20230302100310_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -47,6 +47,34 @@ namespace DAL.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ProductID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
@@ -286,15 +314,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3957699f-423b-4e08-b48b-28934ca132d6",
-                            ConcurrencyStamp = "50cca603-ec24-4c7d-82c3-0de2be4f58e3",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
+                            Id = "4d876dfd-3b11-46e6-ab92-a6e16f622929",
+                            ConcurrencyStamp = "3551a43d-33b5-46d5-a79e-a2b2a141177a",
+                            Name = "ShopOwner",
+                            NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "021fd955-6628-4623-8aec-4f06ca59b4b1",
-                            ConcurrencyStamp = "45f6dd68-726a-48ee-bbdb-4a2f008a9cdb",
+                            Id = "d3e186c7-4d8a-431a-82d9-f035694c1fad",
+                            ConcurrencyStamp = "203dc6ff-f3dc-429a-80b5-ebfc2298a77e",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "c81b05ed-c4f4-4902-850a-ea6705f4ee5c",
+                            ConcurrencyStamp = "5d102afc-9e79-49a7-aa75-88c8a939ad6b",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -406,6 +441,17 @@ namespace DAL.Migrations
                     b.ToTable("UserToken", (string)null);
                 });
 
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("DAL.Entities.Product", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("DAL.Entities.User", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
                 {
                     b.HasOne("DAL.Entities.Orders", "Order")
@@ -503,8 +549,15 @@ namespace DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DAL.Entities.Product", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
