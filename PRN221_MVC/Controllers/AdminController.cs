@@ -7,6 +7,11 @@ using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Collections.Specialized;
+using System.Security.Cryptography;
+using System.Text;
+using System.Data.OleDb;
+using System.Text.Unicode;
 
 namespace PRN221_MVC.Controllers
 {
@@ -14,12 +19,12 @@ namespace PRN221_MVC.Controllers
     {
         private readonly IUserService _userService;
         private UserManager<User> _userManager;
-        private RoleManager<IdentityUserRole<string>> _roleManager;
-        public AdminController(IUserService userService, UserManager<User> userManager, RoleManager<IdentityUserRole<string>> roleManager)
+        //private RoleManager<IdentityUserRole<string>> _roleManager;
+        public AdminController(IUserService userService, UserManager<User> userManager)
         {
             _userService = userService;
             _userManager = userManager;
-            _roleManager = roleManager;
+            //_roleManager = roleManager;
         }
 
         // GET: AdminController
@@ -81,10 +86,10 @@ namespace PRN221_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection)
         {
-
+            //var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             try
             {
-                string password = "A1@ahdsgflifg";
+                string password = HttpContext.Request.Form["userpassword"];
                 var newUser = new User
                 {
                     UserName = HttpContext.Request.Form["username"],
@@ -97,10 +102,9 @@ namespace PRN221_MVC.Controllers
                     Name = "erererere",
                 };
                 IdentityResult re = await _userManager.CreateAsync(newUser, password);
-
                 //IdentityResult re1 = await _userManager.AddToRoleAsync(newUser, "admin");
                 //IdentityResult a = await _roleManager.CreateAsync(new IdentityUserRole<string>().RoleId = newUser.Id);
-                //await _userManager.AddToRoleAsync(newUser, "Visitor");
+                await _userManager.AddToRoleAsync(newUser, "Administrator");
                 return RedirectToAction("Index");
             }
             catch
@@ -119,22 +123,28 @@ namespace PRN221_MVC.Controllers
         // POST: AdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string id, IFormCollection collection)
         {
             try
             {
-                var getUserbyId = users.FirstOrDefault(u => Int32.Parse(u.Id) == id);
-                if (getUserbyId != null)
-                {
-                    getUserbyId.PasswordHash = collection["password"].GetHashCode().ToString();
-                }
+                string userid = HttpContext.Request.Form["idhidden"];
+                var user = await _userManager.FindByIdAsync(userid);
+                string currentPass = HttpContext.Request.Form["oldpass"];
+                string newPass = HttpContext.Request.Form["newpass"];
 
-                using (var db = new FRMDbContext())
+                string decodeHash = base64Decode(user.PasswordHash);
+
+                string newHashPassword = _userManager.PasswordHasher.HashPassword(user, newPass);
+                if (user == null)
                 {
-                    db.Users.Update(getUserbyId);
-                    db.SaveChanges();
+                    return BadRequest("User not found");
                 }
-                return RedirectToAction(nameof(Index));
+                var result = await _userManager.ChangePasswordAsync(user, currentPass, newPass);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors);
+                }
+                return View();
             }
             catch
             {
@@ -162,5 +172,34 @@ namespace PRN221_MVC.Controllers
                 return View();
             }
         }
+
+
+        public string hashPassword(string password)
+        {
+            var sha = SHA256.Create();
+            var asByteArray = Encoding.Default.GetBytes(password);
+            var hashedPass = sha.ComputeHash(asByteArray);
+            return Convert.ToBase64String(hashedPass);
+        }
+
+        public static string base64Decode(string sData) //Decode
+        {
+            try
+            {
+                var encoder = new System.Text.UTF8Encoding();
+                System.Text.Decoder utf8Decode = encoder.GetDecoder();
+                byte[] todecodeByte = Convert.FromBase64String(sData);
+                int charCount = utf8Decode.GetCharCount(todecodeByte, 0, todecodeByte.Length);
+                char[] decodedChar = new char[charCount];
+                utf8Decode.GetChars(todecodeByte, 0, todecodeByte.Length, decodedChar, 0);
+                string result = new String(decodedChar);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error in base64Decode" + ex.Message);
+            }
+        }
+
     }
 }
