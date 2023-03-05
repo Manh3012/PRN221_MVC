@@ -33,16 +33,13 @@ namespace PRN221_MVC.Controllers {
             ViewData["_Email"] = email;
             return View(category);
         }
-        public IActionResult Register()
-        {
+        public IActionResult Register() {
             return View();
         }
-        public IActionResult ForgotPassword()
-        {
+        public IActionResult ForgotPassword() {
             return View();
         }
-        public IActionResult LoginClient()
-        {
+        public IActionResult LoginClient() {
             return View();
         }
         [HttpPost]

@@ -1,11 +1,10 @@
-﻿@using DAL.Entities;
+@using DAL.Entities;
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json;
 @inject IHttpContextAccessor HttpContextAccessor
 @{
     var wishlistJson = HttpContextAccessor.HttpContext.Session.GetString("Wishlist");
     var wishlist = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
-}
 
 <!DOCTYPE html>
 <!--[if IE]><![endif]-->
@@ -837,9 +836,8 @@
                                         <ul class="dropdown-menu dropdown-menu-right user-down haccount  hlogout ">
                                             <h5 class="text-left">Your Account</h5>
                                             <h6 class="text-left">Access account and manage orders</h6>
-                                            <li class="acd"><a href="index5502.html?route=account/register"><i class="fa fa-user-plus"></i> Register</a></li>
+                                            <li class="acd"><a href="@Url.Action("Register","User")"><i class="fa fa-user-plus"></i> Register</a></li>
                                             <li class="acd"><a href="@Url.Action("Login","User")"><i class="fa fa-lock"></i> Login</a></li>
-                                            <li class="wishcom hidden-lg"><a href="indexe223.html?route=account/wishlist" id="wishlist-total"><i class="fa fa-heart"></i><span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">0</span></a></li>
                                         </ul>
                                     </li>
                                 }

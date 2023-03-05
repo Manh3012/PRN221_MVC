@@ -1,9 +1,11 @@
 ﻿using BAL.Helpers;
+using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PRN221_MVC.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace PRN221_MVC.Controllers {
@@ -11,7 +13,8 @@ namespace PRN221_MVC.Controllers {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
         private IPasswordHasher<User> passwordHasher;
-
+        //
+        private FRMDbContext context = new FRMDbContext();
 
         public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher) {
             userManager = userMgr;
@@ -41,6 +44,12 @@ namespace PRN221_MVC.Controllers {
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
 
                 if (result.Succeeded) {
+                    // Add role Customer to new User
+                    var userFind = await userManager.FindByNameAsync(user.Username);
+                    await userManager.AddToRoleAsync(userFind, "Customer");
+                    // save to db
+                    context.SaveChanges();
+
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
                     var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
 
@@ -60,7 +69,8 @@ namespace PRN221_MVC.Controllers {
                         ModelState.AddModelError("", error.Description);
                     //return RedirectToAction("Register");
                     ViewData["error"] = result.Errors;
-                    return View("/Views/Client/User/Register.cshtml", user);
+                    //return View("/Views/Client/User/Register.cshtml", user);
+                    return RedirectToAction("Register", user);
                 }
             }
             else {
@@ -125,13 +135,10 @@ namespace PRN221_MVC.Controllers {
         public async Task<IActionResult> Login(LoginUserViewModel login) {
             if (ModelState.IsValid) {
                 User appUser = await userManager.FindByEmailAsync(login.Email);
+
                 if (appUser != null) {
                     await signInManager.SignOutAsync();
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
-
-                    if (result.Succeeded)
-                        //return Redirect(login.ReturnUrl ?? "/");
-                        return RedirectToAction("Index", "Home");
 
                     // Two Factor Authentication
                     if (result.RequiresTwoFactor) {
@@ -144,12 +151,18 @@ namespace PRN221_MVC.Controllers {
                     if (emailStatus == false) {
                         ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                     }
+                    // set user login info to session cookie
 
-                    // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
                     /*if (result.IsLockedOut)
                         ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
+                    //return Redirect(login.ReturnUrl ?? "/");
+                    if (result.Succeeded) {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
-                ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+                else {
+                    ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+                }
             }
             return RedirectToAction("Login");
         }
@@ -157,14 +170,13 @@ namespace PRN221_MVC.Controllers {
         //public async Task<IActionResult> LoginTwoStep(string email, string returnUrl) {
         public async Task<IActionResult> LoginTwoStep(string email) {
             var user = await userManager.FindByEmailAsync(email);
-            // set user login info to session cookie
+            var token = await userManager.GenerateTwoFactorTokenAsync(user, "Email");
+
             HttpContext.Session.SetString("_Name", user.Name);
             HttpContext.Session.SetString("_Email", email);
 
-            var token = await userManager.GenerateTwoFactorTokenAsync(user, "Email");
-
             EmailHelper emailHelper = new EmailHelper();
-            bool emailResponse = emailHelper.SendEmailTwoFactorCode(user.Email, token);
+            emailHelper.SendEmailTwoFactorCode(user.Email, token);
 
             return View("/Views/Client/User/LoginTwoStep.cshtml");
         }
@@ -189,6 +201,67 @@ namespace PRN221_MVC.Controllers {
                 ModelState.AddModelError("", "Invalid Login Attempt");
                 return View();
             }
+        }
+
+        [AllowAnonymous]
+        public IActionResult ForgotPassword() {
+            return View("/Views/Client/User/ForgotPassword.cshtml");
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([Required] string email) {
+            if (!ModelState.IsValid)
+                return View(email);
+
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+                return RedirectToAction(nameof(ForgotPasswordConfirmation));
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var link = Url.Action("ResetPassword", "User", new { token, email = user.Email }, Request.Scheme);
+
+            EmailHelper emailHelper = new EmailHelper();
+            bool emailResponse = emailHelper.SendEmailPasswordReset(user.Email, link);
+
+            if (emailResponse)
+                return RedirectToAction("ForgotPasswordConfirmation");
+            else {
+                // log email failed 
+            }
+            return View(email);
+        }
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation() {
+            return View("/Views/Client/User/ForgotPasswordConfirmation.cshtml");
+        }
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string token, string email) {
+            var model = new ResetPassword { Token = token, Email = email };
+            return View("/Views/Client/User/ResetPassword.cshtml", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPassword resetPassword) {
+            if (!ModelState.IsValid)
+                return View("/Views/Client/User/ResetPassword.cshtml", resetPassword);
+
+            var user = await userManager.FindByEmailAsync(resetPassword.Email);
+            if (user == null)
+                RedirectToAction("ResetPasswordConfirmation");
+
+            var resetPassResult = await userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+            if (!resetPassResult.Succeeded) {
+                foreach (var error in resetPassResult.Errors)
+                    ModelState.AddModelError(error.Code, error.Description);
+                return RedirectToAction("ResetPassword");
+            }
+
+            return RedirectToAction("ResetPasswordConfirmation");
+        }
+
+        public IActionResult ResetPasswordConfirmation() {
+            return View("/Views/Client/User/ResetPasswordConfirmation.cshtml");
         }
     }
 }
