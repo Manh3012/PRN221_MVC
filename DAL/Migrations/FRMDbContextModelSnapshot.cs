@@ -115,7 +115,6 @@ namespace DAL.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("isDeleted")
@@ -312,15 +311,6 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c5f542f8-7700-466d-abc2-eb9802780d4b",
-                            ConcurrencyStamp = "815af01f-42a2-478a-b811-a3eeda1aa1a3",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
-                        },
-                        new
-                        {
-                            Id = "f7e7887d-6190-4d9f-b5f2-52c6e1da18fa",
-                            ConcurrencyStamp = "84bc1941-a95c-4761-b788-4d56993cb2ec",
                             Id = "4d876dfd-3b11-46e6-ab92-a6e16f622929",
                             ConcurrencyStamp = "3551a43d-33b5-46d5-a79e-a2b2a141177a",
                             Name = "ShopOwner",
@@ -480,13 +470,9 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Orders", b =>
                 {
-                    b.HasOne("DAL.Entities.User", "User")
+                    b.HasOne("DAL.Entities.User", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("DAL.Entities.Product", b =>

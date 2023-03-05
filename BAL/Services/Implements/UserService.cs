@@ -24,5 +24,10 @@ namespace BAL.Services.Implements
             List<User> users = null;
             return  users= await _userRepository.GetAll();
         }
+
+        public async Task<User> GetById(string id)
+        {
+            return await _userRepository.GetUserbyID(id);
+        }
     }
 }
