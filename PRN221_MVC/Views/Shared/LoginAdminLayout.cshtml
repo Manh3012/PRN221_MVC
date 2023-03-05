@@ -52,21 +52,26 @@
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <div class="tab-pane active p-3" id="LogIn_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="https://mannatthemes.com/dastone/default/index.html">
-
+                                        <form class="form-horizontal auth-form" action="AsyncLogin">
+                                            @*@using (Html.BeginForm("AsyncLogin", "Admin", FormMethod.Post))
+                                            {*@
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="username">Username</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+                                                    <input type="text" class="form-control" name="email" id="username" placeholder="Enter username">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
+
+                                            <!--end form-group-->
 
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="userpassword">Password</label>
                                                 <div class="input-group">
                                                     <input type="password" class="form-control" name="password" id="userpassword" placeholder="Enter password">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
+
+                                            <!--end form-group-->
 
                                             <div class="form-group row my-3">
                                                 <div class="col-sm-6">
@@ -78,13 +83,16 @@
                                                 <div class="col-sm-6 text-end">
                                                     <a href="@Url.Action("Recover_Password", "Admin")" class="text-muted font-13"><i class="dripicons-lock"></i> Forgot password?</a>
                                                 </div><!--end col-->
-                                            </div><!--end form-group-->
+                                            </div>
+
+                                            <!--end form-group-->
 
                                             <div class="form-group mb-0 row">
                                                 <div class="col-12">
-                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="button">Log In <i class="fas fa-sign-in-alt ms-1"></i></button>
+                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log In <i class="fas fa-sign-in-alt ms-1"></i></button>
                                                 </div><!--end col-->
                                             </div> <!--end form-group-->
+                                            @*}*@
                                         </form><!--end form-->
                                         <div class="m-3 text-center text-muted">
                                             <p class="mb-0">Don't have an account ?  <a href="@Url.Action("Create", "Admin")" class="text-primary ms-2">Free Resister</a></p>
@@ -99,43 +107,49 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane px-3 pt-3" id="Register_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="https://mannatthemes.com/dastone/default/index.html">
-
+                                        @*<form action='@Url.Action("Create","Admin")' method="post">*@
+                                        @using (Html.BeginForm("Create", "Admin", FormMethod.Post))
+                                        {
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="username">Username</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="useremail">Email</label>
                                                 <div class="input-group">
-                                                    <input type="email" class="form-control" name="email" id="useremail" placeholder="Enter Email">
+                                                    <input type="email" class="form-control" name="useremail" id="useremail" placeholder="Enter Email">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="userpassword">Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="password" id="userpassword" placeholder="Enter password">
+                                                    <input type="password" class="form-control" name="userpassword" id="userpassword" placeholder="Enter password">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="conf_password">Confirm Password</label>
                                                 <div class="input-group">
                                                     <input type="password" class="form-control" name="conf-password" id="conf_password" placeholder="Enter Confirm Password">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="mo_number">Mobile Number</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" name="mobile number" id="mo_number" placeholder="Enter Mobile Number">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group row my-3">
                                                 <div class="col-sm-12">
                                                     <div class="custom-control custom-switch switch-success">
@@ -143,14 +157,16 @@
                                                         <label class="form-label text-muted" for="customSwitchSuccess2">You agree to the Dastone <a href="#" class="text-primary">Terms of Use</a></label>
                                                     </div>
                                                 </div><!--end col-->
-                                            </div><!--end form-group-->
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-0 row">
                                                 <div class="col-12">
-                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="button">Register <i class="fas fa-sign-in-alt ms-1"></i></button>
+                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Register <i class="fas fa-sign-in-alt ms-1"></i></button>
                                                 </div><!--end col-->
                                             </div> <!--end form-group-->
-                                        </form><!--end form-->
+                                        }
+                                        @*</form><!--end form-->*@
                                         <p class="my-3 text-muted">Already have an account ?<a href="@Url.Action("Login", "Admin")" class="text-primary ms-2">Log in</a></p>
                                     </div>
                                 </div>

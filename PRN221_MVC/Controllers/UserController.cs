@@ -1,4 +1,5 @@
 ﻿using BAL.Helpers;
+using DAL;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,7 +12,8 @@ namespace PRN221_MVC.Controllers {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
         private IPasswordHasher<User> passwordHasher;
-
+        //
+        private FRMDbContext context = new FRMDbContext();
 
         public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher) {
             userManager = userMgr;
@@ -41,6 +43,12 @@ namespace PRN221_MVC.Controllers {
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
 
                 if (result.Succeeded) {
+                    // Add role Customer to new User
+                    var userFind = await userManager.FindByNameAsync(user.Username);
+                    await userManager.AddToRoleAsync(userFind, "Customer");
+                    // save to db
+                    context.SaveChanges();
+
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
                     var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
 

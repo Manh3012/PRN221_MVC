@@ -1,20 +1,22 @@
 # PRN221_MVC
 PRN221 MVC final project. Shopping website.
 ## Feature
-Login/logout, confirm email, 2FA login
+Login/logout, confirm email, 2FA login, forgot password, register
 
 Client
 - Search/filter/view products
 - add/update/delete/checkout cart items
-- rating/ review
+- Comment
+- Order history, order detail
 
 Shop owner
 - Dashboard sales
-- CRUD product
+- CRUD, detail product
+- Order history, order detail
 
 Admin
 - CU user account
-- RD user account
+- RD, detail user account
 
 ## How to build?
 Open **Package Manager Console** in **Visual Studio** IDE and run `Update-Database`

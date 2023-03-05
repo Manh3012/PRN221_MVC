@@ -115,7 +115,6 @@ namespace DAL.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("isDeleted")
@@ -478,13 +477,9 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Orders", b =>
                 {
-                    b.HasOne("DAL.Entities.User", "User")
+                    b.HasOne("DAL.Entities.User", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("DAL.Entities.Product", b =>
