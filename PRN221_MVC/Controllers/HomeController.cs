@@ -11,11 +11,6 @@ namespace PRN221_MVC.Controllers {
         }
 
         public IActionResult Index() {
-            // return View("/Views/Home/LoginClient.cshtml");
-            string name = HttpContext.Session.GetString("_Name");
-            string email = HttpContext.Session.GetString("_Email");
-            ViewData["_Name"] = name;
-            ViewData["_Email"] = email;
             return View();
         }
         public IActionResult Register() {
