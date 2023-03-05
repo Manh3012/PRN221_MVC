@@ -3,17 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using BAL;
 using DAL.Entities;
 using DAL.Repositories.Interface;
+using Microsoft.AspNetCore.Identity;
 
 namespace PRN221_MVC.Controllers
 {
     public class ShopOwnerController : Controller
     {
-
+        private UserManager<User> _userManager;
         private readonly IOrdersService ordersService;
-
-        public ShopOwnerController(IOrdersService ordersService)
+        public ShopOwnerController(IOrdersService ordersService, UserManager<User> userManager)
         {
             this.ordersService = ordersService;
+            _userManager = userManager;
         }
 
         // GET: ShopOwnerController
@@ -55,8 +56,20 @@ namespace PRN221_MVC.Controllers
             ViewBag.OrderValuesInEachMonth = orderValuesInEachMonth;
 
             ViewBag.SalesDataInEachMonth = salesDataInEachMonth;
+
+            ViewBag.Email = ViewBag.Email;
+
             return View();
             
+        }
+
+        public async Task<ActionResult> ShopOwnerProfile()
+        {
+            string? email = HttpContext.Session.GetString("Email");
+            User appUser = await _userManager.FindByEmailAsync(email);
+            Console.WriteLine(appUser.Email);
+            ViewBag.User = appUser;
+            return View();
         }
 
         public ActionResult OrderHistory()

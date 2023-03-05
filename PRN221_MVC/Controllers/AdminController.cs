@@ -93,6 +93,7 @@ namespace PRN221_MVC.Controllers
 
                         if (matchingRole != null && matchingRole.Equals("ShopOwner"))
                         {
+                            HttpContext.Session.SetString("Email", appUser.Email);
                             return RedirectToAction("IndexShopOwner", "ShopOwner");
                         }
                     }
