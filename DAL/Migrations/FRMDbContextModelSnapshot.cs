@@ -311,29 +311,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c5f542f8-7700-466d-abc2-eb9802780d4b",
-                            ConcurrencyStamp = "815af01f-42a2-478a-b811-a3eeda1aa1a3",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
-                        },
-                        new
-                        {
-                            Id = "f7e7887d-6190-4d9f-b5f2-52c6e1da18fa",
-                            ConcurrencyStamp = "84bc1941-a95c-4761-b788-4d56993cb2ec",
+                            Id = "9b8f3909-6160-410a-94f2-bfbf51bc4108",
+                            ConcurrencyStamp = "3978c603-0be4-4b70-9f66-aa1061c6a655",
                             Name = "ShopOwner",
                             NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "d3e186c7-4d8a-431a-82d9-f035694c1fad",
-                            ConcurrencyStamp = "203dc6ff-f3dc-429a-80b5-ebfc2298a77e",
+                            Id = "14b5ae04-75a4-41f5-860e-70cd251e9ec3",
+                            ConcurrencyStamp = "dc2a6106-78df-439b-ac26-555d103b6bf3",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "c81b05ed-c4f4-4902-850a-ea6705f4ee5c",
-                            ConcurrencyStamp = "5d102afc-9e79-49a7-aa75-88c8a939ad6b",
+                            Id = "5a64e8a5-b674-4c9f-af9c-65f22c41f13a",
+                            ConcurrencyStamp = "ceb35ca5-806a-42c6-8ddd-dccd8f2a62ac",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -477,9 +470,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Orders", b =>
                 {
-                    b.HasOne("DAL.Entities.User", null)
+                    b.HasOne("DAL.Entities.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Entities.Product", b =>

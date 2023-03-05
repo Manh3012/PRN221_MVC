@@ -93,7 +93,7 @@ namespace PRN221_MVC.Controllers
 
                         if (matchingRole != null && matchingRole.Equals("ShopOwner"))
                         {
-                            return RedirectToAction("Index", "Admin");
+                            return RedirectToAction("IndexShopOwner", "ShopOwner");
                         }
                     }
                         
