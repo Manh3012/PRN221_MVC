@@ -32,13 +32,12 @@ namespace PRN221_MVC.Controllers
         }
 
         // GET: AdminController
-        public ActionResult Index(int id)
+        public async Task<ActionResult> Index(int id)
         {
-            var db = new FRMDbContext();
-            var model = db.Users.Find(id.ToString());
-            if (model != null)
+            var user= await _userService.GetById(id.ToString());
+            if (user != null)
             {
-                return View(model);
+                return View(model:user);
             }
             else
             {
@@ -137,13 +136,13 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public ActionResult UserDetail(int id)
+
+        public async Task<ActionResult> UserDetail(int id)
         {
-            var db = new FRMDbContext();
-            var model = db.Users.Find(id.ToString());
-            if (model != null)
+            var user = await _userService.GetById(id.ToString());
+            if (user != null)
             {
-                return View(model);
+                return View(model: user);
             }
             else
             {
@@ -154,13 +153,12 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public ActionResult AdminProfile(int id)
+        public async Task<ActionResult> AdminProfile(int id)
         {
-            var db = new FRMDbContext();
-            var model = db.Users.Find(id.ToString());
-            if (model != null)
+            var user = await _userService.GetById(id.ToString());
+            if (user != null)
             {
-                return View(model);
+                return View(model: user);
             }
             else
             {
