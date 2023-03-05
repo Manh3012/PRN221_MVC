@@ -23,7 +23,7 @@ builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 
-builder.Services.AddScoped<ILogger>();
+//builder.Services.AddScoped<ILogger>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FRMDbContext>()

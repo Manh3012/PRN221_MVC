@@ -321,8 +321,6 @@ namespace DAL.Migrations
                         {
                             Id = "f7e7887d-6190-4d9f-b5f2-52c6e1da18fa",
                             ConcurrencyStamp = "84bc1941-a95c-4761-b788-4d56993cb2ec",
-                            Id = "4d876dfd-3b11-46e6-ab92-a6e16f622929",
-                            ConcurrencyStamp = "3551a43d-33b5-46d5-a79e-a2b2a141177a",
                             Name = "ShopOwner",
                             NormalizedName = "SHOPOWNER"
                         },
