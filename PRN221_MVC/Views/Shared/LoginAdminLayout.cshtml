@@ -52,21 +52,26 @@
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <div class="tab-pane active p-3" id="LogIn_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="https://mannatthemes.com/dastone/default/index.html">
-
+                                        <form class="form-horizontal auth-form" action="AsyncLogin">
+                                            @*@using (Html.BeginForm("AsyncLogin", "Admin", FormMethod.Post))
+                                            {*@
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="username">Username</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+                                                    <input type="text" class="form-control" name="email" id="username" placeholder="Enter username">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
+
+                                            <!--end form-group-->
 
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="userpassword">Password</label>
                                                 <div class="input-group">
                                                     <input type="password" class="form-control" name="password" id="userpassword" placeholder="Enter password">
                                                 </div>
-                                            </div><!--end form-group-->
+                                            </div>
+
+                                            <!--end form-group-->
 
                                             <div class="form-group row my-3">
                                                 <div class="col-sm-6">
@@ -78,13 +83,16 @@
                                                 <div class="col-sm-6 text-end">
                                                     <a href="@Url.Action("Recover_Password", "Admin")" class="text-muted font-13"><i class="dripicons-lock"></i> Forgot password?</a>
                                                 </div><!--end col-->
-                                            </div><!--end form-group-->
+                                            </div>
+
+                                            <!--end form-group-->
 
                                             <div class="form-group mb-0 row">
                                                 <div class="col-12">
-                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="button">Log In <i class="fas fa-sign-in-alt ms-1"></i></button>
+                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Log In <i class="fas fa-sign-in-alt ms-1"></i></button>
                                                 </div><!--end col-->
                                             </div> <!--end form-group-->
+                                            @*}*@
                                         </form><!--end form-->
                                         <div class="m-3 text-center text-muted">
                                             <p class="mb-0">Don't have an account ?  <a href="@Url.Action("Create", "Admin")" class="text-primary ms-2">Free Resister</a></p>
@@ -99,43 +107,55 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane px-3 pt-3" id="Register_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="https://mannatthemes.com/dastone/default/index.html">
-
+                                        <form id="createform" method="post" action="@Url.Action("UserAdd", "Admin")">
+                                            @*@using (Html.BeginForm("Create", "Admin", FormMethod.Post))
+                                            {*@
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="username">Username</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+                                                    <input type="text" class="form-control" name="username" id="usernameRE" placeholder="Enter username">
                                                 </div>
-                                            </div><!--end form-group-->
+                                                <div id="usernameerr" class="error"></div>
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="useremail">Email</label>
                                                 <div class="input-group">
-                                                    <input type="email" class="form-control" name="email" id="useremail" placeholder="Enter Email">
+                                                    <input type="email" class="form-control" name="useremail" id="useremailRE" placeholder="Enter Email">
                                                 </div>
-                                            </div><!--end form-group-->
+                                                <div id="emailerr" class="error"></div>
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="userpassword">Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="password" id="userpassword" placeholder="Enter password">
+                                                    <input type="password" class="form-control" name="userpassword" id="userpasswordRE" placeholder="Enter password">
                                                 </div>
-                                            </div><!--end form-group-->
+                                                <div id="passerr" class="error"></div>
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="conf_password">Confirm Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="conf-password" id="conf_password" placeholder="Enter Confirm Password">
+                                                    <input type="password" class="form-control" name="conf-password" id="conf_passwordRE" placeholder="Enter Confirm Password">
                                                 </div>
-                                            </div><!--end form-group-->
+                                                <div id="repasserr" class="error"></div>
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="mo_number">Mobile Number</label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" name="mobile number" id="mo_number" placeholder="Enter Mobile Number">
+                                                    <input type="text" class="form-control" name="mobilenumber" id="mo_numberRE" placeholder="Enter Mobile Number">
                                                 </div>
-                                            </div><!--end form-group-->
+                                                <div id="mobileerr" class="error"></div>
 
+                                            </div>
+
+                                            <!--end form-group-->
                                             <div class="form-group row my-3">
                                                 <div class="col-sm-12">
                                                     <div class="custom-control custom-switch switch-success">
@@ -143,13 +163,15 @@
                                                         <label class="form-label text-muted" for="customSwitchSuccess2">You agree to the Dastone <a href="#" class="text-primary">Terms of Use</a></label>
                                                     </div>
                                                 </div><!--end col-->
-                                            </div><!--end form-group-->
+                                            </div>
 
+                                            <!--end form-group-->
                                             <div class="form-group mb-0 row">
                                                 <div class="col-12">
-                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="button">Register <i class="fas fa-sign-in-alt ms-1"></i></button>
+                                                    <button id="registerbtn" onclick="validateform()" class="btn btn-primary w-100 waves-effect waves-light" type="submit">Register <i class="fas fa-sign-in-alt ms-1"></i></button>
                                                 </div><!--end col-->
                                             </div> <!--end form-group-->
+                                            @*}*@
                                         </form><!--end form-->
                                         <p class="my-3 text-muted">Already have an account ?<a href="@Url.Action("Login", "Admin")" class="text-primary ms-2">Log in</a></p>
                                     </div>
@@ -171,6 +193,7 @@
     <div>
         @RenderBody()
     </div>
+
     <!-- End Log In page -->
     <!-- jQuery  -->
     <script src="~/admin/assets/js/jquery.min.js"></script>
@@ -179,9 +202,105 @@
     <script src="~/admin/assets/js/feather.min.js"></script>
     <script src="~/admin/assets/js/simplebar.min.js"></script>
 
+    <script>
+        function validateform() {
+            var form = document.getElementById("createform");
+            var submitButton = document.getElementById("registerbtn");
 
+            // Add an event listener to the form for the submit event
+            form.addEventListener("submit", function (event) {
+                // Prevent the form from submitting
+                event.preventDefault();
+
+                // Check if any fields are invalid
+                var isFormValid = true;
+                var nameInput = document.getElementById("usernameRE");
+                var emailInput = document.getElementById("useremailRE");
+                var passwordInput = document.getElementById("userpasswordRE");
+                var repassInput = document.getElementById("conf_passwordRE");
+                var phoneInput = document.getElementById("mo_numberRE");
+
+                var nameErr = document.getElementById("usernameerr");
+                var emailErr = document.getElementById("emailerr");
+                var passErr = document.getElementById("passerr");
+                var repassErr = document.getElementById("repasserr");
+                var phoneErr = document.getElementById("mobileerr");
+
+
+                var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
+                var phoneRegex = /^\d{10}$/;
+                //var emailRegex = /^\S+@@\S+\.\S+$/;
+                // Check the name field
+                if (nameInput.value == "") {
+                    nameInput.classList.add("invalid");
+                    nameErr.innerHTML = "Name is invalid"
+                    isFormValid = false;
+                } else {
+                    nameErr.innerHTML = ""
+                    nameInput.classList.remove("invalid");
+                }
+
+                // Check the email field
+                if (!emailInput.checkValidity() || emailInput.value == "") {
+                    isFormValid = false;
+                    emailErr.innerHTML = "Email is invalid"
+                    emailInput.classList.add("invalid");
+                } else {
+                    emailInput.classList.remove("invalid");
+                }
+
+                // Check the password field
+                if ( passwordInput.value == "") {
+                    isFormValid = false;
+                    passErr.innerHTML = "Pass is invalid (Ex: A1a@aa)"
+                    passwordInput.classList.add("invalid");
+                } else {
+                    passwordInput.classList.remove("invalid");
+                    passErr.innerHTML = ""
+                }
+
+                if ( repassInput.value == "" || repassInput.value !== passwordInput.value) {
+                    isFormValid = false;
+                    repassErr.innerHTML = "Invalid, not the same password"
+                    repassInput.classList.add("invalid");
+                } else {
+                    repassInput.classList.remove("invalid");
+                    repassErr.innerHTML = ""
+                }
+
+                if (phoneInput.value == "" ) {
+                    isFormValid = false;
+                    phoneErr.innerHTML = "Invalid phone number (10 digits)"
+                    phoneInput.classList.add("invalid");
+                } else {
+                    phoneInput.classList.remove("invalid");
+                    phoneErr.innerHTML = ""
+                }
+
+                // Disable the submit button if the form is invalid
+                if (!isFormValid) {
+                    submitButton.disabled = false;
+                } else {
+                    submitButton.disabled = false;
+                    form.submit(); // submit the form
+                }
+            });
+        }
+
+
+    </script>
+
+    <style>
+        .error {
+            color: red;
+            font-size: small;
+            margin-bottom: 10px;
+        }
+    </style>
 </body>
+
 
 
 <!-- Mirrored from mannatthemes.com/dastone/default/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Feb 2023 15:54:57 GMT -->
 </html>
+

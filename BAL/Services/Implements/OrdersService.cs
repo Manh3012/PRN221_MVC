@@ -96,7 +96,7 @@ namespace BAL.Services.Implements
         public Dictionary<string, float> GetOrderValuesInEachMonth()
         {
             var list = _ordersRepository.GetOrderValuesInEachMonth();
-            
+
             return list;
         }
         public List<(int Month, int TotalOrders, int TotalProducts)> GetSalesDataMonthly(int year)

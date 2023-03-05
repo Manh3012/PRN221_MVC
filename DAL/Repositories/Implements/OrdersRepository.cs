@@ -11,7 +11,7 @@ using System.Globalization;
 
 namespace DAL.Repositories.Implements
 {
-    public class OrdersRepository : FRMDbContextBase<Orders>, IOrdersRepository
+    public class OrdersRepository : FRMDbContextBase<Orders> , IOrdersRepository
     {
         private readonly FRMDbContext _dbContext;
         public OrdersRepository(IDbFactory dbFactory) : base(dbFactory)
@@ -169,5 +169,6 @@ namespace DAL.Repositories.Implements
                         .FirstOrDefault(o => o.ID == id);
             return order;
         }
+
     }
 }
