@@ -191,7 +191,14 @@
                                                 </span>
                                             </div>
                                             <div class="dastone-profile_user-detail">
-                                                <h5 class="dastone-user-name">Rosa Dodson</h5>
+                                                @if (@ViewBag.User == null)
+                                                {
+                                                    <h5 class="dastone-user-name">Lucy</h5>
+                                                }
+                                                else
+                                                {
+                                                    <h5 class="dastone-user-name">@ViewBag.User.Name</h5>
+                                                }
                                                 <p class="mb-0 dastone-user-name-post">UI/UX Designer, India</p>
                                             </div>
                                         </div>
@@ -199,8 +206,16 @@
 
                                     <div class="col-lg-4 ms-auto align-self-center">
                                         <ul class="list-unstyled personal-detail mb-0">
-                                            <li class=""><i class="ti ti-mobile me-2 text-secondary font-16 align-middle"></i> <b> phone </b> : +91 23456 78910</li>
-                                            <li class="mt-2"><i class="ti ti-email text-secondary font-16 align-middle me-2"></i> <b> Email </b> : mannat.theme@gmail.com</li>
+                                            @if (ViewBag.User == null)
+                                            {
+                                                <li class=""><i class="ti ti-mobile me-2 text-secondary font-16 align-middle"></i> <b> phone </b> : +91 23456 78910</li>
+                                                <li class="mt-2"><i class="ti ti-email text-secondary font-16 align-middle me-2"></i> <b> Email </b> : mannat.theme@gmail.com</li>
+                                            }else
+                                            {
+                                                <li class=""><i class="ti ti-mobile me-2 text-secondary font-16 align-middle"></i> <b> phone </b> : +@ViewBag.User.PhoneNumber</li>
+                                                <li class="mt-2"><i class="ti ti-email text-secondary font-16 align-middle me-2"></i> <b> Email </b> : @ViewBag.User.Email</li>
+                                            }
+
                                             <li class="mt-2">
                                                 <i class="ti ti-world text-secondary font-16 align-middle me-2"></i> <b> Website </b> :
                                                 <a href="https://mannatthemes.com/" class="font-14 text-primary">https://mannatthemes.com</a>
@@ -1083,40 +1098,47 @@
                                         <div class="card-header">
                                             <h4 class="card-title">Change Password</h4>
                                         </div><!--end card-header-->
-                                        @using (Html.BeginForm("Edit", "Admin", FormMethod.Post))
-                                        {
+                                        @*@using (Html.BeginForm("Edit", "Admin", FormMethod.Post))
+                                        {*@
+                                        <form id="editform" method="post" action="@Url.Action("ChangePass", "Admin")">
                                             <div class="card-body">
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Current Password</label>
                                                     <div class="col-lg-9 col-xl-8">
-                                                        <input name="oldpass" class="form-control" type="password" placeholder="Password">
+                                                        <input id="oldpassED" name="oldpass" class="form-control" type="password" placeholder="Password">
+                                                        <div id="oldpasserr" class="error"></div>
+
                                                         @*<a href="#" class="text-primary font-12">Forgot password ?</a>*@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">New Password</label>
                                                     <div class="col-lg-9 col-xl-8">
-                                                        <input name="newpass" class="form-control" type="password" placeholder="New Password">
+                                                        <input id="newpassED" name="newpass" class="form-control" type="password" placeholder="New Password">
+                                                        <div id="newpasserr" class="error"></div>
+
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Confirm Password</label>
                                                     <div class="col-lg-9 col-xl-8">
-                                                        <input class="form-control" type="password" placeholder="Re-Password">
+                                                        <input id="renewpassED" class="form-control" type="password" placeholder="Re-Password">
+                                                        <div id="renewpasserr" class="error"></div>
+
                                                         <span class="form-text text-muted font-12">Never share your password.</span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-lg-9 col-xl-8 offset-lg-3">
-                                                        <input type="hidden" name="idhidden" value="a1e3188c-d670-4310-b86b-a5d0c8af4730"></input>
-                                                        <button type="submit" class="btn btn-sm btn-outline-primary">Change Password</button>
+                                                        <input type="hidden" name="idhidden" value="e1b7e721-490b-4801-a855-fa86b513ae08"></input>
+                                                        <button id="editbtn" onclick="validateform()" type="submit" class="btn btn-sm btn-outline-primary">Change Password</button>
                                                         @*<button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>*@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <!--end card-body-->
-                                        }
+                                        </form>
+                                        <!--end card-body-->
+                                        @*}*@
 
                                     </div><!--end card-->
                                     <div class="card">
@@ -1161,3 +1183,74 @@
     <!-- end page content -->
 </div>
 <!-- end page-wrapper -->
+
+<script>
+    function validateform() {
+        var form = document.getElementById("editform");
+        var submitButton = document.getElementById("editbtn");
+
+        // Add an event listener to the form for the submit event
+        form.addEventListener("submit", function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+
+            // Check if any fields are invalid
+            var isFormValid = true;
+            var oldpassInput = document.getElementById("oldpassED");
+            var passwordInput = document.getElementById("newpassED");
+            var repassInput = document.getElementById("renewpassED");
+
+            var oldpassErr = document.getElementById("oldpasserr");
+            var newpassErr = document.getElementById("newpasserr");
+            var renewpassErr = document.getElementById("renewpasserr");
+
+
+            // Check the email field
+            if (oldpassInput == "") {
+                isFormValid = false;
+                oldpassErr.innerHTML = "Pass is invalid"
+                oldpassInput.classList.add("invalid");
+            } else {
+                oldpassInput.classList.remove("invalid");
+            }
+
+            // Check the password field
+            if (passwordInput.value == "") {
+                isFormValid = false;
+                newpassErr.innerHTML = "Pass is invalid (Ex: A1a@aa)"
+                passwordInput.classList.add("invalid");
+            } else {
+                passwordInput.classList.remove("invalid");
+                newpassErr.innerHTML = ""
+            }
+
+            if (repassInput.value == "" || repassInput.value !== passwordInput.value) {
+                isFormValid = false;
+                renewpassErr.innerHTML = "Invalid, not the same password"
+                repassInput.classList.add("invalid");
+            } else {
+                repassInput.classList.remove("invalid");
+                renewpassErr.innerHTML = ""
+            }
+
+
+            // Disable the submit button if the form is invalid
+            if (!isFormValid) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = false;
+                form.submit(); // submit the form
+            }
+        });
+    }
+
+
+</script>
+
+<style>
+    .error {
+        color: red;
+        font-size: small;
+        margin-bottom: 10px;
+    }
+</style>
