@@ -808,7 +808,7 @@
                                 </a>
                             </li>
                             @{
-                                var name = @ViewData["_Name"];
+                                var name = Accessor.HttpContext.Session.GetString("_Name");
                                 if (name== null) {
                                     <li class="dropdown inuser">
                                         <a href="@Url.Action("Login","User")" title="Account" class="dropdown-toggle" data-toggle="dropdown">
@@ -829,8 +829,8 @@
                                 }
                                 else {
                                     <span class="hdis text-left nav-link  d-inline-block">
-                                    <span class="cart-sub">@Accessor.HttpContext.Session.GetString("_Name")</span>
-                                    <span class="cart-sub"><a href="@Url.Action("Logout","User")">Logout</a> </span>
+                                    <span class="cart-sub"><a href="@Url.Action("Detail","User")">@Accessor.HttpContext.Session.GetString("_Name")</a> </span>
+                                    <span><a style="background:red" href="@Url.Action("Logout","User")" class="btn btn-danger">Logout</a> </span>
                                     </span>
                                 }
                             }
