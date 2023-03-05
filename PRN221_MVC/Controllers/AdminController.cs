@@ -1,21 +1,23 @@
 ﻿using BAL;
 using DAL.Entities;
+using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
-using DAL.Entities;
 
 namespace PRN221_MVC.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IOrdersService ordersService;
+        private readonly IUserService _userService;
 
         public float TotalSalesToday { get; set; }
 
-        public AdminController(IOrdersService ordersService)
+        public AdminController(IOrdersService ordersService, IUserService userService)
         {
             this.ordersService = ordersService;
+            _userService = userService;
         }
 
 
