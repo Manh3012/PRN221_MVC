@@ -51,11 +51,11 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        // GET: AdminController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //// GET: AdminController/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
         public async Task<ActionResult> UserList()
         {
             List<User> users = await _userService.GetAll();
@@ -96,7 +96,7 @@ namespace PRN221_MVC.Controllers
                             return RedirectToAction("Index", "Admin");
                         }
                     }
-                        
+
                     //return Redirect(login.ReturnUrl ?? "/");
 
                     // Two Factor Authentication
@@ -149,7 +149,19 @@ namespace PRN221_MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection)
         {
-            //var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            try
+            {
+               
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> UserAdd()
+        {
             try
             {
                 string password = HttpContext.Request.Form["userpassword"];
@@ -157,13 +169,26 @@ namespace PRN221_MVC.Controllers
                 {
                     UserName = HttpContext.Request.Form["username"],
                     Email = HttpContext.Request.Form["useremail"],
-                    PhoneNumber = HttpContext.Request.Form["mobile number"],
+                    PhoneNumber = HttpContext.Request.Form["mobilenumber"],
                     DoB = DateTime.Parse("01/01/2000"),
                     Gender = "F",
                     Address = "NaN",
                     isDeleted = false,
                     Name = "erererere",
                 };
+
+                //string password = collection["userpassword"];
+                //var newUser = new User
+                //{
+                //    UserName = collection["username"],
+                //    Email = collection["useremail"],
+                //    PhoneNumber = collection["mobile number"],
+                //    DoB = DateTime.Parse("01/01/2000"),
+                //    Gender = "F",
+                //    Address = "NaN",
+                //    isDeleted = false,
+                //    Name = "erererere",
+                //};
                 IdentityResult re = await _userManager.CreateAsync(newUser, password);
                 //IdentityResult re1 = await _userManager.AddToRoleAsync(newUser, "admin");
                 //IdentityResult a = await _roleManager.CreateAsync(new IdentityUserRole<string>().RoleId = newUser.Id);
@@ -172,6 +197,7 @@ namespace PRN221_MVC.Controllers
             }
             catch
             {
+                Console.WriteLine("Error");
                 return View();
             }
         }
