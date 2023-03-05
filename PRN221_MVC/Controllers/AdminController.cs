@@ -32,9 +32,17 @@ namespace PRN221_MVC.Controllers
         }
 
         // GET: AdminController
-        public ActionResult Index()
+        public async Task<ActionResult> Index(int id)
         {
-            return View();
+            var user= await _userService.GetById(id.ToString());
+            if (user != null)
+            {
+                return View(model:user);
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult Login()
@@ -128,17 +136,34 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public ActionResult UserDetail()
+
+        public async Task<ActionResult> UserDetail(int id)
         {
-            return View();
+            var user = await _userService.GetById(id.ToString());
+            if (user != null)
+            {
+                return View(model: user);
+            }
+            else
+            {
+                return View();
+            }
         }
         public ActionResult Error()
         {
             return View();
         }
-        public ActionResult AdminProfile()
+        public async Task<ActionResult> AdminProfile(int id)
         {
-            return View();
+            var user = await _userService.GetById(id.ToString());
+            if (user != null)
+            {
+                return View(model: user);
+            }
+            else
+            {
+                return View();
+            }
         }
         public ActionResult Sales_Analytics()
         {
@@ -258,7 +283,11 @@ namespace PRN221_MVC.Controllers
         // GET: AdminController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var db = new FRMDbContext();
+            var model = db.Users.Find(id.ToString());
+            db.Users.Remove(model);
+            db.SaveChanges();
+            return RedirectToAction("UserList");
         }
 
         // POST: AdminController/Delete/5
@@ -268,7 +297,16 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var getUserbyId = users.FirstOrDefault(u => Int32.Parse(u.Id) == id);
+                if (getUserbyId != null)
+                {
+                    using (var db = new FRMDbContext())
+                    {
+                        db.Users.Remove(getUserbyId);
+                        db.SaveChanges();
+                    }
+                }
+                return RedirectToAction("UserList");
             }
             catch
             {
