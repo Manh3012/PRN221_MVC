@@ -22,6 +22,8 @@ namespace PRN221_MVC.Controllers
         private readonly IUserService _userService;
         private UserManager<User> _userManager;
         private SignInManager<User> signInManager;
+
+        FRMDbContext context = new FRMDbContext();
         public AdminController(IUserService userService, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userService = userService;
@@ -68,14 +70,34 @@ namespace PRN221_MVC.Controllers
             if (ModelState.IsValid)
             {
                 User appUser = await _userManager.FindByEmailAsync(login.Email);
+
+                var roleStore = new RoleStore<IdentityRole>(context);
+                var roles = roleStore.Roles.ToList();
+
+
                 if (appUser != null)
                 {
+                    var role = await _userManager.GetRolesAsync(appUser);
+
+                    var matchingRole = roles.FirstOrDefault(r => role.Contains(r.Name)).Name;
+
                     await signInManager.SignOutAsync();
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
 
                     if (result.Succeeded)
-                        //return Redirect(login.ReturnUrl ?? "/");
-                        return RedirectToAction("Index", "Home");
+                    {
+                        if (matchingRole != null && matchingRole.Equals("Administrator"))
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+
+                        if (matchingRole != null && matchingRole.Equals("ShopOwner"))
+                        {
+                            return RedirectToAction("Index", "Admin");
+                        }
+                    }
+                        
+                    //return Redirect(login.ReturnUrl ?? "/");
 
                     // Two Factor Authentication
                     if (result.RequiresTwoFactor)
@@ -90,6 +112,8 @@ namespace PRN221_MVC.Controllers
                     {
                         ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                     }
+
+
 
                     // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
                     /*if (result.IsLockedOut)
