@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "OrderHistory";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutShopOwner.cshtml";
 }
 <div class="page-wrapper">
     <!-- Top Bar Start -->
@@ -189,7 +189,7 @@
                                                 <td>@item.Total</td>
                                                 <td>@item.User.Name</td>
                                                 <td>@item.CreatedDate</td>
-                                                <td><a class="nav-link" href="@Url.Action("OrderDetails", "Admin", new { id = item.ID.ToString("D") })">View</a></td>
+                                                <td><a class="nav-link" href="@Url.Action("OrderDetails", "ShopOwner", new { id = item.ID.ToString("D") })">View</a></td>
                                             </tr>
 
                                             <!--end tr-->

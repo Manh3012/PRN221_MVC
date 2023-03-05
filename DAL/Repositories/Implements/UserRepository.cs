@@ -18,10 +18,16 @@ namespace DAL.Repositories.Implements
         {
             _dbContext = dbFactory.Init();
         }
-     public async Task<List<User>> GetAll()
+        public async Task<List<User>> GetAll()
         {
-            var users= await _dbSet.ToListAsync();
+            var users = await _dbSet.ToListAsync();
             return users;
+        }
+
+        public async Task<User> GetUserbyID(string id)
+        {
+            var user = await _dbContext.Users.Where(u => u.Id.Equals(id)).FirstAsync();
+            return user;
         }
     }
 }
