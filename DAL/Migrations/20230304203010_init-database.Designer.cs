@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(FRMDbContext))]
-    [Migration("20230302100310_init")]
-    partial class init
+    [Migration("20230304203010_init-database")]
+    partial class initdatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,37 @@ namespace DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DAL.Entities.Cart", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ProductID")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Cart");
+                });
 
             modelBuilder.Entity("DAL.Entities.Category", b =>
                 {
@@ -314,22 +345,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4d876dfd-3b11-46e6-ab92-a6e16f622929",
-                            ConcurrencyStamp = "3551a43d-33b5-46d5-a79e-a2b2a141177a",
+                            Id = "3465f447-e82d-4313-9909-99b568d54079",
+                            ConcurrencyStamp = "4fa80854-9cad-4f3f-89f0-a398136c5bdc",
                             Name = "ShopOwner",
                             NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "d3e186c7-4d8a-431a-82d9-f035694c1fad",
-                            ConcurrencyStamp = "203dc6ff-f3dc-429a-80b5-ebfc2298a77e",
+                            Id = "1ea7d8ca-0007-4370-a608-bd08e0c2d4da",
+                            ConcurrencyStamp = "558b1e90-dc3d-48e3-8770-8c2e37d572bf",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "c81b05ed-c4f4-4902-850a-ea6705f4ee5c",
-                            ConcurrencyStamp = "5d102afc-9e79-49a7-aa75-88c8a939ad6b",
+                            Id = "5665b7a6-e32f-4496-a683-2c781c6cbae3",
+                            ConcurrencyStamp = "682de5f2-323c-4275-8b21-38b248967d18",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -439,6 +470,21 @@ namespace DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserToken", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Entities.Cart", b =>
+                {
+                    b.HasOne("DAL.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAL.Entities.User", null)
+                        .WithMany("Carts")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("DAL.Entities.Comment", b =>
@@ -556,6 +602,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
+                    b.Navigation("Carts");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Orders");

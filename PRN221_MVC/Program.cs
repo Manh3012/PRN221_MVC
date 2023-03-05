@@ -1,4 +1,5 @@
 using BAL.Services.Implements;
+using BAL.Services.Interface;
 using DAL;
 using DAL.Entities;
 using DAL.Infacstucture;
@@ -19,7 +20,9 @@ builder.Services.AddScoped<IDbFactory, DbFactory>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ILogger>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+//builder.Services.AddScoped<ILogger>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FRMDbContext>()

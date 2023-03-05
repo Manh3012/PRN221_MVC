@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initdatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -222,6 +222,33 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
+                    ProductID = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Cart_Product_ProductID",
+                        column: x => x.ProductID,
+                        principalTable: "Product",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cart_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comment",
                 columns: table => new
                 {
@@ -303,10 +330,20 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "4d876dfd-3b11-46e6-ab92-a6e16f622929", "3551a43d-33b5-46d5-a79e-a2b2a141177a", "ShopOwner", "SHOPOWNER" },
-                    { "c81b05ed-c4f4-4902-850a-ea6705f4ee5c", "5d102afc-9e79-49a7-aa75-88c8a939ad6b", "Administrator", "ADMINISTRATOR" },
-                    { "d3e186c7-4d8a-431a-82d9-f035694c1fad", "203dc6ff-f3dc-429a-80b5-ebfc2298a77e", "Customer", "CUSTOMER" }
+                    { "1ea7d8ca-0007-4370-a608-bd08e0c2d4da", "558b1e90-dc3d-48e3-8770-8c2e37d572bf", "Customer", "CUSTOMER" },
+                    { "3465f447-e82d-4313-9909-99b568d54079", "4fa80854-9cad-4f3f-89f0-a398136c5bdc", "ShopOwner", "SHOPOWNER" },
+                    { "5665b7a6-e32f-4496-a683-2c781c6cbae3", "682de5f2-323c-4275-8b21-38b248967d18", "Administrator", "ADMINISTRATOR" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_ProductID",
+                table: "Cart",
+                column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_UserId",
+                table: "Cart",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comment_ProductID",
@@ -386,6 +423,9 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Cart");
+
             migrationBuilder.DropTable(
                 name: "Comment");
 
