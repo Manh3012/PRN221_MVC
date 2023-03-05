@@ -34,7 +34,6 @@ namespace PRN221_MVC.Controllers
         // GET: AdminController
         public ActionResult Index()
         {
-
             return View();
         }
 
@@ -88,7 +87,8 @@ namespace PRN221_MVC.Controllers
                     {
                         if (matchingRole != null && matchingRole.Equals("Administrator"))
                         {
-                            return RedirectToAction("Index", "Home");
+                            ViewBag.User = appUser;
+                            return View("AdminProfile");
                         }
 
                         if (matchingRole != null && matchingRole.Equals("ShopOwner"))
@@ -151,7 +151,7 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
-               
+
                 return RedirectToAction("Index");
             }
             catch
@@ -216,6 +216,19 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public async Task<IActionResult> ChangePass()
+        {
+            try
+            {
                 string userid = HttpContext.Request.Form["idhidden"];
                 var user = await _userManager.FindByIdAsync(userid);
                 string currentPass = HttpContext.Request.Form["oldpass"];
@@ -233,7 +246,7 @@ namespace PRN221_MVC.Controllers
                 {
                     return BadRequest(result.Errors);
                 }
-                return View();
+                return RedirectToAction("Index");
             }
             catch
             {
