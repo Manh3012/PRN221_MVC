@@ -146,13 +146,6 @@ namespace PRN221_MVC.Controllers {
                 if (appUser != null) {
                     await signInManager.SignOutAsync();
                     Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
-
-                    if (result.Succeeded == false) {
-                        ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
-                        TempData["LoginError"] = "Login Failed: Invalid Email or password";
-                        return RedirectToAction("Login", login);
-                    }
-
                     // Two Factor Authentication
                     if (result.RequiresTwoFactor) {
                         return RedirectToAction("LoginTwoStep", new { appUser.Email });
@@ -165,9 +158,12 @@ namespace PRN221_MVC.Controllers {
                         TempData["LoginError"] = "Email is unconfirmed, please confirm it first";
                     }
 
-                    if (result.Succeeded) {
-                        return RedirectToAction("Index", "Home");
+                    if (!result.Succeeded) {
+                        ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+                        TempData["LoginError"] = "Login Failed: Invalid Email or password";
+                        return RedirectToAction("Login", login);
                     }
+                    return RedirectToAction("Index", "Home");
                 }
                 else {
                     ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email");
