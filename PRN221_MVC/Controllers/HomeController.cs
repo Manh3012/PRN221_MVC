@@ -28,13 +28,15 @@ namespace PRN221_MVC.Controllers
 
         public IActionResult Index()
         {
-            // return View("/Views/Home/LoginClient.cshtml");
-            var category = _dbContext.Category.ToList();
+            CateAndProductViewModel model = new CateAndProductViewModel();
+            model.Products =_dbContext.Product.ToList();
+            model.Categories = _dbContext.Category.ToList();
             string name = HttpContext.Session.GetString("_Name");
             string email = HttpContext.Session.GetString("_Email");
+            ViewBag.ProductList = _dbContext.Product.ToList();
             ViewData["_Name"] = name;
             ViewData["_Email"] = email;
-            return View(category);
+            return View(model);
         }
         public IActionResult Register()
         {

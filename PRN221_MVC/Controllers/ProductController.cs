@@ -142,7 +142,8 @@ namespace PRN221_MVC.Controllers
             }
             List<Product> sort = new List<Product>();
             Category category = new Category();
-
+            var cate=_dbContext.Category.FirstOrDefault(x=>x.ID == id);
+            ViewBag.NameCategory = cate.Name;
             if (id == 0)
             {
                 return NotFound();

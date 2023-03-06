@@ -35,7 +35,7 @@
                             @foreach (var product in Model)
                             {
                                 <tr>
-                                    <td class="text-center valign"><img src="@product.imgPath" alt="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" title="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" /></td>
+                                    <td class="text-center valign"><img src="@Url.Content(product.imgPath)" width="50" height="50" alt="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" title="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" /></td>
                                     <td class="text-left valign">@product.Name</td>
                                     <td class="text-left valign">
                                         <div class="price">
