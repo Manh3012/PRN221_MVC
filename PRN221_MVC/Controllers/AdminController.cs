@@ -36,7 +36,14 @@ namespace PRN221_MVC.Controllers
         // GET: AdminController
         public ActionResult Index()
         {
-            return RedirectToAction("Login");
+            if (HttpContext.Session.GetString("user") == null)
+            {
+                return RedirectToAction("Login");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public ActionResult Login()
@@ -66,6 +73,7 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+        [HttpPost]
         public async Task<ActionResult> AsyncLogin(LoginUserViewModel login)
         {
             if (ModelState.IsValid)
@@ -90,6 +98,7 @@ namespace PRN221_MVC.Controllers
                         if (matchingRole != null && matchingRole.Equals("Administrator"))
                         {
                             ViewBag.User = appUser;
+                            HttpContext.Session.SetString("user", appUser.Email.ToString());
                             return View("AdminProfile");
                         }
 

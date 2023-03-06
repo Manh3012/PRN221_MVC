@@ -52,7 +52,7 @@
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <div class="tab-pane active p-3" id="LogIn_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="AsyncLogin">
+                                        <form method="post" class="form-horizontal auth-form" action="AsyncLogin">
                                             @*@using (Html.BeginForm("AsyncLogin", "Admin", FormMethod.Post))
                                             {*@
                                             <div class="form-group mb-2">
@@ -131,7 +131,7 @@
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="userpassword">Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="userpassword" id="userpasswordRE" placeholder="Enter password">
+                                                    <input type="password" class="form-control" name="userpassword" id="userpasswordRE" placeholder="Enter password (ex:S2s@ss)">
                                                 </div>
                                                 <div id="passerr" class="error"></div>
                                             </div>
@@ -140,7 +140,7 @@
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="conf_password">Confirm Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="conf-password" id="conf_passwordRE" placeholder="Enter Confirm Password">
+                                                    <input type="password" class="form-control" name="conf-password" id="conf_passwordRE" placeholder="Enter Confirm Password (ex:S2s@ss)">
                                                 </div>
                                                 <div id="repasserr" class="error"></div>
                                             </div>
@@ -229,7 +229,7 @@
 
                 var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
                 var phoneRegex = /^\d{10}$/;
-                //var emailRegex = /^\S+@@\S+\.\S+$/;
+                var emailRegex = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 // Check the name field
                 if (nameInput.value == "") {
                     nameInput.classList.add("invalid");
@@ -241,7 +241,7 @@
                 }
 
                 // Check the email field
-                if (!emailInput.checkValidity() || emailInput.value == "") {
+                if (!emailInput.checkValidity() || emailInput.value == "" || !emailRegex.test(emailInput.value)) {
                     isFormValid = false;
                     emailErr.innerHTML = "Email is invalid"
                     emailInput.classList.add("invalid");
@@ -250,7 +250,7 @@
                 }
 
                 // Check the password field
-                if ( passwordInput.value == "") {
+                if (passwordInput.value == "" || !passwordRegex.test(passwordInput.value)) {
                     isFormValid = false;
                     passErr.innerHTML = "Pass is invalid (Ex: A1a@aa)"
                     passwordInput.classList.add("invalid");
@@ -259,7 +259,7 @@
                     passErr.innerHTML = ""
                 }
 
-                if ( repassInput.value == "" || repassInput.value !== passwordInput.value) {
+                if (repassInput.value == "" || repassInput.value !== passwordInput.value) {
                     isFormValid = false;
                     repassErr.innerHTML = "Invalid, not the same password"
                     repassInput.classList.add("invalid");
@@ -268,7 +268,7 @@
                     repassErr.innerHTML = ""
                 }
 
-                if (phoneInput.value == "" ) {
+                if (phoneInput.value == "" || !phoneRegex.test(phoneInput.value)) {
                     isFormValid = false;
                     phoneErr.innerHTML = "Invalid phone number (10 digits)"
                     phoneInput.classList.add("invalid");
