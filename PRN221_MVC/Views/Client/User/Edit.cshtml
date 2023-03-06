@@ -59,17 +59,11 @@
                                 <input type="tel" name="phoneNumber" asp-for="PhoneNumber" placeholder="Phone Number" id="input-telephone" class="form-control" />
                             </div>
                         </div>
-                        <div class="form-group required">
-                            <label class="col-sm-3 col-xs-12 control-label" asp-for="Password">Password</label>
-                            <div class="col-sm-9 col-xs-12">
-                                <input type="password" name="password" asp-for="Password" placeholder="Password" id="input-password" class="form-control" />
-                            </div>
-                        </div>
                     </fieldset>
 
                     <div class="buttons">
                         <div class="text-right acspace">
-                            <a href="@Url.Action("Edit","User")" class="btn btn-primary">Edit</a>
+                            <input class="btn btn-primary" type="submit" value="Edit" />
                         </div>
                     </div>
 

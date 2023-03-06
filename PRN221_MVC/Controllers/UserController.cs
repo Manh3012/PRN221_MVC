@@ -13,8 +13,6 @@ namespace PRN221_MVC.Controllers {
     public class UserController : Controller {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
-        //
-        private FRMDbContext context = new FRMDbContext();
 
         public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr) {
             userManager = userMgr;
@@ -25,6 +23,8 @@ namespace PRN221_MVC.Controllers {
             await signInManager.SignOutAsync();
             // Remove session cookie of user login info
             HttpContext.Session.Remove("UserInfo.Session");
+            HttpContext.Session.Remove(".AdventureWorks.Session");
+            Response.Cookies.Delete(".AdventureWorks.Session");
             Response.Cookies.Delete("UserInfo.Session");
             return RedirectToAction("Index", "Home");
         }
@@ -53,8 +53,10 @@ namespace PRN221_MVC.Controllers {
                     // Add role Customer to new User
                     var userFind = await userManager.FindByNameAsync(user.Username);
                     await userManager.AddToRoleAsync(userFind, "Customer");
-                    // save to db
-                    context.SaveChanges();
+                    using (var context = new FRMDbContext()) {
+                        // save to db
+                        context.SaveChanges();
+                    }
 
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
                     var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
@@ -269,30 +271,51 @@ namespace PRN221_MVC.Controllers {
 
         [AllowAnonymous]
         public async Task<IActionResult> Detail() {
-            string email = "binhvqse161554@fpt.edu.vn";
+            string email = HttpContext.Session.GetString("_Email");
+
             User user = await userManager.FindByEmailAsync(email);
             EditUserViewModel editUser = new EditUserViewModel {
                 Id = user.Id,
                 Email = user.Email,
                 Username = user.UserName,
                 Name = user.Name,
-                Password = user.PasswordHash,
                 PhoneNumber = user.PhoneNumber
             };
             return View("/Views/Client/User/Detail.cshtml", editUser);
+        }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> Edit() {
+            string email = HttpContext.Session.GetString("_Email");
+            User user = await userManager.FindByEmailAsync(email);
+            EditUserViewModel editUser = new EditUserViewModel {
+                Id = user.Id,
+                Email = user.Email,
+                Username = user.UserName,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber
+            };
+            return View("/Views/Client/User/Edit.cshtml", editUser);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserViewModel editUser) {
             if (!ModelState.IsValid)
                 return View("/Views/Client/User/Edit.cshtml", editUser);
-
-            var user = await userManager.FindByEmailAsync(editUser.Email);
-            if (user == null)
-                RedirectToAction("Edit");
-
-            return RedirectToAction("Edit");
+            User user = await userManager.FindByEmailAsync(editUser.Email);
+            if (user == null) {
+                ModelState.AddModelError("", "User Not Found");
+                return RedirectToAction("Edit", "User");
+            }
+            else {
+                user.Email = editUser.Email;
+                user.Name = editUser.Name;
+                user.PhoneNumber = editUser.PhoneNumber;
+                IdentityResult result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                    return RedirectToAction("Detail", "User");
+                return RedirectToAction("Edit", editUser);
+            }
         }
     }
 }
