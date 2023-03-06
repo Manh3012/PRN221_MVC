@@ -1,21 +1,8 @@
-﻿
+﻿@model List<DAL.Entities.Product>
 @{
     ViewData["Title"] = "WishList";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <div class="breadbg">
     <div class="container">
@@ -39,29 +26,29 @@
                             <tr>
                                 <td class="text-center">Image</td>
                                 <td class="text-left">Product Name</td>
-                                <td class="text-left">Model</td>
-                                <td class="text-left">Stock</td>
-                                <td class="text-left">Unit Price</td>
+                                <td class="text-left">Price</td>
                                 <td class="text-left">Action</td>
+
                             </tr>
                         </thead>
                         <tbody>
-
-                            <tr>
-                                <td class="text-center valign"><a href="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=product/product&amp;product_id=44"><img src="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/29-90x90.jpg" alt="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" title="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" /></a></td>
-                                <td class="text-left valign"><a href="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=product/product&amp;product_id=44"><strong>Chakki-Fresh-Wheat-Atta/Godihittu - Fortified</strong></a></td>
-                                <td class="text-left valign">Product 17</td>
-                                <td class="text-left valign">In Stock</td>
-                                <td class="text-left valign">
-                                    <div class="price">
-                                        $1,202.00
-                                    </div>
-                                </td>
-                                <td class="text-center valign">
-                                    <button type="button" onclick="cart.add('44');" data-toggle="tooltip" title="add to cart" class="btn btn-info"><i class="fa fa-shopping-cart"></i></button>
-                                    <a href="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=account/wishlist&amp;remove=44" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-times"></i></a>
-                                </td>
-                            </tr>
+                            @foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td class="text-center valign"><img src="@product.imgPath" alt="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" title="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified" /></td>
+                                    <td class="text-left valign">@product.Name</td>
+                                    <td class="text-left valign">
+                                        <div class="price">
+                                            @product.Price
+                                        </div>
+                                    </td>
+                                    <td class="text-center valign">
+                                        <form method="post" asp-action="RemoveFromWishList" asp-route-id="@product.ID">
+                                            <button type="submit" class="btn btn-danger" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
 
                     </table>
@@ -99,6 +86,11 @@
         </aside>
     </div>
 </div>
+
+
+
+
+
 
 
 

@@ -24,6 +24,7 @@
     <base />
     <meta name="description" content="My Store" />
 
+
     <script src="~/client/catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
     <link href="~/client/catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
     <script src="~/client/catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -41,7 +42,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&amp;display=swap" rel="stylesheet">
     <link href="~/client/catalog/view/theme/upbasket/stylesheet/stylesheet.css" rel="stylesheet">
-
 
 
     <script src="~/client/catalog/view/javascript/eptheme/animate.js" type="text/javascript"></script>
@@ -70,6 +70,8 @@
     <script src="~/client/catalog/view/javascript/jquery/webinewsletter.js" type="text/javascript"></script>
     <script src="~/client/catalog/view/javascript/wbcommon.js" type="text/javascript"></script>
     <link href="~/client/image/catalog/favicon.png" rel="icon" />
+ 
+
 </head>
 <svg style="display: none;">
 
@@ -806,11 +808,11 @@
                         </form>
                     </div>
                     <div id="top-links" class="col-lg-4 col-md-4 col-sm-7 col-xs-5 text-right">
-                        <ul class="list-inline">
+                          <ul class="list-inline">
                             <li class="wishcom hidden-md hidden-sm hidden-xs wishpad">
-                                <a href="indexe223.html?route=account/wishlist" id="wishlist-total">
+                                <a href="@Url.ActionLink("WishList","Order")" id="wishlist-total">
                                     <svg width="22px" height="20px"><use xlink:href="#hwish"></use></svg>
-                                    <span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">0</span>
+                                    <span class="hidden-lg">Wish List</span><span class="cartt hidden-md hidden-sm hidden-xs">@wishlist.Count</span>
                                 </a>
                             </li>
                             @{

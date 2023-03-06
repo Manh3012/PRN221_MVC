@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<DAL.Entities.Category>
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
 }
@@ -67,76 +68,22 @@
                     <h1 class="heading text-left"><span>Our category</span><p>Do not miss the current offers until the end of March.</p></h1>
                     <div class="row rless">
                         <div class="cat-img">
+                            @foreach(var category in Model)
+                            {
                             <div class="block-cat-wr col-xs-12 cless">
                                 <div class="categorybr">
-                                    <a href="@Url.Action("filter", "Product", new {id = 1})">
+                                    <a href="@Url.Action("Filter", "Product", new {id = category.ID})">
                                         <img src="~/client/image/cache/catalog/category/5-120x120.png" class="img-responsive center-block" alt="">
 
                                         <div class="catcontent">
-                                            <h2><span class="categorybor">meats &amp; sea foods</span></h2>
+                                            <h2><span class="categorybor">@category.Name</span></h2>
                                             <h6 class="catepro"> </h6>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                            <div class="block-cat-wr col-xs-12 cless">
-                                <div class="categorybr">
-                                    <a href="@Url.Action("filter", "Product", new {id = 2})">
-                                        <img src="~/client/image/cache/catalog/category/1-120x120.png" class="img-responsive center-block" alt="">
-
-                                        <div class="catcontent">
-                                            <h2><span class="categorybor">breads &amp; bakery</span></h2>
-                                            <h6 class="catepro"> </h6>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="block-cat-wr col-xs-12 cless">
-                                <div class="categorybr">
-                                    <a href="@Url.Action("filter", "Product", new {id = 3})">
-                                        <img src="~/client/image/cache/catalog/category/2-120x120.png" class="img-responsive center-block" alt="">
-                                        <div class="catcontent">
-                                            <h2><span class="categorybor">breakfast &amp; dairy</span></h2>
-                                            <h6 class="catepro"> </h6>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="block-cat-wr col-xs-12 cless">
-                                <div class="categorybr">
-                                    <a href="@Url.Action("filter", "Product", new {id = 4})">
-                                        <img src="~/client/image/cache/catalog/category/6-120x120.png" class="img-responsive center-block" alt="">
-                                        <div class="catcontent">
-                                            <h2><span class="categorybor">fruits &amp; juice</span></h2>
-                                            <h6 class="catepro"> </h6>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="block-cat-wr col-xs-12 cless">
-                                <div class="categorybr">
-                                    <a href="@Url.Action("filter", "Product", new {id = 6})">
-                                        <img src="~/client/image/cache/catalog/category/8-120x120.png" class="img-responsive center-block" alt="">
-
-                                        <div class="catcontent">
-                                            <h2><span class="categorybor">grocery &amp; staples</span></h2>
-                                            <h6 class="catepro"> </h6>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="block-cat-wr col-xs-12 cless">
-                                <div class="categorybr">
-                                    <a href="@Url.Action("filter", "Product", new {id = 5})">
-                                        <img src="~/client/image/cache/catalog/category/4-120x120.png" class="img-responsive center-block" alt="">
-
-                                        <div class="catcontent">
-                                            <h2><span class="categorybor">fruits &amp; vegetables</span></h2>
-                                            <h6 class="catepro"> </h6>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                            }
+                           
                         </div>
                     </div>
                 </div>
