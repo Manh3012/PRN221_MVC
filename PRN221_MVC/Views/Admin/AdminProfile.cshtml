@@ -197,7 +197,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h5 class="dastone-user-name">@ViewBag.User.Name</h5>
+                                                    <h5 class="dastone-user-name">@ViewBag.User.UserName</h5>
                                                 }
                                                 <p class="mb-0 dastone-user-name-post">UI/UX Designer, India</p>
                                             </div>
@@ -210,7 +210,8 @@
                                             {
                                                 <li class=""><i class="ti ti-mobile me-2 text-secondary font-16 align-middle"></i> <b> phone </b> : +91 23456 78910</li>
                                                 <li class="mt-2"><i class="ti ti-email text-secondary font-16 align-middle me-2"></i> <b> Email </b> : mannat.theme@gmail.com</li>
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <li class=""><i class="ti ti-mobile me-2 text-secondary font-16 align-middle"></i> <b> phone </b> : +@ViewBag.User.PhoneNumber</li>
                                                 <li class="mt-2"><i class="ti ti-email text-secondary font-16 align-middle me-2"></i> <b> Email </b> : @ViewBag.User.Email</li>
@@ -1130,7 +1131,14 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-lg-9 col-xl-8 offset-lg-3">
-                                                        <input type="hidden" name="idhidden" value="e1b7e721-490b-4801-a855-fa86b513ae08"></input>
+                                                        @if (ViewBag.User != null)
+                                                        {
+                                                            <input type="hidden" name="idhidden" value="@ViewBag.User.Id"></input>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="hidden" name="idhidden" value="0"></input>
+                                                        }
                                                         <button id="editbtn" onclick="validateform()" type="submit" class="btn btn-sm btn-outline-primary">Change Password</button>
                                                         @*<button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>*@
                                                     </div>

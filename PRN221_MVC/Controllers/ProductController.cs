@@ -118,5 +118,11 @@ namespace PRN221_MVC.Controllers
             }
             return View("Filter");
         }
+
+        public ActionResult ProSort()
+        {
+
+            return View();
+        }
     }
 }

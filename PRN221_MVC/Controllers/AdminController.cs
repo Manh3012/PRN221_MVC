@@ -14,9 +14,11 @@ using System.Data.OleDb;
 using System.Text.Unicode;
 using NuGet.Protocol.Plugins;
 using PRN221_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PRN221_MVC.Controllers
 {
+    //[Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
@@ -34,7 +36,7 @@ namespace PRN221_MVC.Controllers
         // GET: AdminController
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Login");
         }
 
         public ActionResult Login()
@@ -50,11 +52,11 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        //// GET: AdminController/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        // GET: AdminController/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
         public async Task<ActionResult> UserList()
         {
             List<User> users = await _userService.GetAll();
@@ -151,7 +153,6 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
-
                 return RedirectToAction("Index");
             }
             catch
@@ -177,18 +178,6 @@ namespace PRN221_MVC.Controllers
                     Name = "erererere",
                 };
 
-                //string password = collection["userpassword"];
-                //var newUser = new User
-                //{
-                //    UserName = collection["username"],
-                //    Email = collection["useremail"],
-                //    PhoneNumber = collection["mobile number"],
-                //    DoB = DateTime.Parse("01/01/2000"),
-                //    Gender = "F",
-                //    Address = "NaN",
-                //    isDeleted = false,
-                //    Name = "erererere",
-                //};
                 IdentityResult re = await _userManager.CreateAsync(newUser, password);
                 //IdentityResult re1 = await _userManager.AddToRoleAsync(newUser, "admin");
                 //IdentityResult a = await _roleManager.CreateAsync(new IdentityUserRole<string>().RoleId = newUser.Id);
