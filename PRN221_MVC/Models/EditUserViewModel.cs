@@ -14,5 +14,9 @@ namespace PRN221_MVC.Models {
 
         [Required]
         public string PhoneNumber { get; set; }
+        public DateTime? DoB { get; set; }
+        public string? Address { get; set; }
+        public string? Gender { get; set; }
+
     }
 }

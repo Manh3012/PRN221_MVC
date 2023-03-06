@@ -50,13 +50,32 @@
                         <div class="form-group required">
                             <label class="col-sm-3 col-xs-12 control-label" asp-for="Email">E-Mail</label>
                             <div class="col-sm-9 col-xs-12">
-                                <input type="email" name="email" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
+                                <input readonly type="email" name="email" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group required">
                             <label class="col-sm-3 col-xs-12 control-label" asp-for="PhoneNumber">PhoneNumber</label>
                             <div class="col-sm-9 col-xs-12">
                                 <input type="tel" name="phoneNumber" asp-for="PhoneNumber" placeholder="Phone Number" id="input-telephone" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-3 col-xs-12 control-label" asp-for="DoB">Date of birth</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="date" name="doB" asp-for="DoB" placeholder="Birthday" class="form-control" />
+                            </div>
+                        </div>
+                         <div class="form-group required">
+                            <label class="col-sm-3 col-xs-12 control-label" asp-for="Address">Address</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="address" asp-for="Address" placeholder="Birthday" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-3 col-xs-12 control-label">Gender</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <label>@Html.RadioButtonFor(model => model.Gender, "Male", true) Male</label>
+                                <label>@Html.RadioButtonFor(model => model.Gender, "Female", false) Female</label>
                             </div>
                         </div>
                     </fieldset>

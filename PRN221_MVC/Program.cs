@@ -49,7 +49,11 @@ builder.Services.AddAuthentication(options => {
     // default callback uri: /signin-google
 });
 
-builder.Services.AddSession();
+builder.Services.AddSession(
+    options => {
+        options.Cookie.Name = ".AdventureWorks.Session";
+        options.Cookie.IsEssential = true;
+    });
 
 var app = builder.Build();
 

@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using PRN221_MVC.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace PRN221_MVC.Controllers {
     public class UserController : Controller {
@@ -22,10 +23,9 @@ namespace PRN221_MVC.Controllers {
         public async Task<IActionResult> Logout() {
             await signInManager.SignOutAsync();
             // Remove session cookie of user login info
-            HttpContext.Session.Remove("UserInfo.Session");
-            HttpContext.Session.Remove(".AdventureWorks.Session");
-            Response.Cookies.Delete(".AdventureWorks.Session");
-            Response.Cookies.Delete("UserInfo.Session");
+            ISession session = HttpContext.Session;
+            session.Remove(".AdventureWorks.Session");
+            session.Clear();
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Register() {
@@ -44,7 +44,8 @@ namespace PRN221_MVC.Controllers {
                     Name = user.Name,
                     UserName = user.Username,
                     Email = user.Email,
-                    TwoFactorEnabled = true
+                    TwoFactorEnabled = true,
+                    isDeleted = false
                 };
 
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
@@ -113,6 +114,7 @@ namespace PRN221_MVC.Controllers {
                     Email = email,
                     Name = name,
                     UserName = email,
+                    isDeleted = false
                 };
 
                 IdentityResult identResult = await userManager.CreateAsync(user);
@@ -121,6 +123,9 @@ namespace PRN221_MVC.Controllers {
                     if (identResult.Succeeded) {
                         await signInManager.SignInAsync(user, false);
                         EmailHelper emailHelper = new EmailHelper();
+                        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                        emailHelper.SendEmail(email, confirmationLink);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -147,7 +152,7 @@ namespace PRN221_MVC.Controllers {
 
                 if (appUser != null) {
                     await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+                    SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
                     // Two Factor Authentication
                     if (result.RequiresTwoFactor) {
                         return RedirectToAction("LoginTwoStep", new { appUser.Email });
@@ -279,7 +284,10 @@ namespace PRN221_MVC.Controllers {
                 Email = user.Email,
                 Username = user.UserName,
                 Name = user.Name,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                DoB = user.DoB,
+                Gender = user.Gender
             };
             return View("/Views/Client/User/Detail.cshtml", editUser);
         }
@@ -293,7 +301,10 @@ namespace PRN221_MVC.Controllers {
                 Email = user.Email,
                 Username = user.UserName,
                 Name = user.Name,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                DoB = user.DoB,
+                Gender = user.Gender
             };
             return View("/Views/Client/User/Edit.cshtml", editUser);
         }
@@ -308,9 +319,13 @@ namespace PRN221_MVC.Controllers {
                 return RedirectToAction("Edit", "User");
             }
             else {
-                user.Email = editUser.Email;
                 user.Name = editUser.Name;
+                user.Email = editUser.Email;
+                user.UserName = editUser.Username;
                 user.PhoneNumber = editUser.PhoneNumber;
+                user.Address = editUser.Address;
+                user.DoB = editUser.DoB;
+                user.Gender = editUser.Gender;
                 IdentityResult result = await userManager.UpdateAsync(user);
                 if (result.Succeeded)
                     return RedirectToAction("Detail", "User");
