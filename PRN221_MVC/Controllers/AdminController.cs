@@ -30,7 +30,6 @@ namespace PRN221_MVC.Controllers
             _userManager = userManager;
             this.signInManager = signInManager;
         }
-
         // GET: AdminController
         public async Task<ActionResult> Index(int id)
         {
@@ -58,11 +57,11 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        //// GET: AdminController/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
+        // GET: AdminController/Create
+        public ActionResult Create()
+        {
+            return View();
+        }
         public async Task<ActionResult> UserList()
         {
             List<User> users = await _userService.GetAll();
@@ -281,13 +280,25 @@ namespace PRN221_MVC.Controllers
         }
 
         // GET: AdminController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var db = new FRMDbContext();
-            var model = db.Users.Find(id.ToString());
-            db.Users.Remove(model);
-            db.SaveChanges();
-            return RedirectToAction("UserList");
+            //var db = new FRMDbContext();
+            //var model = db.Users.Find(id.ToString());
+            //db.Users.Remove(model);
+            //db.SaveChanges();
+            //return RedirectToAction("UserList");
+            var user = await _userService.GetById(id.ToString());
+            if (user != null)
+            {
+                var db = new FRMDbContext();
+                db.Users.Remove(user);
+                db.SaveChanges();
+                return RedirectToAction("UserList");
+            }
+            else {
+                return RedirectToAction("UserList");
+            }
+            
         }
 
         // POST: AdminController/Delete/5
