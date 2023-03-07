@@ -15,6 +15,7 @@ using System.Text.Unicode;
 using NuGet.Protocol.Plugins;
 using PRN221_MVC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace PRN221_MVC.Controllers
 {
@@ -64,6 +65,15 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+
+        public ActionResult ErrAdd(string value)
+        {
+            if(value != null)
+            {
+                ViewBag.Error = value;
+            }
+            return View("Create");
+        }
         public async Task<ActionResult> UserList()
         {
             List<User> users = await _userService.GetAll();
@@ -78,59 +88,68 @@ namespace PRN221_MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                User appUser = await _userManager.FindByEmailAsync(login.Email);
-
-                var roleStore = new RoleStore<IdentityRole>(context);
-                var roles = roleStore.Roles.ToList();
-
-
-                if (appUser != null)
+                try
                 {
-                    var role = await _userManager.GetRolesAsync(appUser);
+                    User appUser = await _userManager.FindByEmailAsync(login.Email);
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roles = roleStore.Roles.ToList();
 
-                    var matchingRole = roles.FirstOrDefault(r => role.Contains(r.Name)).Name;
 
-                    await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
-
-                    if (result.Succeeded)
+                    if (appUser != null)
                     {
-                        if (matchingRole != null && matchingRole.Equals("Administrator"))
+                        var role = await _userManager.GetRolesAsync(appUser);
+
+                        var matchingRole = roles.FirstOrDefault(r => role.Contains(r.Name)).Name;
+
+                        await signInManager.SignOutAsync();
+                        Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+
+                        if (result.Succeeded)
                         {
-                            ViewBag.User = appUser;
-                            HttpContext.Session.SetString("user", appUser.Email.ToString());
-                            return View("AdminProfile");
+                            if (matchingRole != null && matchingRole.Equals("Administrator"))
+                            {
+                                ViewBag.User = appUser;
+                                HttpContext.Session.SetString("user", appUser.Email.ToString());
+                                return View("AdminProfile");
+                            }
+
+                            if (matchingRole != null && matchingRole.Equals("ShopOwner"))
+                            {
+                                return RedirectToAction("Index", "Admin");
+                            }
                         }
 
-                        if (matchingRole != null && matchingRole.Equals("ShopOwner"))
+                        //return Redirect(login.ReturnUrl ?? "/");
+
+                        // Two Factor Authentication
+                        if (result.RequiresTwoFactor)
                         {
-                            return RedirectToAction("Index", "Admin");
+                            //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
+                            return RedirectToAction("LoginTwoStep", new { appUser.Email });
                         }
+
+                        // Email confirmation 
+                        bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
+                        if (emailStatus == false)
+                        {
+                            ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
+                        }
+
+
+
+                        // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
+                        /*if (result.IsLockedOut)
+                            ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
                     }
-
-                    //return Redirect(login.ReturnUrl ?? "/");
-
-                    // Two Factor Authentication
-                    if (result.RequiresTwoFactor)
-                    {
-                        //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
-                        return RedirectToAction("LoginTwoStep", new { appUser.Email });
-                    }
-
-                    // Email confirmation 
-                    bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
-                    if (emailStatus == false)
-                    {
-                        ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
-                    }
-
-
-
-                    // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
-                    /*if (result.IsLockedOut)
-                        ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
+                    ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
                 }
-                ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+                catch
+                {
+                    //var err = "Email is already existed";
+                    //return RedirectToAction("Create", new {value = err});
+                    Console.WriteLine("Error Email");
+                }
+
             }
             return RedirectToAction("Login");
         }
@@ -174,6 +193,14 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
+                string getemail = HttpContext.Request.Form["useremail"];
+                var checkEmail = await context.Users.SingleOrDefaultAsync(u => u.Email == getemail);
+                if (checkEmail != null)
+                {
+                    var err = "Email is already existed";
+                    //TempData["Error"] = "Email cannot be empty";
+                    return RedirectToAction("ErrAdd", new {value = err});
+                }
                 string password = HttpContext.Request.Form["userpassword"];
                 var newUser = new User
                 {
