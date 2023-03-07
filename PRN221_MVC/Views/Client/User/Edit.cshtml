@@ -50,7 +50,7 @@
                         <div class="form-group required">
                             <label class="col-sm-3 col-xs-12 control-label" asp-for="Email">E-Mail</label>
                             <div class="col-sm-9 col-xs-12">
-                                <input type="email" name="email" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
+                                <input readonly type="email" name="email" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group required">
@@ -60,16 +60,29 @@
                             </div>
                         </div>
                         <div class="form-group required">
-                            <label class="col-sm-3 col-xs-12 control-label" asp-for="Password">Password</label>
+                            <label class="col-sm-3 col-xs-12 control-label" asp-for="DoB">Date of birth</label>
                             <div class="col-sm-9 col-xs-12">
-                                <input type="password" name="password" asp-for="Password" placeholder="Password" id="input-password" class="form-control" />
+                                <input type="date" name="doB" asp-for="DoB" placeholder="Birthday" class="form-control" />
+                            </div>
+                        </div>
+                         <div class="form-group required">
+                            <label class="col-sm-3 col-xs-12 control-label" asp-for="Address">Address</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="address" asp-for="Address" placeholder="Birthday" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-sm-3 col-xs-12 control-label">Gender</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <label>@Html.RadioButtonFor(model => model.Gender, "Male", true) Male</label>
+                                <label>@Html.RadioButtonFor(model => model.Gender, "Female", false) Female</label>
                             </div>
                         </div>
                     </fieldset>
 
                     <div class="buttons">
                         <div class="text-right acspace">
-                            <a href="@Url.Action("Edit","User")" class="btn btn-primary">Edit</a>
+                            <input class="btn btn-primary" type="submit" value="Edit" />
                         </div>
                     </div>
 

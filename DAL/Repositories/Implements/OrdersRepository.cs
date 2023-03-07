@@ -3,11 +3,11 @@ using System.Linq;
 using System.Text;
 using DAL.Entities;
 using DAL.Infacstucture;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DAL.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace DAL.Repositories.Implements
 {
