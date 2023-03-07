@@ -21,6 +21,5 @@ namespace DAL.Repositories.Interface
         List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId);
 
         Orders GetOrderById(Guid id);
-
     }
 }

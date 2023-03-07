@@ -56,7 +56,6 @@ namespace DAL {
                 .WithOne(m => m.User)
                 .HasForeignKey(m => m.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
-
         }
     }
 }

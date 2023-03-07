@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(FRMDbContext))]
-    [Migration("20230301113729_OrderEntity")]
+    [Migration("20230305061251_OrderEntity")]
     partial class OrderEntity
     {
         /// <inheritdoc />
@@ -47,6 +47,34 @@ namespace DAL.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ProductID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
@@ -90,7 +118,6 @@ namespace DAL.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("isDeleted")
@@ -186,14 +213,13 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DoB")
+                    b.Property<DateTime?>("DoB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -204,7 +230,6 @@ namespace DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -228,10 +253,6 @@ namespace DAL.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -248,7 +269,7 @@ namespace DAL.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("isDeleted")
+                    b.Property<bool?>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -293,15 +314,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c5f542f8-7700-466d-abc2-eb9802780d4b",
-                            ConcurrencyStamp = "815af01f-42a2-478a-b811-a3eeda1aa1a3",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
+                            Id = "9b8f3909-6160-410a-94f2-bfbf51bc4108",
+                            ConcurrencyStamp = "3978c603-0be4-4b70-9f66-aa1061c6a655",
+                            Name = "ShopOwner",
+                            NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "f7e7887d-6190-4d9f-b5f2-52c6e1da18fa",
-                            ConcurrencyStamp = "84bc1941-a95c-4761-b788-4d56993cb2ec",
+                            Id = "14b5ae04-75a4-41f5-860e-70cd251e9ec3",
+                            ConcurrencyStamp = "dc2a6106-78df-439b-ac26-555d103b6bf3",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "5a64e8a5-b674-4c9f-af9c-65f22c41f13a",
+                            ConcurrencyStamp = "ceb35ca5-806a-42c6-8ddd-dccd8f2a62ac",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -413,6 +441,17 @@ namespace DAL.Migrations
                     b.ToTable("UserToken", (string)null);
                 });
 
+            modelBuilder.Entity("DAL.Entities.Comment", b =>
+                {
+                    b.HasOne("DAL.Entities.Product", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductID");
+
+                    b.HasOne("DAL.Entities.User", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
                 {
                     b.HasOne("DAL.Entities.Orders", "Order")
@@ -437,8 +476,7 @@ namespace DAL.Migrations
                     b.HasOne("DAL.Entities.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("User");
                 });
@@ -514,8 +552,15 @@ namespace DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DAL.Entities.Product", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
             modelBuilder.Entity("DAL.Entities.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

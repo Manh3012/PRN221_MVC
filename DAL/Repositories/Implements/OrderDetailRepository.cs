@@ -16,6 +16,5 @@ namespace DAL.Repositories.Implements
         {
             _dbContext = dbFactory.Init();
         }
-
     }
 }

@@ -1,12 +1,7 @@
-﻿@using Microsoft.AspNetCore.Http
-@using Newtonsoft.Json
-@inject IHttpContextAccessor Accessor
-@model List<DAL.Entities.Product>
+﻿
 @{
     ViewData["Title"] = "Category";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
-    var accessor = Context.Request.HttpContext;
-    string productJson = JsonConvert.SerializeObject(Model);
 }
 
     <div class="breadbg">
@@ -14,12 +9,12 @@
         <div class="row">
           <ul class="breadcrumb">
             <li>
-              <a href="@Url.ActionLink("Index","Home")"
+              <a href="index9328.html?route=common/home"
                 ><i class="fa fa-home"></i
               ></a>
             </li>
             <li>
-              <a href="@Url.ActionLink("Category","Home")"
+              <a href="index98dc.html?route=product/category&amp;path=20"
                 >meats &amp; sea foods</a
               >
             </li>
@@ -33,9 +28,101 @@
           <div class="list-group catlistpage hidden-xs">
             <div class="panel-heading cathed">category</div>
 
-            <a href="@Url.ActionLink("Category","Home")"
-              class="list-group-item active">meats &amp; sea foods (@ViewBag.TotalProduct)</a>
-           </div>
+            <a
+              href="index98dc.html?route=product/category&amp;path=20"
+              class="list-group-item active"
+              >meats &amp; sea foods (9)</a
+            >
+            <a
+              href="index7fa3.html?route=product/category&amp;path=18"
+              class="list-group-item"
+              >breads &amp; bakery (4)</a
+            >
+            <a
+              href="index73b3.html?route=product/category&amp;path=59"
+              class="list-group-item"
+              >breakfast &amp; dairy (7)</a
+            >
+            <a
+              href="index1647.html?route=product/category&amp;path=25"
+              class="list-group-item"
+              >fruits &amp; juice (9)</a
+            >
+            <a
+              href="index9a06.html?route=product/category&amp;path=93"
+              class="list-group-item"
+              >grocery &amp; staples (0)</a
+            >
+            <a
+              href="index68ea.html?route=product/category&amp;path=33"
+              class="list-group-item"
+              >fruits &amp; vegetables (4)</a
+            >
+          </div>
+
+          <div class="panel panel-default catfilter">
+            <div class="panel-heading">
+              Refine Search<button
+                type="button"
+                class="btn toggle collapsed"
+                data-toggle="collapse"
+                data-target="#xsfilter"
+              ></button>
+            </div>
+            <div id="xsfilter" class="collapse">
+              <div class="list-group">
+                <a class="list-group-item act">Size</a>
+                <div class="list-group-item">
+                  <div id="filter-group1">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="filter[]" value="1" />
+                        Small (0)
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="filter[]" value="2" />
+                        Medium (1)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <a class="list-group-item act">color</a>
+                <div class="list-group-item">
+                  <div id="filter-group2">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="filter[]" value="4" />
+                        blue (0)
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="filter[]" value="5" />
+                        red (1)
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="filter[]" value="6" />
+                        yellow (0)
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-footer text-right">
+                <button
+                  type="button"
+                  id="button-filter"
+                  class="btn btn-primary"
+                >
+                  Refine Search
+                </button>
+              </div>
+            </div>
+          </div>
           <script type="text/javascript">
             <!--
             $("#button-filter").on("click", function () {
@@ -125,20 +212,62 @@
             </div>
             <div class="col-lg-3 col-md-5 col-xs-4 col-sm-5 catesort">
               <div class="input-group input-group-sm select-input">
-                        <label class="input-group-addon" for="sortId">Sort By:</label
+                <label class="input-group-addon" for="input-sort"
+                  >Sort By:</label
                 >
-                          <form asp-action="Category" asp-controller="Home" method="get">
-                            <select id="sortId" class="form-control" onchange="sortProducts()">
-    <option value="">Choose option</option>
-    <option value="@Url.Action("Category", new { sortId = 1 })">Name (A-Z)</option>
-    <option value="@Url.Action("Category", new { sortId = 2 })">Name (Z-A)</option>
-    <option value="@Url.Action("Category", new { sortId = 3 })">Price (Low to High)</option>
-    <option value="@Url.Action("Category", new { sortId = 4 })">Price (High to Low)</option>
-</select>
 
-                           
-                </form>
-               
+                <select
+                  id="input-sort"
+                  class="form-control"
+                  onchange="location = this.value;"
+                >
+                  <option
+                    value="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=product/category&amp;path=20&amp;sort=p.sort_order&amp;order=ASC"
+                    selected="selected"
+                  >
+                    Default
+                  </option>
+                  <option
+                    value="index9a01.html?route=product/category&amp;path=20&amp;sort=pd.name&amp;order=ASC"
+                  >
+                    Name (A - Z)
+                  </option>
+                  <option
+                    value="index5b66.html?route=product/category&amp;path=20&amp;sort=pd.name&amp;order=DESC"
+                  >
+                    Name (Z - A)
+                  </option>
+                  <option
+                    value="index6bd7.html?route=product/category&amp;path=20&amp;sort=p.price&amp;order=ASC"
+                  >
+                    Price (Low &gt; High)
+                  </option>
+                  <option
+                    value="indexa03c.html?route=product/category&amp;path=20&amp;sort=p.price&amp;order=DESC"
+                  >
+                    Price (High &gt; Low)
+                  </option>
+                  <option
+                    value="index9a4f.html?route=product/category&amp;path=20&amp;sort=rating&amp;order=DESC"
+                  >
+                    Rating (Highest)
+                  </option>
+                  <option
+                    value="indexb953.html?route=product/category&amp;path=20&amp;sort=rating&amp;order=ASC"
+                  >
+                    Rating (Lowest)
+                  </option>
+                  <option
+                    value="indexa5ae.html?route=product/category&amp;path=20&amp;sort=p.model&amp;order=ASC"
+                  >
+                    Model (A - Z)
+                  </option>
+                  <option
+                    value="index8e93.html?route=product/category&amp;path=20&amp;sort=p.model&amp;order=DESC"
+                  >
+                    Model (Z - A)
+                  </option>
+                </select>
               </div>
             </div>
             <div class="col-lg-3 col-md-5 col-xs-4 col-sm-4 catesort">
@@ -180,24 +309,20 @@
             </div>
           </div>
           <div class="row cpagerow">
-              @foreach (var product in Model)
-              {
-                    var json = JsonConvert.SerializeObject(product);
-                    accessor.Session.SetString($"Product_{product.ID}", json);
-                    if(product.isDeleted == false)
-                  {
             <div class="product-layout product-list col-xs-12">
               <div class="product-thumb transition">
                 <div class="image">
-                                <a href="@Url.ActionLink("Details","Product",new { id = product.ID })">
-                                    <img src="~/client/image/cache/catalog/product/29-329x329.jpg"
+                  <a
+                    href="index3f41.html?route=product/product&amp;path=20&amp;product_id=44"
+                    ><img
+                      src="~/client/image/cache/catalog/product/29-329x329.jpg"
                       alt="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified"
                       title="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified"
                       class="img-responsive center-block"
                   /></a>
                   <!-- Images Start -->
                   <a
-                    href="@Url.ActionLink("Details","Product",new { id = product.ID })"
+                    href="index3f41.html?route=product/product&amp;path=20&amp;product_id=44"
                     ><img
                       src="~/client/image/cache/catalog/product/14-329x329.jpg"
                       class="img-responsive second-img"
@@ -210,7 +335,7 @@
                   <h4 class="protitle">
                     <a
                       href="index3f41.html?route=product/product&amp;path=20&amp;product_id=44"
-                      >@product.Name</a
+                      >Chakki-Fresh-Wheat-Atta/Godihittu - Fortified</a
                     >
                   </h4>
                   <p class="catlist-des">
@@ -233,13 +358,12 @@
                               value="37"
                               data-rawPrice="180"
                             />
-                            <span>@product.ID</span>
+                            <span>4kg</span>
                           </label>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
                   <div class="rating comments_note wb-list-product-reviews">
                     <span class="or-rate">
                       <span class="fa fa-stack"
@@ -260,7 +384,7 @@
                     </span>
                   </div>
                   <p class="price">
-                    <span data-update="price-44" class="price">@product.Price</span>
+                    <span data-update="price-44" class="price">$1,202.00</span>
                   </p>
                   <div class="homeqtinner">
                     <div class="homeqt">
@@ -303,59 +427,1313 @@
                   </div>
                   <div class="button-group">
                     <div class="absbtn">
-                                            <form method="post" asp-action="AddToWishList" id="addToWishListForm" >
-                                                <input type="hidden" name="id" value="@product.ID" />
-                                                <button type="submit" class="btn-wishlist" title="Add to Wish List" onclick="submitForm(event)">
-                                                    <svg><use xlink:href="#heart" /></svg>
-                                                </button>
-                                            </form>
-                                            <script>
-                                                function submitForm(event) {
-                                                    event.preventDefault();
-                                                    var form = event.target.closest('form');
-                                                    var formData = new FormData(form);
-                                                    fetch(form.action, {
-                                                        method: 'POST',
-                                                        body: formData
-                                                    })
-                                                        .then(function (response) {
-                                                            if (response.ok) {
-                                                                // Show success message as a popup
-                                                                Swal.fire({
-                                                                    icon: 'success',
-                                                                    title: 'Item added to Wish List!',
-                                                                    showConfirmButton: false,
-                                                                    timer: 1500
-                                                                }).then(function () {
-                                                                    // Reload the page after the popup is closed
-                                                                    location.reload();
-                                                                });
-                                                            }
-                                                        });
-                                                }
-                                            </script>
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('44');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('44');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
 
-
-
-
-
-
-
-
-                                        </div>
-                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
-                                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
-                                
-
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
                   </div>
-
                 </div>
               </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="indexce1a.html?route=product/product&amp;path=20&amp;product_id=33"
+                    ><img
+                      src="~/client/image/cache/catalog/product/14-329x329.jpg"
+                      alt="Coriander Leaves - Organically Grown"
+                      title="Coriander Leaves - Organically Grown"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="indexce1a.html?route=product/product&amp;path=20&amp;product_id=33"
+                    ><img
+                      src="~/client/image/cache/catalog/product/15-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="indexce1a.html?route=product/product&amp;path=20&amp;product_id=33"
+                      >Coriander Leaves - Organically Grown</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    Imagine the advantages of going big without slowing down.
+                    The big 19&quot; 941BW monitor combines wide aspect ratio
+                    with fast pixel response time, for bigger images, more room
+                    to work and crisp motion..
+                  </p>
+                  <div class="webi-main">
+                    <input type="hidden" name="product_id" value="33" />
+                    <div class="form-group required checkbox_input">
+                      <label class="control-label">weight</label>
+                      <div id="input-option235">
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[235][]"
+                              value="36"
+                              data-rawPrice="156"
+                            />
+                            <span>kg</span>
+                          </label>
                         </div>
-                      
-                    }
-            }
-          
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[235][]"
+                              value="35"
+                              data-rawPrice="549.6"
+                            />
+                            <span>g</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-33" class="price">$242.00</span>
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('33')"
+                        class="form-control pull-left btn-number btnminus dis-33"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-33"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('33')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="33" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('33');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('33');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="indexccba.html?route=product/product&amp;path=20&amp;product_id=48"
+                    ><img
+                      src="~/client/image/cache/catalog/product/23-329x329.jpg"
+                      alt="Detergent Powder - 2X Active Power"
+                      title="Detergent Powder - 2X Active Power"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="indexccba.html?route=product/product&amp;path=20&amp;product_id=48"
+                    ><img
+                      src="~/client/image/cache/catalog/product/5-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+
+                  <span class="sale">90%</span>
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="indexccba.html?route=product/product&amp;path=20&amp;product_id=48"
+                      >Detergent Powder - 2X Active Power</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    More room to move. With 80GB or 160GB of storage and up to
+                    40 hours of battery life, the new iPod classic lets you
+                    enjoy up to 40,000 songs or up to 200 hours of video or any
+                    combination where..
+                  </p>
+                  <div class="webi-main">
+                    <input type="hidden" name="product_id" value="48" />
+                    <div class="form-group required checkbox_input">
+                      <label class="control-label">weight</label>
+                      <div id="input-option230">
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[230][]"
+                              value="25"
+                              data-rawPrice="182.4"
+                            />
+                            <span>1kg</span>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[230][]"
+                              value="26"
+                              data-rawPrice="549.6"
+                            />
+                            <span>2kg</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-new-48" class="price-new"
+                      >$14.00</span
+                    >
+                    <span data-update="price-48" class="price-old"
+                      >$122.00</span
+                    >
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('48')"
+                        class="form-control pull-left btn-number btnminus dis-48"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-48"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('48')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="48" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('48');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('48');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="index8d24.html?route=product/product&amp;path=20&amp;product_id=29"
+                    ><img
+                      src="~/client/image/cache/catalog/product/7-329x329.jpg"
+                      alt="Gold Instant Coffee - 100% Pure &amp; Authentic Taste"
+                      title="Gold Instant Coffee - 100% Pure &amp; Authentic Taste"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="index8d24.html?route=product/product&amp;path=20&amp;product_id=29"
+                    ><img
+                      src="~/client/image/cache/catalog/product/5-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="index8d24.html?route=product/product&amp;path=20&amp;product_id=29"
+                      >Gold Instant Coffee - 100% Pure &amp; Authentic Taste</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    Redefine your workday with the Palm Treo Pro smartphone.
+                    Perfectly balanced, you can respond to business and personal
+                    email, stay on top of appointments and contacts, and use
+                    Wi-Fi or GPS when you&rsq..
+                  </p>
+                  <div class="webi-main"></div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-29" class="price">$337.99</span>
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('29')"
+                        class="form-control pull-left btn-number btnminus dis-29"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-29"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('29')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="29" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('29');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('29');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="index8bbb.html?route=product/product&amp;path=20&amp;product_id=30"
+                    ><img
+                      src="~/client/image/cache/catalog/product/9-329x329.jpg"
+                      alt="Green Lemon &amp; Jasmine Detergent Powder"
+                      title="Green Lemon &amp; Jasmine Detergent Powder"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="index8bbb.html?route=product/product&amp;path=20&amp;product_id=30"
+                    ><img
+                      src="~/client/image/cache/catalog/product/5-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+
+                  <span class="sale">20%</span>
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="index8bbb.html?route=product/product&amp;path=20&amp;product_id=30"
+                      >Green Lemon &amp; Jasmine Detergent Powder</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    Canon's press material for the EOS 5D states that it
+                    'defines (a) new D-SLR category', while we're not typically
+                    too concerned with marketing talk this particular statement
+                    is clearly pretty accurate...
+                  </p>
+                  <div class="webi-main">
+                    <input type="hidden" name="product_id" value="30" />
+                    <div class="form-group required checkbox_input">
+                      <label class="control-label">weight</label>
+                      <div id="input-option234">
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[234][]"
+                              value="33"
+                              data-rawPrice="182.4"
+                            />
+                            <span>4kg</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-new-30" class="price-new"
+                      >$98.00</span
+                    >
+                    <span data-update="price-30" class="price-old"
+                      >$122.00</span
+                    >
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('30')"
+                        class="form-control pull-left btn-number btnminus dis-30"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-30"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('30')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="30" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('30');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('30');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="indexebf3.html?route=product/product&amp;path=20&amp;product_id=42"
+                    ><img
+                      src="~/client/image/cache/catalog/product/10-329x329.jpg"
+                      alt="Organic Cold Pressed Sunflower Cooking Oil"
+                      title="Organic Cold Pressed Sunflower Cooking Oil"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="indexebf3.html?route=product/product&amp;path=20&amp;product_id=42"
+                    ><img
+                      src="~/client/image/cache/catalog/product/2-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="indexebf3.html?route=product/product&amp;path=20&amp;product_id=42"
+                      >Organic Cold Pressed Sunflower Cooking Oil</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    The 30-inch Apple Cinema HD Display delivers an amazing 2560
+                    x 1600 pixel resolution. Designed specifically for the
+                    creative professional, this display provides more space for
+                    easier access to all the..
+                  </p>
+                  <div class="webi-main">
+                    <input type="hidden" name="product_id" value="42" />
+                    <div class="form-group required checkbox_input">
+                      <label class="control-label">weight</label>
+                      <div id="input-option223">
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[223][]"
+                              value="8"
+                              data-rawPrice="12"
+                            />
+                            <span>1kg</span>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[223][]"
+                              value="9"
+                              data-rawPrice="24"
+                            />
+                            <span>2kg</span>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[223][]"
+                              value="10"
+                              data-rawPrice="36"
+                            />
+                            <span>3kg</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack">
+                        <i class="fa fa-star fa-stack-2x"></i
+                        ><i class="fa fa-star-o fa-stack-2x"></i>
+                      </span>
+
+                      <span class="fa fa-stack">
+                        <i class="fa fa-star fa-stack-2x"></i
+                        ><i class="fa fa-star-o fa-stack-2x"></i>
+                      </span>
+
+                      <span class="fa fa-stack">
+                        <i class="fa fa-star fa-stack-2x"></i
+                        ><i class="fa fa-star-o fa-stack-2x"></i>
+                      </span>
+
+                      <span class="fa fa-stack">
+                        <i class="fa fa-star fa-stack-2x"></i
+                        ><i class="fa fa-star-o fa-stack-2x"></i>
+                      </span>
+
+                      <span class="fa fa-stack">
+                        <i class="fa fa-star fa-stack-2x"></i
+                        ><i class="fa fa-star-o fa-stack-2x"></i>
+                      </span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-42" class="price">$122.00</span>
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('42')"
+                        class="form-control pull-left btn-number btnminus dis-42"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-42"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('42')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="42" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('42');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('42');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="index6f63.html?route=product/product&amp;path=20&amp;product_id=47"
+                    ><img
+                      src="~/client/image/cache/catalog/product/11-329x329.jpg"
+                      alt="Salted Puffed Rice Kadle Puri Murmure"
+                      title="Salted Puffed Rice Kadle Puri Murmure"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="index6f63.html?route=product/product&amp;path=20&amp;product_id=47"
+                    ><img
+                      src="~/client/image/cache/catalog/product/12-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+
+                  <span class="sale">90%</span>
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="index6f63.html?route=product/product&amp;path=20&amp;product_id=47"
+                      >Salted Puffed Rice Kadle Puri Murmure</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    Stop your co-workers in their tracks with the stunning new
+                    30-inch diagonal HP LP3065 Flat Panel Monitor. This flagship
+                    monitor features best-in-class performance and presentation
+                    features on a huge w..
+                  </p>
+                  <div class="webi-main">
+                    <input type="hidden" name="product_id" value="47" />
+                    <div class="form-group required checkbox_input">
+                      <label class="control-label">weight</label>
+                      <div id="input-option239">
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[239][]"
+                              value="43"
+                              data-rawPrice="189.6"
+                            />
+                            <span>4kg</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-new-47" class="price-new"
+                      >$14.00</span
+                    >
+                    <span data-update="price-47" class="price-old"
+                      >$122.00</span
+                    >
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('47')"
+                        class="form-control pull-left btn-number btnminus dis-47"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-47"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('47')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="47" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('47');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('47');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="index17bf.html?route=product/product&amp;path=20&amp;product_id=28"
+                    ><img
+                      src="~/client/image/cache/catalog/product/12-329x329.jpg"
+                      alt="Sambar Onion - Peeled (Small Onion)"
+                      title="Sambar Onion - Peeled (Small Onion)"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="index17bf.html?route=product/product&amp;path=20&amp;product_id=28"
+                    ><img
+                      src="~/client/image/cache/catalog/product/13-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+
+                  <span class="sale">90%</span>
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="index17bf.html?route=product/product&amp;path=20&amp;product_id=28"
+                      >Sambar Onion - Peeled (Small Onion)</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    HTC Touch - in High Definition. Watch music videos and
+                    streaming content in awe-inspiring high definition clarity
+                    for a mobile experience you never thought possible.
+                    Seductively sleek, the HTC Touch H..
+                  </p>
+                  <div class="webi-main">
+                    <input type="hidden" name="product_id" value="28" />
+                    <div class="form-group required checkbox_input">
+                      <label class="control-label">weight</label>
+                      <div id="input-option229">
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[229][]"
+                              value="22"
+                              data-rawPrice="681.6"
+                            />
+                            <span>1kg</span>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[229][]"
+                              value="23"
+                              data-rawPrice="156"
+                            />
+                            <span>2kg</span>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[229][]"
+                              value="24"
+                              data-rawPrice="182.4"
+                            />
+                            <span>3kg</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-new-28" class="price-new"
+                      >$14.00</span
+                    >
+                    <span data-update="price-28" class="price-old"
+                      >$122.00</span
+                    >
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('28')"
+                        class="form-control pull-left btn-number btnminus dis-28"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-28"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('28')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="28" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('28');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('28');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="product-layout product-list col-xs-12">
+              <div class="product-thumb transition">
+                <div class="image">
+                  <a
+                    href="index4f81.html?route=product/product&amp;path=20&amp;product_id=43"
+                    ><img
+                      src="~/client/image/cache/catalog/product/25-329x329.jpg"
+                      alt="Strawberry &amp; Rosemary Preserve"
+                      title="Strawberry &amp; Rosemary Preserve"
+                      class="img-responsive center-block"
+                  /></a>
+                  <!-- Images Start -->
+                  <a
+                    href="index4f81.html?route=product/product&amp;path=20&amp;product_id=43"
+                    ><img
+                      src="~/client/image/cache/catalog/product/2-329x329.jpg"
+                      class="img-responsive second-img"
+                      alt="hover image"
+                  /></a>
+                  <!-- Images End -->
+                </div>
+
+                <div class="caption text-left">
+                  <h4 class="protitle">
+                    <a
+                      href="index4f81.html?route=product/product&amp;path=20&amp;product_id=43"
+                      >Strawberry &amp; Rosemary Preserve</a
+                    >
+                  </h4>
+                  <p class="catlist-des">
+                    Intel Core 2 Duo processor Powered by an Intel Core 2 Duo
+                    processor at speeds up to 2.16GHz, the new MacBook is the
+                    fastest ever. 1GB memory, larger hard drives The new MacBook
+                    now c..
+                  </p>
+                  <div class="webi-main">
+                    <input type="hidden" name="product_id" value="43" />
+                    <div class="form-group required checkbox_input">
+                      <label class="control-label">weight</label>
+                      <div id="input-option233">
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[233][]"
+                              value="31"
+                              data-rawPrice="0"
+                            />
+                            <span>300g</span>
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <label class="size-option">
+                            <input
+                              class="webi-option-click"
+                              type="checkbox"
+                              name="option[233][]"
+                              value="32"
+                              data-rawPrice="0"
+                            />
+                            <span>500g</span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rating comments_note wb-list-product-reviews">
+                    <span class="or-rate">
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                      <span class="fa fa-stack"
+                        ><i class="fa fa-star-o fa-stack-2x"></i
+                      ></span>
+                    </span>
+                  </div>
+                  <p class="price">
+                    <span data-update="price-43" class="price">$602.00</span>
+                  </p>
+                  <div class="homeqtinner">
+                    <div class="homeqt">
+                      <button
+                        type="button"
+                        onclick="qty.minus('43')"
+                        class="form-control pull-left btn-number btnminus dis-43"
+                        disabled="disabled"
+                      >
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </button>
+                      <input
+                        name="quantity"
+                        class="addhqty"
+                        type="text"
+                        value="1"
+                        size="2"
+                        min="1"
+                        max="999"
+                        id="input-quantity-43"
+                        class="form-control input-number pull-left"
+                      />
+                      <button
+                        type="button"
+                        onclick="qty.plus('43')"
+                        class="form-control pull-left btn-number btnplus"
+                      >
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </button>
+                    </div>
+                    <input type="hidden" name="product_id" value="43" />
+                    <button type="button" class="cartb add-to-cart webi-cart">
+                      <svg><use xlink:href="#pcart"></use></svg>
+                    </button>
+                    <input
+                      type="hidden"
+                      name="hid-qty-msg"
+                      value="Quantity At Least One or More"
+                    />
+                  </div>
+                  <div class="button-group">
+                    <div class="absbtn">
+                      <button
+                        type="button"
+                        class="btn-wishlist"
+                        data-toggle="tooltip"
+                        title="Add to Wish List"
+                        onclick="wishlist.add('43');"
+                      >
+                        <svg><use xlink:href="#heart" /></svg>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-compare"
+                        data-toggle="tooltip"
+                        title="Compare this Product"
+                        onclick="compare.add('43');"
+                      >
+                        <svg><use xlink:href="#compare" /></svg>
+                      </button>
+
+                      <div
+                        data-toggle="tooltip"
+                        title="Quickview"
+                        class="bquickv"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="row pagi">
             <div class="col-sm-6 col-xs-6 text-left"></div>
@@ -366,9 +1744,6 @@
         </div>
       </div>
     </div>
-
-
-
 
 
 
