@@ -66,12 +66,9 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        public ActionResult ErrAdd(string value)
+        public ActionResult ErrAdd()
         {
-            if(value != null)
-            {
-                ViewBag.Error = value;
-            }
+            ViewBag.CheckErr = "Email is already existed";
             return View("Create");
         }
         public async Task<ActionResult> UserList()
@@ -197,9 +194,7 @@ namespace PRN221_MVC.Controllers
                 var checkEmail = await context.Users.SingleOrDefaultAsync(u => u.Email == getemail);
                 if (checkEmail != null)
                 {
-                    var err = "Email is already existed";
-                    //TempData["Error"] = "Email cannot be empty";
-                    return RedirectToAction("ErrAdd", new {value = err});
+                    return RedirectToAction("ErrAdd");
                 }
                 string password = HttpContext.Request.Form["userpassword"];
                 var newUser = new User

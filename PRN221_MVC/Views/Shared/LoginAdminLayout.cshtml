@@ -76,10 +76,6 @@
 
                                             <div class="form-group row my-3">
                                                 <div class="col-sm-6">
-                                                    <div class="custom-control custom-switch switch-success">
-                                                        <input type="checkbox" class="custom-control-input" id="customSwitchSuccess">
-                                                        <label class="form-label text-muted" for="customSwitchSuccess">Remember me</label>
-                                                    </div>
                                                 </div><!--end col-->
                                                 <div class="col-sm-6 text-end">
                                                     <a href="@Url.Action("Recover_Password", "Admin")" class="text-muted font-13"><i class="dripicons-lock"></i> Forgot password?</a>
@@ -125,9 +121,9 @@
                                                 <div class="input-group">
                                                     <input type="email" class="form-control" name="useremail" id="useremailRE" placeholder="Enter Email">
                                                 </div>
-                                                @if (ViewBag.Error !=null)
+                                                @if (ViewBag.CheckErr != null)
                                                 {
-                                                    <div class="error">@ViewBag.Error</div>
+                                                    <div class="error">@ViewBag.CheckErr</div>
                                                 }
 
                                                 <div id="emailerr" class="error"></div>
@@ -162,15 +158,6 @@
                                             </div>
 
                                             <!--end form-group-->
-                                            <div class="form-group row my-3">
-                                                <div class="col-sm-12">
-                                                    <div class="custom-control custom-switch switch-success">
-                                                        <input type="checkbox" class="custom-control-input" id="customSwitchSuccess2">
-                                                        <label class="form-label text-muted" for="customSwitchSuccess2">You agree to the Dastone <a href="#" class="text-primary">Terms of Use</a></label>
-                                                    </div>
-                                                </div><!--end col-->
-                                            </div>
-
                                             <!--end form-group-->
                                             <div class="form-group mb-0 row">
                                                 <div class="col-12">
