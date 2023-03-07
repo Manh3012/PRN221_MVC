@@ -896,7 +896,7 @@
                                                         <a href="@Url.Action("Filter", "Product", new {id = 3})" @*class="dropdown-toggle header-menu" data-toggle="dropdown"*@>breakfast &amp; dairy@*<i class="fa fa-angle-down enaleng">*@</i></a>
                                                     </li>
                                                     <li class="@*dropdown *@m-menu">
-                                                        <a href="@Url.Action("Filter", "Product", new {id = 3})" @*class="dropdown-toggle header-menu" data-toggle="dropdown"*@>fruits &amp; juice@*<i class="fa fa-angle-down enaleng"></i>*@</a>
+                                                        <a href="@Url.Action("Filter", "Product", new {id = 4})" @*class="dropdown-toggle header-menu" data-toggle="dropdown"*@>fruits &amp; juice@*<i class="fa fa-angle-down enaleng"></i>*@</a>
                                                     </li>
                                                     <li class="m-menu"><a href="@Url.Action("Filter", "Product", new {id = 5})">fruits &amp; vegetables</a></li>
                                                 </ul>
@@ -925,11 +925,14 @@
                     </div>
                     <div id="right-colume-1" class="clo-lg-7 col-md-7 col-sm-7 col-xs-5 rightmenu text-left">
                         <ul class="sblock">
-                            <li><a href="@Url.Content("~/Home/index9328.cshtml")?route=common/home">Home</a></li>
-                            <li><a href="indexf110.html?route=product/special">specials</a></li>
-                            <li><a href="index2724.html?route=information/contact">contact</a></li>
-                            <li><a href="index7cb2.html?route=information/sitemap">sitemap</a></li>
-                            <li><a href="indexd773.html?route=product/manufacturer">Brand</a></li>
+                            @{
+                                var userRoleJson= Accessor.HttpContext.Session.GetString("UserRole");
+                                if (userRoleJson == "SHOPOWNER")
+                                {
+                            <li><a href="@Url.ActionLink("CreateProduct","Product")">Create Product</a></li>
+                            <li><a href="@Url.ActionLink("ListProduct","Product")">List Product</a></li>
+                                }
+                                }
                         </ul>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-8 col-xs-12 lunsup text-right">

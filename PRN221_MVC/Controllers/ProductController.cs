@@ -1,10 +1,16 @@
 ﻿using DAL;
+using BAL.Model;
+using System.Data;
 using DAL.Entities;
+using Newtonsoft.Json;
 using BAL.Services.Implements;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PRN221_MVC.Controllers
 {
@@ -39,12 +45,16 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewProduct(int id)
         {
-            var productDetail = await _dbContext.Product.FirstOrDefaultAsync(x => x.ID == id);
+            var productDetail = await _dbContext.Product.Include(x=>x.Category).FirstOrDefaultAsync(x => x.ID == id);
             return View(productDetail);
         }
+
+        [Authorize(Roles = "ShopOwner")]
         [HttpPost]
         public async Task<IActionResult> ViewProduct(Product product)
         {
+            
+            
             var productDetail = await _dbContext.Product.FindAsync(product.ID);
             if (productDetail != null)
             {
@@ -53,6 +63,11 @@ namespace PRN221_MVC.Controllers
                 productDetail.imgPath = product.imgPath;
                 productDetail.isDeleted = product.isDeleted;
                 productDetail.isAvailable = product.isAvailable;
+                var category = await _dbContext.Category.FindAsync(product.Category.ID);
+                if (category != null)
+                {
+                    productDetail.Category = category;
+                }
                 await _dbContext.SaveChangesAsync();
             }
             return RedirectToAction("ListProduct");
@@ -75,7 +90,7 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> ListProduct()
         {
-            var productList = await _dbContext.Product.ToListAsync();
+            var productList = await _dbContext.Product.Include(x=>x.Category).ToListAsync();
             return View(productList);
         }
 
@@ -85,7 +100,7 @@ namespace PRN221_MVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<IActionResult> CreateProduct(CreateProductModel product)
         {
             if (_dbContext.Product.Any(p => p.Name == product.Name))
             {
@@ -94,7 +109,7 @@ namespace PRN221_MVC.Controllers
             }
             if (ModelState.IsValid)
             {
-
+                Category category=_dbContext.Category.FirstOrDefault(x=>x.ID== product.CategoryID);
                 var products = new Product()
                 {
                     Name = product.Name,
@@ -102,6 +117,8 @@ namespace PRN221_MVC.Controllers
                     imgPath = product.imgPath,
                     isAvailable = product.isAvailable,
                     isDeleted = product.isDeleted,
+                    Category = category,
+                    
                 };
                 await _dbContext.Product.AddAsync(products);
                 await _dbContext.SaveChangesAsync();
