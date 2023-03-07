@@ -16,6 +16,7 @@ using NuGet.Protocol.Plugins;
 using PRN221_MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace PRN221_MVC.Controllers
 {
@@ -105,9 +106,9 @@ namespace PRN221_MVC.Controllers
                         {
                             if (matchingRole != null && matchingRole.Equals("Administrator"))
                             {
-                                ViewBag.User = appUser;
-                                HttpContext.Session.SetString("user", appUser.Email.ToString());
-                                return View("AdminProfile");
+                                //ViewBag.User = appUser;
+                                HttpContext.Session.SetString("user", appUser.Id.ToString());
+                                return RedirectToAction("AdminProfile");
                             }
 
                             if (matchingRole != null && matchingRole.Equals("ShopOwner"))
@@ -131,9 +132,6 @@ namespace PRN221_MVC.Controllers
                         {
                             ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                         }
-
-
-
                         // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
                         /*if (result.IsLockedOut)
                             ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
@@ -171,16 +169,25 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public async Task<ActionResult> AdminProfile(int id)
+        public async Task<ActionResult> AdminProfile()
         {
-            var user = await _userService.GetById(id.ToString());
-            if (user != null)
+            try
             {
-                return View(model: user);
+                var user = await _userService.GetById(HttpContext.Session.GetString("user"));
+                if (user != null)
+                {
+                    ViewBag.User = user;
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login");
+                }
             }
-            else
+            catch
             {
-                return View();
+                    return RedirectToAction("Login");
+
             }
         }
         public ActionResult Sales_Analytics()
