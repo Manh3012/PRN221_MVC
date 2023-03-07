@@ -612,37 +612,37 @@
                                                 </div>
                                                 <div class="button-group">
                                                     <div class="absbtn">
-                                                        <form method="post" asp-action="AddToWishList" id="addToWishListForm">
-                                                            <input type="hidden" name="id" value="@product.ID" />
-                                                            <button type="submit" class="btn-wishlist" title="Add to Wish List" onclick="submitForm(event)">
-                                                                <svg><use xlink:href="#heart" /></svg>
-                                                            </button>
-                                                        </form>
-                                                        <script>
-                                                            function submitForm(event) {
-                                                                event.preventDefault();
-                                                                var form = event.target.closest('form');
-                                                                var formData = new FormData(form);
-                                                                fetch(form.action, {
-                                                                    method: 'POST',
-                                                                    body: formData
-                                                                })
-                                                                    .then(function (response) {
-                                                                        if (response.ok) {
-                                                                            // Show success message as a popup
-                                                                            Swal.fire({
-                                                                                icon: 'success',
-                                                                                title: 'Item added to Wish List!',
-                                                                                showConfirmButton: false,
-                                                                                timer: 1500
-                                                                            }).then(function () {
-                                                                                // Reload the page after the popup is closed
-                                                                                location.reload();
-                                                                            });
-                                                                        }
-                                                                    });
-                                                            }
-                                                        </script>
+                                                    <form method="post" asp-action="AddToWishList" asp-controller="Home" id="addToWishListForm">
+                                                        <input type="hidden" name="id" value="@product.ID" />
+                                                        <button type="submit" class="btn-wishlist" title="Add to Wish List" onclick="submitForm(event)">
+                                                            <svg><use xlink:href="#heart" /></svg>
+                                                        </button>
+                                                    </form>
+                                                    <script>
+                                                        function submitForm(event) {
+                                                            event.preventDefault();
+                                                            var form = event.target.closest('form');
+                                                            var formData = new FormData(form);
+                                                            fetch(form.action, {
+                                                                method: 'POST',
+                                                                body: formData
+                                                            })
+                                                                .then(function (response) {
+                                                                    if (response.ok) {
+                                                                        // Show success message as a popup
+                                                                        Swal.fire({
+                                                                            icon: 'success',
+                                                                            title: 'Item added to Wish List!',
+                                                                            showConfirmButton: false,
+                                                                            timer: 1500
+                                                                        }).then(function () {
+                                                                            // Reload the page after the popup is closed
+                                                                            location.reload();
+                                                                        });
+                                                                    }
+                                                                });
+                                                        }
+                                                    </script>
 
 
 

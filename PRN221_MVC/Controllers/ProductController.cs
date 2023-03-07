@@ -253,7 +253,7 @@ namespace PRN221_MVC.Controllers
             }
             ViewBag.Search = sort;
 
-            return View("Filter");
+            return View("Filter",sort);
         }
 
         public ActionResult ProSort()
