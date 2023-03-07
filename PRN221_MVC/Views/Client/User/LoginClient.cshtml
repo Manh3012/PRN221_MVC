@@ -44,11 +44,11 @@
                         <form asp-controller="User" asp-action="Login" method="post" enctype="multipart/form-data">
                             <div class="form-group required">
                                 <label class="control-label" asp-for="Email">E-Mail</label>
-                                <input type="email" name="email" value="binhvqse161554@fpt.edu.vn" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
+                                <input type="email" name="email" value="" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
                             </div>
                             <div class="form-group required">
                                 <label class="control-label" asp-for="Password">Password</label>
-                                <input type="password" name="password" asp-for="Password" value="123@abcABC" placeholder="Password" id="input-password" class="form-control" />
+                                <input type="password" name="password" asp-for="Password" value="" placeholder="Password" id="input-password" class="form-control" />
                             </div>
                             <input type="submit" value="Login" class="btn btn-primary" />
                             <a class="btn btn-primary" href="@Url.Action("GoogleLogin", "User")">Log In With Google</a>

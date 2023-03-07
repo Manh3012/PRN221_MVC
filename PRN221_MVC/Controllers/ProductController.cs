@@ -45,16 +45,19 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewProduct(int id)
         {
+            ViewBag.CategorySelective = _dbContext.Category.ToList();
+
             var productDetail = await _dbContext.Product.Include(x=>x.Category).FirstOrDefaultAsync(x => x.ID == id);
             return View(productDetail);
         }
 
-        [Authorize(Roles = "ShopOwner")]
+        
         [HttpPost]
         public async Task<IActionResult> ViewProduct(Product product)
         {
             
-            
+            ViewBag.CategorySelective = _dbContext.Category.ToList();
+
             var productDetail = await _dbContext.Product.FindAsync(product.ID);
             if (productDetail != null)
             {
@@ -90,6 +93,7 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> ListProduct()
         {
+            
             var productList = await _dbContext.Product.Include(x=>x.Category).ToListAsync();
             return View(productList);
         }
@@ -97,11 +101,14 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public IActionResult CreateProduct()
         {
+            ViewBag.CategorySelect = _dbContext.Category.ToList();
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductModel product)
         {
+            ViewBag.CategorySelect = _dbContext.Category.ToList();
+
             if (_dbContext.Product.Any(p => p.Name == product.Name))
             {
                 ModelState.AddModelError($"Name", "A product with this name already exists.");
@@ -109,6 +116,7 @@ namespace PRN221_MVC.Controllers
             }
             if (ModelState.IsValid)
             {
+
                 Category category=_dbContext.Category.FirstOrDefault(x=>x.ID== product.CategoryID);
                 var products = new Product()
                 {
@@ -152,6 +160,8 @@ namespace PRN221_MVC.Controllers
             {
                 items=_dbContext.Product.ToList();
                 ViewBag.Search = items;
+                ViewBag.Count = items.Count;
+
                 return View("Filter",items);
             }
             return View("Filter");
@@ -173,7 +183,7 @@ namespace PRN221_MVC.Controllers
             List<Product> listProduct = _dbContext.Product.ToList();
             Category category = new Category();
             var cate = _dbContext.Category.FirstOrDefault(x => x.ID == id);
-            ViewBag.NameCategory = cate.Name;
+
             if (id == 0)
             {
                 return NotFound();

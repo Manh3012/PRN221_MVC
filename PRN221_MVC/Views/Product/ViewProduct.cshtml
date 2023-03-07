@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Category.ID" class="control-label"></label>
-                <input asp-for="Category.ID" class="form-control" />
+                <select asp-for="Category.ID" asp-items="@(new SelectList(ViewBag.CategorySelective, "ID", "ID"))" class="form-control"></select>
                 <span asp-validation-for="Category.ID" class="text-danger"></span>
             </div>
 

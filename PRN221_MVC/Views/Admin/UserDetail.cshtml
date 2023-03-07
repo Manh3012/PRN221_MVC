@@ -209,10 +209,8 @@
                                                     {
                                                         @Html.Raw("Female")
                                                     }
-
-                                                          </td>
-                                           <    /tr>
-
+                                            </td>
+                                                </tr>                    
                                             <tr>
                                                 <td>@Html.Raw("Deleted")</td>
                                                 <td>:</td>
@@ -230,11 +228,19 @@
                                             <tr>
                                                 <td>@Html.DisplayNameFor(model => model.Orders)</td>
                                                 <td>:</td>
-                                            <td>@Html.DisplayFor(model => model.Orders)</td>
+                                                    @if (Model.Orders != null)
+                                                    {
+                                                        <td><a href="#">Orders</a></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>This user has no order</td>
+                                                    }
+                                                
                                             </tr>
                                             <tr>
-                                                <td><a href="~/Admin/Edit?id=@Model.Id" style="border-style: groove;">Edit</a></td>
-                                            <td><a href="~/Admin/Delete?id=@Model.Id" style="border-style: groove;">Delete?</a></td>
+                                                <td><a href="~/Admin/Edit?id=@Model.Id" class="btn btn-sm btn-outline-primary">Edit</a></td>
+                                            <td><a href="~/Admin/Delete?id=@Model.Id" class="btn btn-sm btn-outline-primary">Delete?</a></td>
                                             </tr>
                                         </table> 
                                     </div>

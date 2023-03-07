@@ -1,12 +1,28 @@
+
+﻿using DAL.Repositories.Interface;
 ﻿using DAL.Entities;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using BAL.Services.Implements;
+using DAL;
+using Microsoft.AspNetCore.Identity;
+using DAL.Entities;
 
 namespace PRN221_MVC.Controllers
 {
     public class OrderController : Controller
     {
+        private readonly IOrdersService _ordersService;
+        private UserManager<User> _userManager;
+
+        FRMDbContext context = new FRMDbContext();
+
+        public OrderController(IOrdersService ordersService, UserManager<User> userManager)
+        {
+            _ordersService = ordersService;
+            _userManager = userManager;
+        }
         // GET: OrderController
         public ActionResult Index()
         {
@@ -54,6 +70,19 @@ namespace PRN221_MVC.Controllers
         public ActionResult Create()
         {
             return View();
+        }
+
+        public async Task<ActionResult> OrderList(Guid id)
+        {
+            var getList = _ordersService.GetOrdersById(id);
+            if (getList != null)
+            {
+                return View(model: getList);
+            }
+            else
+            {
+                return View();
+            }
         }
 
         // POST: OrderController/Create

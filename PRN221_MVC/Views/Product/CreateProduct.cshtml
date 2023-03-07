@@ -101,11 +101,23 @@
                     <label for="imgPath" class="form-label">Image Path</label>
                     <input type="text" class="form-control" id="imgPath" name="imgPath" asp-for="imgPath">
                 </div>
+                @{
+                //<div class="form-group">
+                //    <label for="imgPath" class="form-label">Category ID</label>
+                //    <input type="text" class="form-control" id="CategoryID" name="CategoryID" asp-for="CategoryID">
+                //</div>
                 <div class="form-group">
-                    <label for="imgPath" class="form-label">Category ID</label>
-                    <input type="text" class="form-control" id="CategoryID" name="CategoryID" asp-for="CategoryID">
-                </div>
-             
+    <label for="CategoryID" class="form-label">Category</label>
+    <select class="form-control" id="CategoryID" name="CategoryID" asp-for="CategoryID">
+        <option value="">-- Select a category --</option>
+        @foreach (var category in ViewBag.CategorySelect)
+        {
+            <option value="@category.ID">@category.ID</option>
+        }
+    </select>
+    <div id="CategoryError" class="invalid-feedback d-none"></div>
+</div>
+             }
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="isAvailable" name="isAvailable" asp-for="isAvailable">
                     <label class="form-check-label" for="isAvailable">Available</label>

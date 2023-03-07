@@ -1,10 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using DAL.Repositories.Interface;
+using DAL;
 
 namespace PRN221_MVC.Controllers
 {
     public class OrderDetailController : Controller
     {
+        private readonly IOrderDetailService _orderDetailService;
+        private readonly IOrdersService _ordersService;
+
+        FRMDbContext _dbContext;
+
+        public OrderDetailController(IOrderDetailService orderDetailService, IOrdersService ordersService)
+        {
+            _orderDetailService = orderDetailService;
+            _ordersService = ordersService;
+        }
         // GET: OrderDetailController
         public ActionResult Index()
         {
@@ -16,9 +28,10 @@ namespace PRN221_MVC.Controllers
         }
 
         // GET: OrderDetailController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
-            return View();
+            var ordDetailList = _ordersService.GetOrderDetailsByOrderId(id);
+            return View(model : ordDetailList);
         }
 
         // GET: OrderDetailController/Create

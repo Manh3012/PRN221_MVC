@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class OrderEntity : Migration
+    public partial class PRN221 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -303,9 +303,9 @@ namespace DAL.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "14b5ae04-75a4-41f5-860e-70cd251e9ec3", "dc2a6106-78df-439b-ac26-555d103b6bf3", "Customer", "CUSTOMER" },
-                    { "5a64e8a5-b674-4c9f-af9c-65f22c41f13a", "ceb35ca5-806a-42c6-8ddd-dccd8f2a62ac", "Administrator", "ADMINISTRATOR" },
-                    { "9b8f3909-6160-410a-94f2-bfbf51bc4108", "3978c603-0be4-4b70-9f66-aa1061c6a655", "ShopOwner", "SHOPOWNER" }
+                    { "9f97a9c9-f44c-4aaf-b53e-c471937b089e", "adf466e0-85d4-4c72-a9fe-02f5188b9e4a", "ShopOwner", "SHOPOWNER" },
+                    { "a7b6047b-66a3-4d0b-83ac-c31275991c71", "88a40654-06df-406b-a4b1-809cf19cb334", "Administrator", "ADMINISTRATOR" },
+                    { "b5c4e3d0-328e-42d1-8dc6-d6c751bd9971", "ce740bed-d6f5-4583-8fac-dd8a0c3d06d7", "Customer", "CUSTOMER" }
                 });
 
             migrationBuilder.CreateIndex(

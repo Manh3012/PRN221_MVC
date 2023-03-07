@@ -838,22 +838,29 @@
                                 }
                                 else
                                 {
-                                    <span class="hdis text-left nav-link  d-inline-block">
-                                        <span class="cart-sub"><a href="@Url.Action("Detail","User")">@Accessor.HttpContext.Session.GetString("_Name")</a> </span>
-                                        <span><a style="background:red" href="@Url.Action("Logout","User")" class="btn btn-danger">Logout</a> </span>
-                                    </span>
+                                    <li class="dropdown inuser">
+                                        <a href="@Url.Action("Login","User")" title="Account" class="dropdown-toggle" data-toggle="dropdown">
+                                            <svg>
+                                                <use xlink:href="#huser"></use>
+                                            </svg>
+                                            <span class="hdis text-left nav-link  d-inline-block">
+                                                <span>@Accessor.HttpContext.Session.GetString("_Name")</span>
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right user-down haccount  hlogout ">
+                                            <h5 class="text-left">Your Account</h5>
+                                            <h6 class="text-left">Access account and manage orders</h6>
+                                            <li class="acd"><a href="@Url.Action("OrderList","Order",new {id="4f991f2f-b9f6-43fa-940e-7d3f3685fdc5"})"><i class="fa fa-lock"></i>Order History</a></li>
+                                            <li class="acd"><a href="@Url.Action("Logout","User")"><i class="fa fa-lock"></i>Logout</a></li>
+                                        </ul>
+                                    </li>
                                 }
                               }
                             <li>
                                 <div id="cart" class="btn-group btn-block">
-                                    <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="dropdown-toggle">
+                                    <a href="@Url.Action("Cart","OrderDetail",new {id = 1})">
                                         <svg><use xlink:href="#hcart"></use></svg><span id="cart-total"> <span class="cartt">0</span><span class="hidden-xs cartna">my cart</span><strong>$0.00</strong></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li>
-                                            <p class="text-center">Your shopping cart is empty!</p>
-                                        </li>
-                                    </ul>
+                                    </a>
                                 </div>
                             </li>
                         </ul>
