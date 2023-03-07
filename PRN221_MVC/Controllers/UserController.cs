@@ -1,6 +1,10 @@
-﻿using BAL.Helpers;
-using DAL;
+﻿using DAL;
+using BAL.Helpers;
 using DAL.Entities;
+using PRN221_MVC.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
