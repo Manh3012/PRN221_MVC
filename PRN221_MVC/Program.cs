@@ -55,6 +55,12 @@ builder.Services.AddSession(
         options.Cookie.IsEssential = true;
     });
 
+// Lockout
+builder.Services.Configure<IdentityOptions>(opts => {
+    opts.Lockout.AllowedForNewUsers = true;
+    opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+    opts.Lockout.MaxFailedAccessAttempts = 3;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

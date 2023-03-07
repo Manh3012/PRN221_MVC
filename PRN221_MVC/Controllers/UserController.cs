@@ -118,10 +118,18 @@ namespace PRN221_MVC.Controllers {
                 };
 
                 IdentityResult identResult = await userManager.CreateAsync(user);
+
                 if (identResult.Succeeded) {
                     identResult = await userManager.AddLoginAsync(user, info);
                     if (identResult.Succeeded) {
                         await signInManager.SignInAsync(user, false);
+                        //var userFind = await userManager.FindByNameAsync(user.Username);
+                        // Add role customer
+                        await userManager.AddToRoleAsync(user, "Customer");
+                        using (var context = new FRMDbContext()) {
+                            // save to db
+                            context.SaveChanges();
+                        }
                         EmailHelper emailHelper = new EmailHelper();
                         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
                         var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
@@ -152,10 +160,24 @@ namespace PRN221_MVC.Controllers {
 
                 if (appUser != null) {
                     await signInManager.SignOutAsync();
-                    SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+                    SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, true);
+
+                    if (result.Succeeded) {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else {
+                        ModelState.AddModelError("", "Incorrect Email or Password.");
+                    }
+
                     // Two Factor Authentication
                     if (result.RequiresTwoFactor) {
                         return RedirectToAction("LoginTwoStep", new { appUser.Email });
+                    }
+
+                    // Locked out: LockedEndTime Store in Coordinated Universal Time (UTC)
+                    if (result.IsLockedOut) {
+                        ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");
+                        TempData["LoginError"] = "Your account is locked out. Kindly wait for 10 minutes and try again";
                     }
 
                     // Email confirmation 
@@ -164,16 +186,10 @@ namespace PRN221_MVC.Controllers {
                         ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                         TempData["LoginError"] = "Email is unconfirmed, please confirm it first";
                     }
-
-                    if (!result.Succeeded) {
-                        ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
-                        TempData["LoginError"] = "Login Failed: Invalid Email or password";
-                        return RedirectToAction("Login", login);
-                    }
-                    return RedirectToAction("Index", "Home");
                 }
                 else {
                     ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email");
+                    ModelState.AddModelError("", "Login Failed: Invalid Email");
                     TempData["LoginError"] = "Login Failed: Invalid Email";
                 }
             }
@@ -274,7 +290,8 @@ namespace PRN221_MVC.Controllers {
             return View("/Views/Client/User/ResetPasswordConfirmation.cshtml");
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Detail() {
             string email = HttpContext.Session.GetString("_Email");
 
