@@ -29,5 +29,11 @@ namespace DAL.Repositories.Implements
             var user = await _dbContext.Users.Where(u => u.Id.Equals(id)).FirstAsync();
             return user;
         }
+
+        public async Task<User> GetUserbyUserEmail(string userEmail)
+        {
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == userEmail);
+            return user;
+        }
     }
 }

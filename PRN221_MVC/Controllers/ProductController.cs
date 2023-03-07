@@ -1,14 +1,22 @@
-﻿using BAL.Services.Implements;
-using DAL.Repositories.Interface;
+﻿using DAL;
+using DAL.Entities;
+using BAL.Services.Implements;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using DAL.Entities;
+using DAL.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace PRN221_MVC.Controllers
 {
     public class ProductController : Controller
     {
         readonly IProductService productService = new ProductService();
+        private readonly FRMDbContext _dbContext;
+
+        public ProductController(FRMDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         // GET: ProductController
         public ActionResult Index()
@@ -16,95 +24,123 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        // GET: ProductController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var productDetail = _dbContext.Product.FirstOrDefault(x => x.ID == id);
+            if (productDetail == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(productDetail);
         }
+        [BindProperty]
+        public Product Product { get; set; }
 
-        // GET: ProductController/Create
-        public ActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> ViewProduct(int id)
         {
-            return View();
+            var productDetail = await _dbContext.Product.FirstOrDefaultAsync(x => x.ID == id);
+            return View(productDetail);
         }
-
-
-        // POST: ProductController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> ViewProduct(Product product)
         {
-            try
+            var productDetail = await _dbContext.Product.FindAsync(product.ID);
+            if (productDetail != null)
             {
-                return RedirectToAction(nameof(Index));
+                productDetail.Name = product.Name;
+                productDetail.Price = product.Price;
+                productDetail.imgPath = product.imgPath;
+                productDetail.isDeleted = product.isDeleted;
+                productDetail.isAvailable = product.isAvailable;
+                await _dbContext.SaveChangesAsync();
             }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction("ListProduct");
         }
-
-        // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<IActionResult> Delete(Product product)
         {
-            return View();
-        }
-
-        // POST: ProductController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
+            var productdetail = await _dbContext.Product.FindAsync(product.ID);
+            if (productdetail != null)
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProductController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult SearchProduct(string search)
-        {
-            var items = productService.Search(search);
-            if (items.Count == 0)
-            {
-                //ViewBag.Message = "Nothing Found";
-                //TempData["Message"] = ViewBag.Message;
-                //return View("/Views/Home/Index.cshtml");
-                ViewBag.Error = "No Item Found";
+                productdetail.isDeleted = true;
+                _dbContext.Product.Update(productdetail);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction("ListProduct");
             }
             else
+            { return RedirectToAction("ListProduct"); }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListProduct()
+        {
+            var productList = await _dbContext.Product.ToListAsync();
+            return View(productList);
+        }
+
+        [HttpGet]
+        public IActionResult CreateProduct()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct(Product product)
+        {
+            if (_dbContext.Product.Any(p => p.Name == product.Name))
             {
-                ViewBag.Count = items.Count;
+                ModelState.AddModelError($"Name", "A product with this name already exists.");
+                return View(product);
+            }
+            if (ModelState.IsValid)
+            {
+
+                var products = new Product()
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    imgPath = product.imgPath,
+                    isAvailable = product.isAvailable,
+                    isDeleted = product.isDeleted,
+                };
+                await _dbContext.Product.AddAsync(products);
+                await _dbContext.SaveChangesAsync();
+                return RedirectToAction("CreateProduct");
+            }
+            return View(product);
+        }
+
+        public ActionResult SearchProduct(string? search)
+        {
+            List<Product> items = new List<Product>();
+
+            try
+            {
+
+                items = productService.Search(search.Trim());
+                if (items.Count == 0)
+                {
+                    //ViewBag.Message = "Nothing Found";
+                    //TempData["Message"] = ViewBag.Message;
+                    //return View("/Views/Home/Index.cshtml");
+                    ViewBag.Error = "No Item Found";
+                }
+                else
+                {
+                    ViewBag.Count = items.Count;
+                    ViewBag.Search = items;
+                }
+            }
+            catch
+            {
+                items=_dbContext.Product.ToList();
                 ViewBag.Search = items;
+                return View("Filter",items);
             }
             return View("Filter");
         }
 
-        public ActionResult Filter(int id)
+        public ActionResult Filter(int sortId, int id,List<Product> list)
         {
             var products = productService.Filter(id);
             if (products.Count > 0)
@@ -116,7 +152,114 @@ namespace PRN221_MVC.Controllers
             {
                 ViewBag.Error = "No Item Found";
             }
-            return View("Filter");
+            List<Product> sort = new List<Product>();
+            List<Product> listProduct = _dbContext.Product.ToList();
+            Category category = new Category();
+            var cate = _dbContext.Category.FirstOrDefault(x => x.ID == id);
+            ViewBag.NameCategory = cate.Name;
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            switch (sortId)
+            {
+
+                case 1:
+                    sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).OrderBy(x => x.Name).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                case 2:
+                    sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).OrderByDescending(x => x.Name).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                case 3:
+                    sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).OrderBy(x => x.Price).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                case 4:
+                    sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).OrderByDescending(x => x.Price).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                default:
+                    sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).ToList();
+                    category = _dbContext.Category.FirstOrDefault(x => x.ID == id);
+                    foreach (var item in sort)
+                    {
+                        item.Category = category;
+                    }
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+
+
+            }
+
+
+            return View(sort);
+        }
+        [HttpGet]
+        public IActionResult Sort(int sortId)
+        {
+
+            List<Product> sort = new List<Product>();
+            //switch (sortId)
+            //{
+
+            //    case 1:
+            //           sort =list.OrderBy(x=>x.Name).ToList();
+            //        break;
+            //    case 2:
+            //           sort =list.OrderByDescending(x=>x.Name).ToList();
+
+            //        break;
+            //    case 3:
+            //           sort =list.OrderBy(x=>x.Price).ToList();
+
+            //        break;
+            //    case 4:
+            //           sort =list.OrderByDescending(x=>x.Price).ToList();
+
+            //        break;
+            //    default:
+            //        sort = list.ToList();
+            //        break;
+
+
+            //}
+            switch (sortId)
+            {
+
+                case 1:
+                    sort = _dbContext.Product.OrderBy(x => x.Name).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                case 2:
+                    sort = _dbContext.Product.OrderByDescending(x => x.Name).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                case 3:
+                    sort = _dbContext.Product.OrderBy(x => x.Price).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                case 4:
+                    sort = _dbContext.Product.OrderByDescending(x => x.Price).ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+                default:
+                    sort = _dbContext.Product.ToList();
+                    ViewBag.TotalProduct = sort.Count();
+                    break;
+
+
+            }
+            ViewBag.Search = sort;
+
+            return View("Filter",sort);
+        }
+
+        public ActionResult ProSort()
+        {
+
+            return View();
         }
     }
 }

@@ -51,12 +51,18 @@ builder.Services.AddAuthentication(options => {
     // default callback uri: /signin-google
 });
 
-builder.Services.AddSession(options => {
-    options.Cookie.Name = "UserInfo.Session";
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
-    options.Cookie.IsEssential = true;
-});
+builder.Services.AddSession(
+    options => {
+        options.Cookie.Name = ".AdventureWorks.Session";
+        options.Cookie.IsEssential = true;
+    });
 
+// Lockout
+builder.Services.Configure<IdentityOptions>(opts => {
+    opts.Lockout.AllowedForNewUsers = true;
+    opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
+    opts.Lockout.MaxFailedAccessAttempts = 3;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

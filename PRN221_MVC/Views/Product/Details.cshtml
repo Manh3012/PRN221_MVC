@@ -1,13 +1,14 @@
-﻿@{
+﻿@model DAL.Entities.Product
+@{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
 }
 <div class="container">
     <div class="row">
         <ul class="breadcrumb">
-            <li><a href="index9328.html?route=common/home"><i class="fa fa-home"></i></a></li>
-            <li><a href="index98dc.html?route=product/category&amp;path=20">meats &amp; sea foods</a></li>
-            <li><a href="index3f41.html?route=product/product&amp;path=20&amp;product_id=44">Chakki-Fresh-Wheat-Atta/Godihittu - Fortified</a></li>
+            <li><a href="@Url.ActionLink("Index","Home")"><i class="fa fa-home"></i></a></li>
+            <li><a href="@Url.ActionLink("Category","Home")">meats &amp; sea foods</a></li>
+            <li><a href="@Url.ActionLink("Details","Product")">@Model.Name</a></li>
         </ul>
     </div>
 </div>
@@ -21,30 +22,17 @@
                     <div class="col-sm-6 col-lg-5 col-md-6 col-xs-12 proimg sticky">
                         <ul class="thumbnails">
                             <li>
-                                <a class="thumbnail" href="~/client/image/cache/catalog/product/29-1000x1000.jpg" title="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified">
-                                    <img data-zoom-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/29-1000x1000.jpg" src="~/client/image/cache/catalog/product/29-543x543.jpg" id="zoom_03" class="img-responsive center-block" alt="image">
+                                <a class="thumbnail" href="@Url.Content(Model.imgPath)" title="@Model.Name">
+                                    <img src="@Url.Content(Model.imgPath)" width="700" height="600" id="zoom_03" class="img-responsive center-block" alt="image">
                                 </a>
                             </li>
                             <div class="row">
-                            <li id="gallery_01">
-                                <a data-zoom-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/14-1000x1000.jpg" data-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/14-1000x1000.jpg" href="~/client/image/cache/catalog/product/14-1000x1000.jpg" class="col-xs-12">
-                                    <img src="~/client/image/cache/catalog/product/14-114x114.jpg" class="img-responsive center-block" alt="additional image">
-                                </a>
-                                <a data-zoom-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/17-1000x1000.jpg" data-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/17-1000x1000.jpg" href="~/client/image/cache/catalog/product/17-1000x1000.jpg" class="col-xs-12">
-                                    <img src="~/client/image/cache/catalog/product/17-114x114.jpg" class="img-responsive center-block" alt="additional image">
-                                </a>
-                                <a data-zoom-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/19-1000x1000.jpg" data-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/19-1000x1000.jpg" href="~/client/image/cache/catalog/product/19-1000x1000.jpg" class="col-xs-12">
-                                    <img src="~/client/image/cache/catalog/product/19-114x114.jpg" class="img-responsive center-block" alt="additional image">
-                                </a>
-                                <a data-zoom-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/8-1000x1000.jpg" data-image="https://opencart.dostguru.com/FD04/upbasket_01/image/cache/catalog/product/8-1000x1000.jpg" href="image/cache/catalog/product/8-1000x1000.jpg" class="col-xs-12">
-                                    <img src="~/client/image/cache/catalog/product/8-114x114.jpg" class="img-responsive center-block" alt="additional image">
-                                </a>
-                            </li>
+
                     </div>
                     </ul>
                 </div>
                 <div class="col-lg-7 col-md-6 col-xs-12 col-sm-6 pro-content">
-                    <h1>Chakki-Fresh-Wheat-Atta/Godihittu - Fortified</h1><hr class="producthr">
+                    <h1>@Model.Name</h1><hr class="producthr">
                     <div class="rating">
                         <li>
                             <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>
@@ -63,72 +51,79 @@
                                 <ul class="list-unstyled">
 
                                     <li>
-                                        <h2 data-update='price-44' class="price">$1,202.00</h2>
+                                        <h2 data-update='price-44' class="price">@Model.Price</h2>
                                     </li>
-                                    <div class="protax">
-                                    <li>Ex Tax:</li>
-                                    <li data-update='price-tax-44' class="price-tax">$1,000.00</li>
+
+
+
+
+                                </ul>
                             </div>
-
-
-
-                            </ul>
-                        </div>
-                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 cless product-timer text-right">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12 cless product-timer text-right">
+                            </div>
                         </div>
                     </div>
+                    <hr class="producthr">
+                    <ul class="list-unstyled">
+                        <div class="row rless">
+                            <div class="col-md-8 col-sm-8 col-xs-12 cless prod-detail">
+                        <li><span class="text-decor">Brand:</span><a href="index98fa.html?route=product/manufacturer/info&amp;manufacturer_id=8" class="textdeb">Apple</a></li>
+                        <li><span class="text-decor">Product Code:</span> Product 17</li>
+                        <li><span class="text-decor">Reward Points:</span> 700</li>
+                        <li class="stock_bg">
+                            <span class="text-decor">Availability:</span>
+                                        @if (Model.isAvailable == true)
+                                        {
+                                <span class="bg-success">
+                                    In Stock
+                                </span>
+                                        }
+                                        else
+                                        {
+                                <span class="bg-danger">
+                                    Out of Stock
+                                </span>
+                                        }
+                        </li>
+                        <li><span class="text-decor"></span> </li>
                 </div>
-                <hr class="producthr">
-                <ul class="list-unstyled">
-                    <div class="row rless">
-                        <div class="col-md-8 col-sm-8 col-xs-12 cless prod-detail">
-                    <li><span class="text-decor">Brand:</span><a href="index98fa.html?route=product/manufacturer/info&amp;manufacturer_id=8" class="textdeb">Apple</a></li>
-                    <li><span class="text-decor">Product Code:</span> Product 17</li>
-                    <li><span class="text-decor">Reward Points:</span> 700</li>
-                    <li class="stock_bg">
-                        <span class="text-decor">Availability:</span>
-                        <span class="bg-success">
-                            In Stock
-                        </span>
-                    </li>
-                    <li><span class="text-decor"></span> </li>
+                <div class="col-md-4 col-sm-4 col-xs-12 cless prod-image text-right hidden-xs">
+                </div>
             </div>
-            <div class="col-md-4 col-sm-4 col-xs-12 cless prod-image text-right hidden-xs">
-            </div>
-        </div>
-        </ul>
+            </ul>
 
-        <div id="product">
-            <div class="webi-main">
-                <h3>Available Options</h3>
-                <div class="form-group required  checkbox_input">
-                    <label class="control-label text-decorop">weight</label>
-                    <div id="input-option236">
-                        <div class="checkbox">
-                            <label class="size-option">
-                                <input class="webi-option-click" type="checkbox" name="option[236][]" value="37" />
-                                <span>4kg</span>
-                            </label>
+            <div id="product">
+                <div class="webi-main">
+                    <h3>Available Options</h3>
+                    <div class="form-group required  checkbox_input">
+                        <label class="control-label text-decorop">weight</label>
+                        <div id="input-option236">
+                            <div class="checkbox">
+                                <label class="size-option">
+                                    <input class="webi-option-click" type="checkbox" name="option[236][]" value="37" />
+                                    <span>4kg</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group pro-qty">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 op-box qty-plus-minus">
-                            <button type="button" class="form-control pull-left btn-number btnminus" disabled="disabled" data-type="minus" data-field="quantity">
-                                <span class="glyphicon glyphicon-minus"></span>
-                            </button>
-                            <input id="input-quantity" type="text" name="quantity" value="1" size="2" id="input-quantity" class="form-control input-number pull-left" />
-                            <input type="hidden" name="product_id" value="44" />
-                            <button type="button" class="form-control pull-left btn-number btnplus" data-type="plus" data-field="quantity">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        </div>
-                        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 product-btn text-right">
-                            <button type="button" id="button-cart" data-loading-text="Loading..." class="btn pcrt add-to-cart btn-primary">add to cart</button>
-                            <button type="button" class="btn pcrt btn-primary" onclick="wishlist.add('44');"><svg width="18px" height="17px"><use xlink:href="#heart" /></svg></button>
-                            <button type="button" class="btn pcrt  btn-primary" onclick="compare.add('44');"><svg width="18px" height="17px"><use xlink:href="#compare" /></svg></button>
+                    <div class="form-group pro-qty">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 op-box qty-plus-minus">
+                                <button type="button" class="form-control pull-left btn-number btnminus" disabled="disabled" data-type="minus" data-field="quantity">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                                <input id="input-quantity" type="text" name="quantity" value="1" size="2" id="input-quantity" class="form-control input-number pull-left" />
+                                <input type="hidden" name="product_id" value="44" />
+                                <button type="button" class="form-control pull-left btn-number btnplus" data-type="plus" data-field="quantity">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 product-btn text-right">
+                                <button type="button" id="button-cart" data-loading-text="Loading..." class="btn pcrt add-to-cart btn-primary">add to cart</button>
+                                <button type="button" class="btn pcrt btn-primary" onclick="wishlist.add('44');"><svg width="18px" height="17px"><use xlink:href="#heart" /></svg></button>
+                                <button type="button" class="btn pcrt  btn-primary" onclick="compare.add('44');"><svg width="18px" height="17px"><use xlink:href="#compare" /></svg></button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,7 +131,6 @@
         </div>
     </div>
 </div>
-      </div>
 <div class="product-tab">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
@@ -217,7 +211,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    <!--
+        <!--
     $('select[name=\'recurring_id\'], input[name="quantity"]').change(function () {
         $.ajax({
             url: 'index.php?route=product/product/getRecurringDescription',
@@ -238,7 +232,7 @@
     });
     //--></script>
 <script type="text/javascript">
-    <!--
+        <!--
     $('#button-cart').on('click', function () {
         $.ajax({
             url: 'index.php?route=checkout/cart/add',
@@ -295,7 +289,7 @@
     });
     //--></script>
 <script type="text/javascript">
-    <!--
+        <!--
     $('.date').datetimepicker({
         language: 'en-gb',
         pickTime: false
@@ -443,7 +437,7 @@
 </script>
 
 <script type="text/javascript">
-    <!--
+        <!--
     $('#review').delegate('.pagination a', 'click', function (e) {
         e.preventDefault();
 
@@ -514,7 +508,7 @@
 </script>
 <!--ZOOM END-->
 <script type="text/javascript">
-    <!--
+        <!--
     // Webi Timer
     $(document).ready(function () {
         $('.wb_product_countdown').each(function () {

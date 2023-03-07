@@ -1,5 +1,6 @@
 ﻿using BAL;
 using DAL.Entities;
+using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
@@ -14,9 +15,13 @@ using System.Data.OleDb;
 using System.Text.Unicode;
 using NuGet.Protocol.Plugins;
 using PRN221_MVC.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace PRN221_MVC.Controllers
 {
+    //[Authorize(Roles = "Administrator")]
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
@@ -31,12 +36,11 @@ namespace PRN221_MVC.Controllers
             this.signInManager = signInManager;
         }
         // GET: AdminController
-        public async Task<ActionResult> Index(Guid id)
+        public ActionResult Index()
         {
-            var user= await _userService.GetById(id.ToString());
-            if (user != null)
+            if (HttpContext.Session.GetString("user") == null)
             {
-                return View(model:user);
+                return RedirectToAction("Login");
             }
             else
             {
@@ -62,6 +66,12 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+
+        public ActionResult ErrAdd()
+        {
+            ViewBag.CheckErr = "Email is already existed";
+            return View("Create");
+        }
         public async Task<ActionResult> UserList()
         {
             List<User> users = await _userService.GetAll();
@@ -71,63 +81,70 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+        [HttpPost]
         public async Task<ActionResult> AsyncLogin(LoginUserViewModel login)
         {
             if (ModelState.IsValid)
             {
-                User appUser = await _userManager.FindByEmailAsync(login.Email);
-
-                var roleStore = new RoleStore<IdentityRole>(context);
-                var roles = roleStore.Roles.ToList();
-
-
-                if (appUser != null)
+                try
                 {
-                    var role = await _userManager.GetRolesAsync(appUser);
+                    User appUser = await _userManager.FindByEmailAsync(login.Email);
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roles = roleStore.Roles.ToList();
 
-                    var matchingRole = roles.FirstOrDefault(r => role.Contains(r.Name)).Name;
 
-                    await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
-
-                    if (result.Succeeded)
+                    if (appUser != null)
                     {
-                        if (matchingRole != null && matchingRole.Equals("Administrator"))
+                        var role = await _userManager.GetRolesAsync(appUser);
+
+                        var matchingRole = roles.FirstOrDefault(r => role.Contains(r.Name)).Name;
+
+                        await signInManager.SignOutAsync();
+                        Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+
+                        if (result.Succeeded)
                         {
-                            ViewBag.User = appUser;
-                            return View("AdminProfile");
+                            if (matchingRole != null && matchingRole.Equals("Administrator"))
+                            {
+                                //ViewBag.User = appUser;
+                                HttpContext.Session.SetString("user", appUser.Id.ToString());
+                                return RedirectToAction("AdminProfile");
+                            }
+
+                            if (matchingRole != null && matchingRole.Equals("ShopOwner"))
+                            {
+                                return RedirectToAction("Index", "Admin");
+                            }
                         }
 
-                        if (matchingRole != null && matchingRole.Equals("ShopOwner"))
+                        //return Redirect(login.ReturnUrl ?? "/");
+
+                        // Two Factor Authentication
+                        if (result.RequiresTwoFactor)
                         {
-                            HttpContext.Session.SetString("Email", appUser.Email);
-                            return RedirectToAction("IndexShopOwner", "ShopOwner");
+                            //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
+                            return RedirectToAction("LoginTwoStep", new { appUser.Email });
                         }
+
+                        // Email confirmation 
+                        bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
+                        if (emailStatus == false)
+                        {
+                            ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
+                        }
+                        // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
+                        /*if (result.IsLockedOut)
+                            ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
                     }
-
-                    //return Redirect(login.ReturnUrl ?? "/");
-
-                    // Two Factor Authentication
-                    if (result.RequiresTwoFactor)
-                    {
-                        //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
-                        return RedirectToAction("LoginTwoStep", new { appUser.Email });
-                    }
-
-                    // Email confirmation 
-                    bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
-                    if (emailStatus == false)
-                    {
-                        ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
-                    }
-
-
-
-                    // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
-                    /*if (result.IsLockedOut)
-                        ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");*/
+                    ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
                 }
-                ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
+                catch
+                {
+                    //var err = "Email is already existed";
+                    //return RedirectToAction("Create", new {value = err});
+                    Console.WriteLine("Error Email");
+                }
+
             }
             return RedirectToAction("Login");
         }
@@ -152,16 +169,26 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public async Task<ActionResult> AdminProfile(Guid id)
+
+        public async Task<ActionResult> AdminProfile()
         {
-            var user = await _userService.GetById(id.ToString());
-            if (user != null)
+            try
             {
-                return View(model: user);
+                var user = await _userService.GetById(HttpContext.Session.GetString("user"));
+                if (user != null)
+                {
+                    ViewBag.User = user;
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Login");
+                }
             }
-            else
+            catch
             {
-                return View();
+                    return RedirectToAction("Login");
+
             }
         }
         public ActionResult Sales_Analytics()
@@ -176,7 +203,6 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
-
                 return RedirectToAction("Index");
             }
             catch
@@ -189,6 +215,12 @@ namespace PRN221_MVC.Controllers
         {
             try
             {
+                string getemail = HttpContext.Request.Form["useremail"];
+                var checkEmail = await context.Users.SingleOrDefaultAsync(u => u.Email == getemail);
+                if (checkEmail != null)
+                {
+                    return RedirectToAction("ErrAdd");
+                }
                 string password = HttpContext.Request.Form["userpassword"];
                 var newUser = new User
                 {
@@ -202,18 +234,6 @@ namespace PRN221_MVC.Controllers
                     Name = "erererere",
                 };
 
-                //string password = collection["userpassword"];
-                //var newUser = new User
-                //{
-                //    UserName = collection["username"],
-                //    Email = collection["useremail"],
-                //    PhoneNumber = collection["mobile number"],
-                //    DoB = DateTime.Parse("01/01/2000"),
-                //    Gender = "F",
-                //    Address = "NaN",
-                //    isDeleted = false,
-                //    Name = "erererere",
-                //};
                 IdentityResult re = await _userManager.CreateAsync(newUser, password);
                 //IdentityResult re1 = await _userManager.AddToRoleAsync(newUser, "admin");
                 //IdentityResult a = await _roleManager.CreateAsync(new IdentityUserRole<string>().RoleId = newUser.Id);

@@ -11,5 +11,6 @@ namespace DAL.Repositories.Interface
     {
         Task<List<User>> GetAll();
         Task<User> GetUserbyID(string id);
+        Task<User> GetUserbyUserEmail(string userEmail);
     }
 }
