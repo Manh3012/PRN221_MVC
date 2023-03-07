@@ -169,6 +169,12 @@ namespace DAL.Repositories.Implements
                         .FirstOrDefault(o => o.ID == id);
             return order;
         }
-
+        
+        //Get all orders from a user
+        public List<Orders> GetOrdersById(Guid id)
+        {
+            var orders = _dbContext.Orders.Where(x => x.UserId == id.ToString());
+            return orders.ToList();
+        }
     }
 }

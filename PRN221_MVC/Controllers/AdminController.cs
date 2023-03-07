@@ -31,7 +31,7 @@ namespace PRN221_MVC.Controllers
             this.signInManager = signInManager;
         }
         // GET: AdminController
-        public async Task<ActionResult> Index(int id)
+        public async Task<ActionResult> Index(Guid id)
         {
             var user= await _userService.GetById(id.ToString());
             if (user != null)
@@ -136,7 +136,7 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        public async Task<ActionResult> UserDetail(int id)
+        public async Task<ActionResult> UserDetail(Guid id)
         {
             var user = await _userService.GetById(id.ToString());
             if (user != null)
@@ -152,7 +152,7 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
-        public async Task<ActionResult> AdminProfile(int id)
+        public async Task<ActionResult> AdminProfile(Guid id)
         {
             var user = await _userService.GetById(id.ToString());
             if (user != null)
@@ -280,7 +280,7 @@ namespace PRN221_MVC.Controllers
         }
 
         // GET: AdminController/Delete/5
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             //var db = new FRMDbContext();
             //var model = db.Users.Find(id.ToString());
