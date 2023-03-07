@@ -1,6 +1,10 @@
-﻿using BAL.Helpers;
-using DAL;
+﻿using DAL;
+using BAL.Helpers;
 using DAL.Entities;
+using PRN221_MVC.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +12,7 @@ using Newtonsoft.Json;
 using PRN221_MVC.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace PRN221_MVC.Controllers
 {
@@ -15,8 +20,6 @@ namespace PRN221_MVC.Controllers
     {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
-        //
-        private FRMDbContext context = new FRMDbContext();
 
         public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher)
         {
@@ -28,9 +31,14 @@ namespace PRN221_MVC.Controllers
         {
             await signInManager.SignOutAsync();
             // Remove session cookie of user login info
+
             HttpContext.Session.Remove("UserInfo.Session");
             HttpContext.Session.Remove("user");
             Response.Cookies.Delete("UserInfo.Session");
+            ISession session = HttpContext.Session;
+            session.Remove(".AdventureWorks.Session");
+            session.Clear();
+
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Register() {
@@ -52,7 +60,8 @@ namespace PRN221_MVC.Controllers
                     Name = user.Name,
                     UserName = user.Username,
                     Email = user.Email,
-                    TwoFactorEnabled = true
+                    TwoFactorEnabled = true,
+                    isDeleted = false
                 };
 
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
@@ -62,8 +71,10 @@ namespace PRN221_MVC.Controllers
                     // Add role Customer to new User
                     var userFind = await userManager.FindByNameAsync(user.Username);
                     await userManager.AddToRoleAsync(userFind, "Customer");
-                    // save to db
-                    context.SaveChanges();
+                    using (var context = new FRMDbContext()) {
+                        // save to db
+                        context.SaveChanges();
+                    }
 
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
                     var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
@@ -128,16 +139,29 @@ namespace PRN221_MVC.Controllers
                     Email = email,
                     Name = name,
                     UserName = email,
+                    isDeleted = false
                 };
 
                 IdentityResult identResult = await userManager.CreateAsync(user);
+
                 if (identResult.Succeeded)
                 {
+
                     identResult = await userManager.AddLoginAsync(user, info);
                     if (identResult.Succeeded)
                     {
                         await signInManager.SignInAsync(user, false);
+                        //var userFind = await userManager.FindByNameAsync(user.Username);
+                        // Add role customer
+                        await userManager.AddToRoleAsync(user, "Customer");
+                        using (var context = new FRMDbContext()) {
+                            // save to db
+                            context.SaveChanges();
+                        }
                         EmailHelper emailHelper = new EmailHelper();
+                        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                        emailHelper.SendEmail(email, confirmationLink);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -163,12 +187,26 @@ namespace PRN221_MVC.Controllers
                 if (appUser != null)
                 {
                     await signInManager.SignOutAsync();
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
+                    SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, true);
+
+                    if (result.Succeeded) {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else {
+                        ModelState.AddModelError("", "Incorrect Email or Password.");
+                    }
+
                     // Two Factor Authentication
                     if (result.RequiresTwoFactor)
                     {
                         //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
                         return RedirectToAction("LoginTwoStep", new { appUser.Email });
+                    }
+
+                    // Locked out: LockedEndTime Store in Coordinated Universal Time (UTC)
+                    if (result.IsLockedOut) {
+                        ModelState.AddModelError("", "Your account is locked out. Kindly wait for 10 minutes and try again");
+                        TempData["LoginError"] = "Your account is locked out. Kindly wait for 10 minutes and try again";
                     }
 
                     // Email confirmation 
@@ -178,16 +216,10 @@ namespace PRN221_MVC.Controllers
                         ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                         TempData["LoginError"] = "Email is unconfirmed, please confirm it first";
                     }
-
-                    if (!result.Succeeded) {
-                        ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
-                        TempData["LoginError"] = "Login Failed: Invalid Email or password";
-                        return RedirectToAction("Login", login);
-                    }
-                    return RedirectToAction("Index", "Home");
                 }
                 else {
                     ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email");
+                    ModelState.AddModelError("", "Login Failed: Invalid Email");
                     TempData["LoginError"] = "Login Failed: Invalid Email";
                 }
             }
@@ -295,32 +327,64 @@ namespace PRN221_MVC.Controllers
             return View("/Views/Client/User/ResetPasswordConfirmation.cshtml");
         }
 
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Detail() {
-            string email = "binhvqse161554@fpt.edu.vn";
+            string email = HttpContext.Session.GetString("_Email");
+
             User user = await userManager.FindByEmailAsync(email);
             EditUserViewModel editUser = new EditUserViewModel {
                 Id = user.Id,
                 Email = user.Email,
                 Username = user.UserName,
                 Name = user.Name,
-                Password = user.PasswordHash,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                DoB = user.DoB,
+                Gender = user.Gender
             };
             return View("/Views/Client/User/Detail.cshtml", editUser);
+        }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> Edit() {
+            string email = HttpContext.Session.GetString("_Email");
+            User user = await userManager.FindByEmailAsync(email);
+            EditUserViewModel editUser = new EditUserViewModel {
+                Id = user.Id,
+                Email = user.Email,
+                Username = user.UserName,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                DoB = user.DoB,
+                Gender = user.Gender
+            };
+            return View("/Views/Client/User/Edit.cshtml", editUser);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserViewModel editUser) {
             if (!ModelState.IsValid)
                 return View("/Views/Client/User/Edit.cshtml", editUser);
-
-            var user = await userManager.FindByEmailAsync(editUser.Email);
-            if (user == null)
-                RedirectToAction("Edit");
-
-            return RedirectToAction("Edit");
+            User user = await userManager.FindByEmailAsync(editUser.Email);
+            if (user == null) {
+                ModelState.AddModelError("", "User Not Found");
+                return RedirectToAction("Edit", "User");
+            }
+            else {
+                user.Name = editUser.Name;
+                user.Email = editUser.Email;
+                user.UserName = editUser.Username;
+                user.PhoneNumber = editUser.PhoneNumber;
+                user.Address = editUser.Address;
+                user.DoB = editUser.DoB;
+                user.Gender = editUser.Gender;
+                IdentityResult result = await userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                    return RedirectToAction("Detail", "User");
+                return RedirectToAction("Edit", editUser);
+            }
         }
     }
 }
