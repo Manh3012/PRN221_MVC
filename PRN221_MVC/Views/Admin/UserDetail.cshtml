@@ -1,4 +1,4 @@
-﻿
+﻿@model DAL.Entities.User
 @{
     ViewData["Title"] = "UserDetail";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -182,37 +182,61 @@
                                 </div><!--end col-->
                                 <div class="col-lg-6 align-self-center">
                                     <div class="single-pro-detail">
-                                        <p class="mb-1">Dastone</p>
-                                        <div class="custom-border mb-3"></div>
-                                        <h3 class="pro-title">Dastone Mask - 101</h3>
-                                        <p class="text-muted mb-0">Morden and good look model 2020</p>
-                                        <ul class="list-inline mb-2 product-review">
-                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                            <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                            <li class="list-inline-item"><i class="mdi mdi-star-half text-warning"></i></li>
-                                            <li class="list-inline-item">4.5 (9830 reviews)</li>
-                                        </ul>
-                                        <h2 class="pro-price">$49.00 <span><del>$100.00</del></span><span class="text-danger fw-bold ms-2">50% Off</span></h2>
-                                        <h6 class="text-muted font-13">Features :</h6>
-                                        <ul class="list-unstyled pro-features border-0">
-                                            <li>It is a long established fact that a reader will be distracted.</li>
-                                            <li>Contrary to popular belief, Lorem Ipsum is not text. </li>
-                                        </ul>
-                                        <h6 class="text-muted font-13 d-inline-block align-middle me-2">Color :</h6>
-                                        <div class="radio2 radio-info2 form-check-inline ms-2">
-                                            <input type="radio" id="inlineRadio1" value="option1" name="radioInline" checked="">
-                                            <label for="inlineRadio1"></label>
-                                        </div>
-                                        <div class="radio2 radio-dark2 form-check-inline">
-                                            <input type="radio" id="inlineRadio2" value="option2" name="radioInline">
-                                            <label for="inlineRadio2"></label>
-                                        </div>
-                                        <div class="quantity mt-3 ">
-                                            <input class="form-control form-control-sm" type="number" min="0" value="0" id="example-number-input">
-                                            <a href="#" class="btn btn-primary btn-sm text-white px-4 d-inline-block"><i class="mdi mdi-cart me-2"></i>Add to Cart</a>
-                                        </div>
+                                        <table>
+                                            <tr>
+                                                <td>@Html.DisplayNameFor(model => model.Name)</td>
+                                                <td>:</td>
+                                                <td>@Html.DisplayFor(model => model.Name)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@Html.DisplayNameFor(model => model.DoB)</td>
+                                                <td>:</td>
+                                                <td>@Html.DisplayFor(model => model.DoB,"{0:dd-MM-yyyy}")</td>
+                                            </tr>
+                                            <tr>
+                                                <td>@Html.DisplayNameFor(model => model.Address)</td>
+                                                <td>:</td>
+                                                <td>@Html.DisplayFor(model => model.Address)</td>
+                                            </tr>
+                                                <tr>
+                                                <td>@Html.DisplayNameFor(model => model.Gender)</td>
+                                                <td>:</td>
+                                                <td>@if (Model.Gender.Equals("1"))
+                                                    { 
+                                                        @Html.Raw("Male")
+                                                    }
+                                                    else if (Model.Gender.Equals("0"))
+                                                    {
+                                                        @Html.Raw("Female")
+                                                    }
+
+                                                          </td>
+                                           <    /tr>
+
+                                            <tr>
+                                                <td>@Html.Raw("Deleted")</td>
+                                                <td>:</td>
+                                                <td>
+                                                    @if (Model.isDeleted == false)
+                                                    {
+                                                        @Html.Raw("No")
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Raw("Yes")
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@Html.DisplayNameFor(model => model.Orders)</td>
+                                                <td>:</td>
+                                            <td>@Html.DisplayFor(model => model.Orders)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><a href="~/Admin/Edit?id=@Model.Id" style="border-style: groove;">Edit</a></td>
+                                            <td><a href="~/Admin/Delete?id=@Model.Id" style="border-style: groove;">Delete?</a></td>
+                                            </tr>
+                                        </table> 
                                     </div>
                                 </div><!--end col-->
                             </div><!--end row-->

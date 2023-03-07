@@ -311,22 +311,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4d876dfd-3b11-46e6-ab92-a6e16f622929",
-                            ConcurrencyStamp = "3551a43d-33b5-46d5-a79e-a2b2a141177a",
+                            Id = "9b8f3909-6160-410a-94f2-bfbf51bc4108",
+                            ConcurrencyStamp = "3978c603-0be4-4b70-9f66-aa1061c6a655",
                             Name = "ShopOwner",
                             NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "d3e186c7-4d8a-431a-82d9-f035694c1fad",
-                            ConcurrencyStamp = "203dc6ff-f3dc-429a-80b5-ebfc2298a77e",
+                            Id = "14b5ae04-75a4-41f5-860e-70cd251e9ec3",
+                            ConcurrencyStamp = "dc2a6106-78df-439b-ac26-555d103b6bf3",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "c81b05ed-c4f4-4902-850a-ea6705f4ee5c",
-                            ConcurrencyStamp = "5d102afc-9e79-49a7-aa75-88c8a939ad6b",
+                            Id = "5a64e8a5-b674-4c9f-af9c-65f22c41f13a",
+                            ConcurrencyStamp = "ceb35ca5-806a-42c6-8ddd-dccd8f2a62ac",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -470,9 +470,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Orders", b =>
                 {
-                    b.HasOne("DAL.Entities.User", null)
+                    b.HasOne("DAL.Entities.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Entities.Product", b =>
