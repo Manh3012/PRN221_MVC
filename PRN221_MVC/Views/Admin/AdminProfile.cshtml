@@ -1108,6 +1108,7 @@
             var newpassErr = document.getElementById("newpasserr");
             var renewpassErr = document.getElementById("renewpasserr");
 
+            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
 
             // Check the email field
             if (oldpassInput == "") {
@@ -1119,9 +1120,9 @@
             }
 
             // Check the password field
-            if (passwordInput.value == "") {
+            if (passwordInput.value == "" || !passwordRegex.test(passwordInput)) {
                 isFormValid = false;
-                newpassErr.innerHTML = "Pass is invalid (Ex: A1a@aa)"
+                newpassErr.innerHTML = "Invalid, min 6 characters, upper, lower, number, special(Ex: A1a@aa)"
                 passwordInput.classList.add("invalid");
             } else {
                 passwordInput.classList.remove("invalid");

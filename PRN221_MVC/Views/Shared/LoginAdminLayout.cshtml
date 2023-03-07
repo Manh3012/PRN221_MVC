@@ -245,7 +245,7 @@
                 // Check the password field
                 if (passwordInput.value == "" || !passwordRegex.test(passwordInput.value)) {
                     isFormValid = false;
-                    passErr.innerHTML = "Pass is invalid (Ex: A1a@aa)"
+                    passErr.innerHTML = "Min 6 characters, upper, lower, number, special(Ex: A1a@aa)"
                     passwordInput.classList.add("invalid");
                 } else {
                     passwordInput.classList.remove("invalid");
