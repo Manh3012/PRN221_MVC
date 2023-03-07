@@ -452,17 +452,30 @@
                             <div class="col-lg-3 col-md-5 col-xs-4 col-sm-5 catesort">
                                 <div class="input-group input-group-sm select-input">
                                     <label class="input-group-addon" for="sortId">Sort By:</label>
-                                    <form asp-action="Category" asp-controller="Home" method="get">
-                                        <select id="sortId" class="form-control" onchange="sortProducts()">
-                                            <option value="">Choose option</option>
-                                            <option value="@Url.Action("Category", new { sortId = 1 })">Name (A-Z)</option>
-                                            <option value="@Url.Action("Category", new { sortId = 2 })">Name (Z-A)</option>
-                                            <option value="@Url.Action("Category", new { sortId = 3 })">Price (Low to High)</option>
-                                            <option value="@Url.Action("Category", new { sortId = 4 })">Price (High to Low)</option>
-                                        </select>
+                                <form asp-action="Sort" asp-controller="Product" method="get">
+                                    <select id="sortId" class="form-control" onchange="sortProducts()">
+                                        <option value="">Choose option</option>
+                                        <option value="@Url.Action("Sort", new { sortId = 1 })">Name (A-Z)</option>
+                                        <option value="@Url.Action("Sort", new { sortId = 2 })">Name (Z-A)</option>
+                                        <option value="@Url.Action("Sort", new { sortId = 3 })">Price (Low to High)</option>
+                                        <option value="@Url.Action("Sort", new { sortId = 4 })">Price (High to Low)</option>
+                                    </select>
 
 
-                                    </form>
+                                </form>
+                                              <script>
+                                        function sortProducts() {
+                                            // Get the select element
+                                            var selectElement = document.getElementById("sortId");
+                                            // Get the selected value
+                                            var selectedValue = selectElement.value;
+                                            // If the selected value is not empty
+                                            if (selectedValue !== "") {
+                                                // Redirect to the selected option's URL
+                                                window.location.href = selectedValue;
+                                            }
+                                        }
+                                    </script>
 
                                 </div>
                             </div>
