@@ -1,22 +1,22 @@
 ﻿using BAL;
+using DAL;
+using System.Text;
 using DAL.Entities;
 using DAL.Entities;
+using DAL.Entities;
+using System.Data.OleDb;
+using PRN221_MVC.Models;
+using System.Text.Unicode;
+using NuGet.Protocol.Plugins;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
-using DAL;
-using DAL.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Collections.Specialized;
 using System.Security.Cryptography;
-using System.Text;
-using System.Data.OleDb;
-using System.Text.Unicode;
-using NuGet.Protocol.Plugins;
-using PRN221_MVC.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Specialized;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace PRN221_MVC.Controllers
@@ -113,7 +113,8 @@ namespace PRN221_MVC.Controllers
 
                             if (matchingRole != null && matchingRole.Equals("ShopOwner"))
                             {
-                                return RedirectToAction("Index", "Admin");
+                                HttpContext.Session.SetString("Email", appUser.Email);
+                                return RedirectToAction("IndexShopOwner", "ShopOwner");
                             }
                         }
 
