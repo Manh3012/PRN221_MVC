@@ -5,6 +5,7 @@ using DAL.Entities;
 using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 using Org.BouncyCastle.Crypto.Parameters;
+using System.Text;
 
 namespace BAL.Services.Implements
 {

@@ -9,6 +9,9 @@
         success: (json) => {
             if (json.status === 'Success') {
                 fetchCart();
+                if (refresh) {
+                    window.location.reload();
+                }
             }
             else {
                 alert('Error: ' + json['message']);
@@ -18,9 +21,6 @@
             alert("Something went wrong. Please try again later");
         }
     });
-    if (refresh) {
-        window.location.reload();
-    }
 }
 
 

@@ -45,7 +45,7 @@ namespace PRN221_MVC.Controllers
         {
             if (HttpContext.Session.GetString("_Email") == null)
             {
-                return Json(new { Status = "Error", Message = "Session Ended. Please login again" });
+                return Json(new { Status = "Error", Message = "Please login again to continue." });
             }
             MemoryStream stream = new MemoryStream();
             Request.Body.CopyTo(stream);
@@ -90,7 +90,7 @@ namespace PRN221_MVC.Controllers
         {
             if (HttpContext.Session.GetString("_Email") == null)
             {
-                return Json(new { Status = "Error", Message = "Session Ended. Please login again" });
+                return Json(new { Status = "Error", Message = "Please login again to continue." });
             }
             User user = new User();
             user.Email = HttpContext.Session.GetString("_Email");
@@ -104,7 +104,7 @@ namespace PRN221_MVC.Controllers
         {
             if (HttpContext.Session.GetString("_Email") == null)
             {
-                return Json(new { Status = "Error", Message = "Session Ended. Please login again" });
+                return Json(new { Status = "Error", Message = "Please login again to continue." });
             }
             MemoryStream stream = new MemoryStream();
             Request.Body.CopyTo(stream);
@@ -144,7 +144,7 @@ namespace PRN221_MVC.Controllers
         public ActionResult Update() {
             if (HttpContext.Session.GetString("_Email") == null)
             {
-                return Json(new { Status = "Error", Message = "Session Ended. Please login again" });
+                return Json(new { Status = "Error", Message = "Please login again to continue." });
             }
             MemoryStream stream = new MemoryStream();
             Request.Body.CopyTo(stream);
