@@ -154,14 +154,16 @@ namespace DAL.Repositories.Implements
             return monthlySalesData;
         }
 
+        //Return Order's Detail in order, find by order id
         public List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId)
         {
             return _dbContext.OrderDetail
-                .Where(od => od.Order.ID == orderId)
+                .Where(od => od.Order.ID == orderId && od.isDeleted == false) 
                 .Include(od => od.Product)
                 .ToList();
         }
 
+        //Get order
         public Orders GetOrderById(Guid id)
         {
             var order = _dbContext.Orders

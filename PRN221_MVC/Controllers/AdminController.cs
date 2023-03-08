@@ -1,11 +1,9 @@
 ﻿using BAL;
 using DAL.Entities;
-using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
 using DAL;
-using DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Collections.Specialized;
