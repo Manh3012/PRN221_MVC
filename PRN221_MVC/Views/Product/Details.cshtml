@@ -134,7 +134,15 @@
 <div class="product-tab">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
-        <li><a href="#tab-review" data-toggle="tab">Reviews (0)</a></li>
+            @if (Model.Comments == null)
+                {
+                    <li><a href="#tab-review" data-toggle="tab">Reviews (0) </a></li>
+                }
+            else
+                {
+                    <li><a href="#tab-review" data-toggle="tab">Reviews (@Model.Comments.Count()) </a></li>
+                }
+            
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab-description">
@@ -143,6 +151,17 @@
             </div>
         </div>
         <div class="tab-pane" id="tab-review">
+            <div>
+                 @if (Model.Comments != null)
+                     {
+                      foreach(var comment in Model.Comments)
+                      {
+                           <div>@comment.ID</div>    
+                      }
+                     }
+            </div>
+        </div>
+        @*<div class="tab-pane" id="tab-review">
             <form class="" id="form-review">
                 <div id="review"></div>
                 <h2 class="co-heading">Write a review</h2>
@@ -204,7 +223,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div>*@
 </div>
 <!-- relatedproduct -->
       </div></div>

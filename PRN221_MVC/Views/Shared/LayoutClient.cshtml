@@ -850,7 +850,7 @@
                                         <ul class="dropdown-menu dropdown-menu-right user-down haccount  hlogout ">
                                             <h5 class="text-left">Your Account</h5>
                                             <h6 class="text-left">Access account and manage orders</h6>
-                                            <li class="acd"><a href="@Url.Action("OrderList","Order",new {id="4f991f2f-b9f6-43fa-940e-7d3f3685fdc5"})"><i class="fa fa-lock"></i>Order History</a></li>
+                                            <li class="acd"><a href="@Url.Action("OrderList","Order",new {id=@Accessor.HttpContext.Session.GetString("_Email")})"><i class="fa fa-lock"></i>Order History</a></li>
                                             <li class="acd"><a href="@Url.Action("Logout","User")"><i class="fa fa-lock"></i>Logout</a></li>
                                         </ul>
                                     </li>

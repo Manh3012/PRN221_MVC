@@ -26,7 +26,9 @@ namespace PRN221_MVC.Controllers
 
         public ActionResult Details(int id)
         {
-            var productDetail = _dbContext.Product.FirstOrDefault(x => x.ID == id);
+            var productDetail = _dbContext.Product
+                                            .Include(v => v.Comments)
+                                            .FirstOrDefault(x => x.ID == id);
             if (productDetail == null)
             {
                 return RedirectToAction("Index", "Home");
