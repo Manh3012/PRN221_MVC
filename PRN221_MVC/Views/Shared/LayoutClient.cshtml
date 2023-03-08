@@ -30,7 +30,8 @@
     <script src="~/client/catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 
     <script src="~/client/catalog/view/javascript/eptheme/product-slider-zoom/jquery.elevatezoom.js" type="text/javascript"></script>
-
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <link href="~/client/catalog/view/javascript/jquery/swiper/css/owl.theme.css" rel="stylesheet">
 
@@ -57,24 +58,27 @@
     <script src="~/client/catalog/view/javascript/eptheme/countdown/jquery.countdown.min.js" type="text/javascript"></script>
 
     <script src="~/client/catalog/view/javascript/eptheme/custom.js" type="text/javascript"></script>
-    <script src="~/client/catalog/view/javascript/eptheme/option.js" type="text/javascript"></script>
+    @*<script src="~/client/catalog/view/javascript/eptheme/option.js" type="text/javascript"></script>*@
+
     <link href="~/client/catalog/view/javascript/jquery/swiper/css/owl.carousel.html" type="text/css" rel="stylesheet" media="screen" />
     <link href="~/client/catalog/view/javascript/jquery/swiper/css/owl.theme.css" type="text/css" rel="stylesheet" media="screen" />
     <link href="~/client/catalog/view/javascript/jquery/swiper/css/swiper.min.css" type="text/css" rel="stylesheet" media="screen" />
     <link href="~/client/catalog/view/javascript/jquery/swiper/css/opencart.css" type="text/css" rel="stylesheet" media="screen" />
     <link href="~/client/catalog/view/javascript/jquery/magnific/magnific-popup.css" type="text/css" rel="stylesheet" media="screen" />
+    <link href="~/client/custom/css/cart.css" type="text/css" rel="stylesheet" />
     <script src="~/client/catalog/view/javascript/jquery/swiper/js/owl.carousel.min.html" type="text/javascript"></script>
     <script src="~/client/catalog/view/javascript/jquery/swiper/js/swiper.jquery.js" type="text/javascript"></script>
     <script src="~/client/catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js" type="text/javascript"></script>
     <script src="~/client/catalog/view/javascript/jquery/webiquickview.js" type="text/javascript"></script>
     <script src="~/client/catalog/view/javascript/jquery/webinewsletter.js" type="text/javascript"></script>
     <script src="~/client/catalog/view/javascript/wbcommon.js" type="text/javascript"></script>
+    <script src="~/client/custom/javascript/cart.js"></script>
     <link href="~/client/image/catalog/favicon.png" rel="icon" />
  
 
 </head>
 <svg style="display: none;">
-
+    <script>fetchCart()</script>
     <symbol viewBox="0 0 512 512" id="arleft">
         <path d="M501.333,245.333H36.417l141.792-141.792c4.167-4.167,4.167-10.917,0-15.083c-4.167-4.167-10.917-4.167-15.083,0l-160,160
       c-4.167,4.167-4.167,10.917,0,15.083l160,160c2.083,2.083,4.813,3.125,7.542,3.125c2.729,0,5.458-1.042,7.542-3.125
@@ -858,9 +862,18 @@
                               }
                             <li>
                                 <div id="cart" class="btn-group btn-block">
-                                    <a href="@Url.Action("Cart","OrderDetail",new {id = 1})">
-                                        <svg><use xlink:href="#hcart"></use></svg><span id="cart-total"> <span class="cartt">0</span><span class="hidden-xs cartna">my cart</span><strong>$0.00</strong></span>
-                                    </a>
+                                    <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="dropdown-toggle" onclick="fetchCart()">
+                                        <svg>
+                                            <use xlink:href="#hcart"></use>
+                                        </svg>
+                                        <span id="cart-total"> @*<span class="cartt">0</span>*@<span class="hidden-xs cartna">my cart</span><strong>$0.00</strong></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <p class="text-center">Loading...</p>
+                                        </li>
+                                    </ul>
+
                                 </div>
                             </li>
                         </ul>

@@ -1,15 +1,73 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using DAL.Repositories.Interface;
+using BAL.Services.Interface;
+using DAL.Entities;
+using PRN221_MVC.Models;
+using Newtonsoft.Json;
+using BAL.Services.Implements;
 
-namespace PRN221_MVC.Controllers {
-    public class TransactionController : Controller {
+namespace PRN221_MVC.Controllers
+{
+    public class TransactionController : Controller
+    {
+        private IUserService UserService;
+        private ICartService CartService;
+        private ITransactionService TransactionService;
+
+        public TransactionController(IUserService userService, ICartService cartService, ITransactionService transactionService)
+        {
+            this.UserService = userService;
+            this.CartService = cartService;
+            this.TransactionService = transactionService;
+        }
         // GET: TransactionController
         public ActionResult Index() {
             return View();
         }
-        public IActionResult CheckOut() {
-            return View();
+        public IActionResult CheckOut()
+        {
+            User User = UserService.GetUserByEmail("anhthuyn2412@gmail.com")!;
+            Models.CheckoutViewModel.AccountData account = new Models.CheckoutViewModel.AccountData(User.Name, User.Email, User.Address);
+            var orderDetails = CartService.GetCartList(User).ConvertAll((cart) => new Models.CheckoutViewModel.OrderDetail(cart.Product.ID,cart.Product.Name, cart.Quantity, cart.Product.Price));
+            var checkoutModel = new Models.CheckoutViewModel(account, orderDetails);
+            return View("/Views/Transaction/Checkout.cshtml", checkoutModel);
         }
 
+        [HttpPost]
+        public IActionResult Checkout()
+        {
+            MemoryStream stream = new MemoryStream();
+            Request.Body.CopyTo(stream);
+            stream.Position = 0;
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string requestBody = reader.ReadToEnd();
+                if (requestBody.Length > 0)
+                {
+                    try
+                    {
+                        var model = JsonConvert.DeserializeObject<Models.CheckoutViewModel>(requestBody);
+                        User user = UserService.GetUserByEmail(model.Account.Email);
+                        if (user == null) throw new Exception("Empty email");
+                        var carts = CartService.GetCartList(user);
+                        if (carts == null || carts.Count == 0)
+                        {
+                            throw new Exception("Empty cart");
+                        }
+                        TransactionService.Save(user, model.Total, carts);
+                        CartService.RemoveCartList(user);
+                        return Json(new { Status = "Success", Message = "Your order are being processed and deliveried." });
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        return Json(new { Status = "Error", Message = e.Message });
+                    }
+                }
+            }
+            return Json(new { Status = "Error", Message = "Something went wrong. Please try again" });
+        }
         // GET: TransactionController/Details/5
         public ActionResult Details(int id) {
             return View();

@@ -170,6 +170,10 @@ namespace DAL.Repositories.Implements
             return order;
         }
         
+        public Orders SaveOrder(Orders orders)
+        {
+            return _dbSet.Add(orders).Entity;
+        }
         //Get all orders from a user
         public List<Orders> GetOrdersById(Guid id)
         {

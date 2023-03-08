@@ -20,7 +20,7 @@ namespace DAL.Repositories.Interface
         List<(int Month, int TotalOrders, int TotalProducts)> GetSalesDataMonthly(int year);
         List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId);
         Orders GetOrderById(Guid id);
-
+        Orders SaveOrder(Orders orders);
         //Get all orders from a user
         List<Orders> GetOrdersById(Guid id);
     }

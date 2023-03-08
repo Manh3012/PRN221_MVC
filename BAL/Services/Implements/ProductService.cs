@@ -33,6 +33,10 @@ namespace BAL.Services.Implements {
                 return results;
             }
         }
+        public Product? GetProductById(long id)
+        {
+            return _productRepository.GetProductAsync(id).Result;
+        }
 
         public List<Product> sortPro(int sortId, List<Product> product) {
             List<Product> sortList = new List<Product>();
