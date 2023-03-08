@@ -1,10 +1,16 @@
 ﻿using DAL;
+using BAL.Model;
+using System.Data;
 using DAL.Entities;
+using Newtonsoft.Json;
 using BAL.Services.Implements;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PRN221_MVC.Controllers
 {
@@ -41,12 +47,19 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewProduct(int id)
         {
-            var productDetail = await _dbContext.Product.FirstOrDefaultAsync(x => x.ID == id);
+            ViewBag.CategorySelective = _dbContext.Category.ToList();
+
+            var productDetail = await _dbContext.Product.Include(x=>x.Category).FirstOrDefaultAsync(x => x.ID == id);
             return View(productDetail);
         }
+
+        
         [HttpPost]
         public async Task<IActionResult> ViewProduct(Product product)
         {
+            
+            ViewBag.CategorySelective = _dbContext.Category.ToList();
+
             var productDetail = await _dbContext.Product.FindAsync(product.ID);
             if (productDetail != null)
             {
@@ -55,6 +68,11 @@ namespace PRN221_MVC.Controllers
                 productDetail.imgPath = product.imgPath;
                 productDetail.isDeleted = product.isDeleted;
                 productDetail.isAvailable = product.isAvailable;
+                var category = await _dbContext.Category.FindAsync(product.Category.ID);
+                if (category != null)
+                {
+                    productDetail.Category = category;
+                }
                 await _dbContext.SaveChangesAsync();
             }
             return RedirectToAction("ListProduct");
@@ -77,18 +95,22 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> ListProduct()
         {
-            var productList = await _dbContext.Product.ToListAsync();
+            
+            var productList = await _dbContext.Product.Include(x=>x.Category).ToListAsync();
             return View(productList);
         }
 
         [HttpGet]
         public IActionResult CreateProduct()
         {
+            ViewBag.CategorySelect = _dbContext.Category.ToList();
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<IActionResult> CreateProduct(CreateProductModel product)
         {
+            ViewBag.CategorySelect = _dbContext.Category.ToList();
+
             if (_dbContext.Product.Any(p => p.Name == product.Name))
             {
                 ModelState.AddModelError($"Name", "A product with this name already exists.");
@@ -97,6 +119,7 @@ namespace PRN221_MVC.Controllers
             if (ModelState.IsValid)
             {
 
+                Category category=_dbContext.Category.FirstOrDefault(x=>x.ID== product.CategoryID);
                 var products = new Product()
                 {
                     Name = product.Name,
@@ -104,6 +127,8 @@ namespace PRN221_MVC.Controllers
                     imgPath = product.imgPath,
                     isAvailable = product.isAvailable,
                     isDeleted = product.isDeleted,
+                    Category = category,
+                    
                 };
                 await _dbContext.Product.AddAsync(products);
                 await _dbContext.SaveChangesAsync();
@@ -137,6 +162,8 @@ namespace PRN221_MVC.Controllers
             {
                 items=_dbContext.Product.ToList();
                 ViewBag.Search = items;
+                ViewBag.Count = items.Count;
+
                 return View("Filter",items);
             }
             return View("Filter");
@@ -158,7 +185,7 @@ namespace PRN221_MVC.Controllers
             List<Product> listProduct = _dbContext.Product.ToList();
             Category category = new Category();
             var cate = _dbContext.Category.FirstOrDefault(x => x.ID == id);
-            ViewBag.NameCategory = cate.Name;
+
             if (id == 0)
             {
                 return NotFound();

@@ -1,17 +1,18 @@
 ﻿using DAL;
 using BAL.Helpers;
 using DAL.Entities;
-using PRN221_MVC.Models;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PRN221_MVC.Models;
-using System.ComponentModel.DataAnnotations;
+using PRN221_MVC.Models;
 using System.Security.Claims;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace PRN221_MVC.Controllers
@@ -20,11 +21,13 @@ namespace PRN221_MVC.Controllers
     {
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
+        private readonly FRMDbContext _dbContext;
 
-        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher)
+        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher, FRMDbContext dbContext)
         {
             userManager = userMgr;
             signInManager = signinMgr;
+            _dbContext = dbContext;
         }
 
         public async Task<IActionResult> Logout()
@@ -234,7 +237,10 @@ namespace PRN221_MVC.Controllers
 
             HttpContext.Session.SetString("_Name", user.Name);
             HttpContext.Session.SetString("_Email", email);
-
+            var userS = await _dbContext.Users.FirstOrDefaultAsync(x => x.Name == HttpContext.Session.GetString("_Name"));
+            var userRole = await _dbContext.UserRoles.FirstOrDefaultAsync(x => x.UserId == userS.Id);
+            var userRoleName = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Id == userRole.RoleId);
+            HttpContext.Session.SetString("UserRole", userRoleName.NormalizedName);
             EmailHelper emailHelper = new EmailHelper();
             emailHelper.SendEmailTwoFactorCode(user.Email, token);
 
