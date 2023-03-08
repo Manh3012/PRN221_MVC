@@ -107,6 +107,10 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
                 {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<float>("Amount")
                         .HasColumnType("real");
 
@@ -124,6 +128,8 @@ namespace DAL.Migrations
 
                     b.Property<bool>("isDeleted")
                         .HasColumnType("bit");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("OrderID");
 
@@ -342,22 +348,22 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a54f603b-3d3f-4df7-83f5-d20ac46a1cb9",
-                            ConcurrencyStamp = "88a53f8c-1091-4d7e-8f6c-7fd8ace0809a",
+                            Id = "d84126d4-45ff-4957-98af-ee01f3e0ac57",
+                            ConcurrencyStamp = "26365b1a-5da8-41b6-a3fb-d5380891318f",
                             Name = "ShopOwner",
                             NormalizedName = "SHOPOWNER"
                         },
                         new
                         {
-                            Id = "6c227c49-ab4f-4484-b67e-4161131c5e6c",
-                            ConcurrencyStamp = "75e94c8f-932e-4bf2-9924-1b29e3d379be",
+                            Id = "8903ffc3-49a8-4ff3-9439-52a3d332e513",
+                            ConcurrencyStamp = "332d68b7-17c5-4e9d-a93c-c945f36f680e",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "c65511b8-3fcc-49f0-9bda-7419f8912732",
-                            ConcurrencyStamp = "e15909b5-9d3a-4d6f-a63b-1b7e0b9e3029",
+                            Id = "829f09cd-0915-4ec5-b46b-1dfff8019476",
+                            ConcurrencyStamp = "377fbcff-3e6d-4365-a633-384ee32d7e8e",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         });
@@ -518,9 +524,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Entities.Orders", b =>
                 {
-                    b.HasOne("DAL.Entities.User", null)
+                    b.HasOne("DAL.Entities.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DAL.Entities.Product", b =>

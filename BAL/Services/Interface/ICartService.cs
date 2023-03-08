@@ -9,15 +9,19 @@ namespace BAL.Services.Interface
 {
     public interface ICartService
     {
-        Task<List<Cart>> GetCartList(User user);
+        List<Cart> GetCartList(User user);
 
-        void AddItem(User user, Product product, int quantity);
+        Cart? GetCartByProductAndUser(Product product, User user);
+
+        void AddItem(Cart cart);
 
         void UpdateQuantity(Cart cart, int quantity);
 
         void DeleteItem(Cart cart);
 
         Cart GetCartById(string id);
+
+        void RemoveCartList(User user);
 
     }
 }

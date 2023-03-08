@@ -10,8 +10,12 @@ namespace DAL.Repositories.Interface
         
         void AddItem(Cart cart);
 
+        Task<Cart?> GetCartByProductAndUser(Product product, User user);
+
         void DeleteItem(Cart cart);
 
         void UpdateItem(Cart cart);
+
+        void RemoveCartList(User user);
     }
 }

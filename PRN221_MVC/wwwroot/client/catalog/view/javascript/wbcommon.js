@@ -46,30 +46,30 @@ $(document).ready(function() {
 	});
 
 	/* Search */
-	$('#search input[name=\'search\']').parent().find('button').on('click', function() {
-		var url = $('base').attr('href') + 'index.php?route=product/search';
+	//$('#search input[name=\'search\']').parent().find('button').on('click', function() {
+	//	var url = $('base').attr('href') + '?route=product/search';
 
-		var value = $('header #search input[name=\'search\']').val();
+	//	var value = $('header #search input[name=\'search\']').val();
 
-		if (value) {
-			url += '&search=' + encodeURIComponent(value);
-		}
+	//	if (value) {
+	//		url += '&search=' + encodeURIComponent(value);
+	//	}
 
-		// madebyhand Search Start 
-        var category_id = $('#madebyhand-search-category').val();
-        if (category_id > 0) {
-            url += '&category_id=' + encodeURIComponent(category_id);
-        }
-        // madebyhand Search END
+	//	// madebyhand Search Start 
+ //       var category_id = $('#madebyhand-search-category').val();
+ //       if (category_id > 0) {
+ //           url += '&category_id=' + encodeURIComponent(category_id);
+ //       }
+ //       // madebyhand Search END
 
-		location = url;
-	});
+	//	location = url;
+	//});
 
-	$('#search input[name=\'search\']').on('keydown', function(e) {
-		if (e.keyCode == 13) {
-			$('header #search input[name=\'search\']').parent().find('button').trigger('click');
-		}
-	});
+	//$('#search input[name=\'search\']').on('keydown', function(e) {
+	//	if (e.keyCode == 13) {
+	//		$('header #search input[name=\'search\']').parent().find('button').trigger('click');
+	//	}
+	//});
 
 	/* Copyright (C) Winter Infotech, Inc - All Rights Reserved
      * Unauthorized copying of this file, via any medium is strictly prohibited
@@ -170,7 +170,7 @@ $(document).ready(function() {
 var cart = {
 	'add': function(product_id, quantity) {
 		$.ajax({
-			url: 'index.php?route=checkout/cart/add',
+			url: '/Cart/Add',
 			type: 'post',
 			data: 'product_id=' + product_id + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
 			dataType: 'json',
@@ -199,7 +199,8 @@ var cart = {
                 }
             },
 			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				//alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				alert("Unimplemented method!")
 			}
 		});
 	},

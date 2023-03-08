@@ -21,9 +21,17 @@ namespace BAL.Services.Implements
             this.UnitOfWork = unitOfWork;
         }
 
-        public void AddItem(User user, Product product, int quantity)
+        public Cart? GetCartByProductAndUser(Product product, User user)
         {
-            throw new NotImplementedException();
+            return CartRepository.GetCartByProductAndUser(product, user).Result;
+        }
+
+        public void AddItem(Cart cart)
+        {
+            cart.CreatedDate= DateTime.Now;
+            cart.UpdatedDate= DateTime.Now;
+            CartRepository.AddItem(cart);
+            UnitOfWork.Commit();
         }
 
         public void DeleteItem(Cart cart)
@@ -32,13 +40,14 @@ namespace BAL.Services.Implements
             UnitOfWork.Commit();
         }
 
-        public Task<List<Cart>> GetCartList(User user)
+        public List<Cart> GetCartList(User user)
         {
-            return CartRepository.GetCartList(user);
+            return CartRepository.GetCartList(user).Result;
         }
 
         public void UpdateQuantity(Cart cart, int quantity)
         {
+            cart.UpdatedDate = DateTime.Now;
             cart.Quantity = quantity;
             CartRepository.UpdateItem(cart);
             UnitOfWork.Commit();
@@ -47,6 +56,12 @@ namespace BAL.Services.Implements
         public Cart GetCartById(string id)
         {
             return CartRepository.GetCartItem(new Guid(id)).Result;
+        }
+
+        public void RemoveCartList(User user)
+        {
+            CartRepository.RemoveCartList(user);
+            UnitOfWork.Commit();
         }
     }
 }

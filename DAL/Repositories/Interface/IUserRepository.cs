@@ -10,5 +10,8 @@ namespace DAL.Repositories.Interface
     public interface IUserRepository
     {
         Task<List<User>> GetAll();
+        Task<User> GetUserbyID(string id);
+
+        Task<User?> GetUserByEmail(string email);
     }
 }

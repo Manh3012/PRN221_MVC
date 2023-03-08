@@ -23,6 +23,11 @@ namespace DAL.Repositories.Implements
             return await _dbSet.Where(cart => cart.ID.Equals(guid)).Include(cart => cart.Product).FirstAsync();
         }
 
+        public async Task<Cart?> GetCartByProductAndUser(Product product, User user)
+        {
+            return await _dbSet.FirstOrDefaultAsync((c) => c.Product.Equals(product) && c.User.Equals(user));
+        }
+
         public void AddItem(Cart cart)
         {
             _dbSet.Add(cart);
@@ -41,6 +46,12 @@ namespace DAL.Repositories.Implements
         public void UpdateItem(Cart cart)
         {
             _dbSet.Update(cart);
+        }
+
+        public void RemoveCartList(User user)
+        {
+            var list = _dbSet.Where(c => c.User.Equals(user)).ToList();
+            _dbSet.RemoveRange(list);
         }
     }
 }
