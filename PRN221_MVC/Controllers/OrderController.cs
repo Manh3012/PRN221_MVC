@@ -72,9 +72,10 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        public async Task<ActionResult> OrderList(Guid id)
+        public async Task<ActionResult> OrderList(string id)
         {
-            var getList = _ordersService.GetOrdersById(id);
+            var user = context.Users.FirstOrDefault(x => x.Email == id);
+            var getList = _ordersService.GetOrdersById(Guid.Parse(user.Id));
             if (getList != null)
             {
                 return View(model: getList);
@@ -82,8 +83,8 @@ namespace PRN221_MVC.Controllers
             else
             {
                 return View();
-            }
         }
+    }
 
         // POST: OrderController/Create
         [HttpPost]
