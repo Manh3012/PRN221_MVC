@@ -514,14 +514,14 @@
                                         <div class="product-thumb transition">
                                             <div class="image">
                                                 <a href="@Url.ActionLink("Details","Product",new { id = product.ID })">
-                                                    <img src="~/client/image/cache/catalog/product/29-329x329.jpg"
+                                                    <img src="@Url.Content(product.imgPath)"
                                          alt="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified"
                                          title="Chakki-Fresh-Wheat-Atta/Godihittu - Fortified"
                                          class="img-responsive center-block" />
                                                 </a>
                                                 <!-- Images Start -->
                                                 <a href="@Url.ActionLink("Details","Product",new { id = product.ID })">
-                                                    <img src="~/client/image/cache/catalog/product/14-329x329.jpg"
+                                                <img src="@Url.Content(product.imgPath)"
                                          class="img-responsive second-img"
                                          alt="hover image" />
                                                 </a>
