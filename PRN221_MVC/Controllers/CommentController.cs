@@ -1,7 +1,10 @@
 ﻿using BAL.Services.Interface;
+using DAL;
 using DAL.Entities;
+using DAL.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PRN221_MVC.Models;
 
 namespace PRN221_MVC.Controllers {
@@ -9,6 +12,7 @@ namespace PRN221_MVC.Controllers {
         private UserManager<User> userManager;
         private ICommentService commentService;
 
+        FRMDbContext _dbContext = new FRMDbContext();
         public CommentController(UserManager<User> userMgr, ICommentService commentService) {
             userManager = userMgr;
             this.commentService = commentService;
@@ -58,6 +62,23 @@ namespace PRN221_MVC.Controllers {
                 ProductId = comment.productId
             });
             return Redirect("/Product/Details/" + comment.productId);
+        }
+
+        public ActionResult DeleteComment(Guid commentId, long productId)
+        {
+            var comment = _dbContext.Comment.FirstOrDefault(x => x.ID == commentId);
+            if (comment != null)
+            {
+                var db = new FRMDbContext();
+                comment.isDeleted = true;
+                db.Entry(comment).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Details", "Product", new { id = productId });
+            }
+            else
+            {
+                return RedirectToAction("Details");
+            }
         }
     }
 }

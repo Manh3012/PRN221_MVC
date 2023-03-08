@@ -1,4 +1,5 @@
-﻿@model DAL.Entities.Product
+﻿@using DAL.Entities
+@model DAL.Entities.Product
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
@@ -136,11 +137,11 @@
         <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
             @if (Model.Comments == null)
                 {
-                    <li><a href="#tab-review" data-toggle="tab">Reviews (0) </a></li>
+                    <li><a href="#tab-review" data-toggle="tab">Comments (0) </a></li>
                 }
             else
                 {
-                    <li><a href="#tab-review" data-toggle="tab">Reviews (@Model.Comments.Count()) </a></li>
+                <li><a href="#tab-review" data-toggle="tab">Reviews (@Model.Comments.Count(x => x.isDeleted==false)) </a></li>
                 }
             
     </ul>
@@ -168,7 +169,7 @@
                      {
                       foreach(var comment in Model.Comments)
                       {
-                            <div>@comment.ID + @comment.Content</div>
+                            <div>@comment.UserId</div>
                             <div>
                                 <form action="@Url.Action("Update","Comment")" method="post" autocomplete="off" enctype="multipart/form-data" class="form-horizontal">
                                         <div class="form-group required">

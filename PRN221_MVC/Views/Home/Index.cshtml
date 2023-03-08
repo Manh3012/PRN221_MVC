@@ -113,14 +113,14 @@
                                     <div class="product-layout col-xs-12 cless">
                                         <div class="product-thumb transition">
                                             <div class="image">
-                                                        <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" alt="Organic Cold Pressed Sunflower Cooking Oil" title="Organic Cold Pressed Sunflower Cooking Oil" class="img-responsive center-block" /></a>
+                                                        <a href="@Url.ActionLink("Details","Product",new { id = product.ID})"><img src="@Url.Content(product.imgPath)" alt="Organic Cold Pressed Sunflower Cooking Oil" title="Organic Cold Pressed Sunflower Cooking Oil" class="img-responsive center-block" /></a>
                                                 <!-- Images Start -->
                                                         <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" class="img-responsive second-img" alt="hover image" /></a>                                           
                                                 <!-- End -->
                                             </div>
 
                                             <div class="caption text-left">
-                                                <h4 class="protitle"><a href="indexbb02.html?route=product/product&amp;product_id=42">@product.Name</a></h4>
+                                                        <h4 class="protitle"><a href="@Url.ActionLink("Details","Product",new { id = product.ID })">@product.Name</a></h4>
                                                 <div class="webi-main">
                                                     <input type="hidden" name="product_id" value="42" />
                                                     <div class="form-group required  checkbox_input">
