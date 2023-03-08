@@ -25,6 +25,11 @@ namespace BAL.Services.Implements
             return  users= await _userRepository.GetAll();
         }
 
+        public async Task<User> GetByEmail(string email)
+        {
+            return await _userRepository.GetUserbyUserEmail(email);
+        }
+
         public async Task<User> GetById(string id)
         {
             return await _userRepository.GetUserbyID(id);

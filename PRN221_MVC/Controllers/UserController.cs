@@ -1,33 +1,49 @@
-﻿using BAL.Helpers;
-using DAL;
+﻿using DAL;
+using BAL.Helpers;
 using DAL.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PRN221_MVC.Models;
-using System.ComponentModel.DataAnnotations;
+using PRN221_MVC.Models;
 using System.Security.Claims;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace PRN221_MVC.Controllers {
-    public class UserController : Controller {
+namespace PRN221_MVC.Controllers
+{
+    public class UserController : Controller
+    {
         private UserManager<User> userManager;
         private RoleManager<IdentityRole> roleManager;
         private SignInManager<User> signInManager;
+        private readonly FRMDbContext _dbContext;
 
-        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, RoleManager<IdentityRole> roleMgr) {
+        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher, RoleManager<IdentityRole> roleMgr, FRMDbContext dbContext)
+        {
             userManager = userMgr;
             signInManager = signinMgr;
+            _dbContext = dbContext;
             roleManager = roleMgr;
         }
 
-        public async Task<IActionResult> Logout() {
+        public async Task<IActionResult> Logout()
+        {
             await signInManager.SignOutAsync();
             // Remove session cookie of user login info
+
+            HttpContext.Session.Remove("UserInfo.Session");
+            HttpContext.Session.Remove("user");
+            Response.Cookies.Delete("UserInfo.Session");
             ISession session = HttpContext.Session;
             session.Remove(".AdventureWorks.Session");
             session.Clear();
+
             return RedirectToAction("Index", "Home");
         }
         public IActionResult Register() {
@@ -40,9 +56,12 @@ namespace PRN221_MVC.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserViewModel user) {
-            if (ModelState.IsValid) {
-                User appUser = new User {
+        public async Task<IActionResult> Register(RegisterUserViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                User appUser = new User
+                {
                     Name = user.Name,
                     UserName = user.Username,
                     Email = user.Email,
@@ -52,7 +71,8 @@ namespace PRN221_MVC.Controllers {
 
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
 
-                if (result.Succeeded) {
+                if (result.Succeeded)
+                {
                     // Add role Customer to new User
                     //var userFind = await userManager.FindByNameAsync(user.Username);
                     var userFind = await userManager.FindByEmailAsync(appUser.Email);
@@ -79,12 +99,14 @@ namespace PRN221_MVC.Controllers {
 
                     if (emailResponse)
                         return RedirectToAction("Index", "Home");
-                    else {
+                    else
+                    {
                         // log email failed 
                         return RedirectToAction("Unconfirm", "Email");
                     }
                 }
-                else {
+                else
+                {
                     // Input fields are not valid
                     foreach (IdentityError error in result.Errors)
                         ModelState.AddModelError("", error.Description);
@@ -92,7 +114,8 @@ namespace PRN221_MVC.Controllers {
                     return RedirectToAction("Register", user);
                 }
             }
-            else {
+            else
+            {
                 // Null fields
                 // send back inputed value
                 return RedirectToAction("Register");
@@ -100,13 +123,15 @@ namespace PRN221_MVC.Controllers {
         }
 
         [AllowAnonymous]
-        public IActionResult GoogleLogin() {
+        public IActionResult GoogleLogin()
+        {
             string redirectUrl = Url.Action("GoogleResponse", "User");
             var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
             return new ChallengeResult("Google", properties);
         }
         [AllowAnonymous]
-        public async Task<IActionResult> GoogleResponse() {
+        public async Task<IActionResult> GoogleResponse()
+        {
             ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null)
                 return RedirectToAction(nameof(Login));
@@ -121,8 +146,11 @@ namespace PRN221_MVC.Controllers {
             // redirect to userInfo View (return user info JSON)
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
-            else {
-                User user = new User {
+            //return View(userInfo);
+            else
+            {
+                User user = new User
+                {
                     Email = email,
                     Name = name,
                     UserName = email,
@@ -131,9 +159,12 @@ namespace PRN221_MVC.Controllers {
 
                 IdentityResult identResult = await userManager.CreateAsync(user);
 
-                if (identResult.Succeeded) {
+                if (identResult.Succeeded)
+                {
+
                     identResult = await userManager.AddLoginAsync(user, info);
-                    if (identResult.Succeeded) {
+                    if (identResult.Succeeded)
+                    {
                         await signInManager.SignInAsync(user, false);
                         //var userFind = await userManager.FindByNameAsync(user.Username);
                         // Add role customer
@@ -155,22 +186,21 @@ namespace PRN221_MVC.Controllers {
         }
 
         [AllowAnonymous]
-        public IActionResult Login() {
-            var err = TempData["LoginError"] as string;
-            if (err != null) {
-                ViewData["LoginError"] = err;
-            }
+        public IActionResult Login()
+        {
             return View("/Views/Client/User/LoginClient.cshtml");
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginUserViewModel login) {
-            if (ModelState.IsValid) {
+        public async Task<IActionResult> Login(LoginUserViewModel login)
+        {
+            if (ModelState.IsValid)
+            {
                 User appUser = await userManager.FindByEmailAsync(login.Email);
-
-                if (appUser != null) {
+                if (appUser != null)
+                {
                     await signInManager.SignOutAsync();
                     SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, true);
 
@@ -184,13 +214,9 @@ namespace PRN221_MVC.Controllers {
                     }
 
                     // Two Factor Authentication
-                    if (result.RequiresTwoFactor) {
-                        //var userRoles = await userManager.GetRolesAsync(appUser);
-                        //var authClaims = new List<Claim> { new Claim(ClaimTypes.Email, appUser.Email) };
-                        //foreach (var userRole in userRoles) {
-                        //    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                        //}
 
+                    if (result.RequiresTwoFactor)
+                    {
                         return RedirectToAction("LoginTwoStep", new { appUser.Email });
                     }
 
@@ -202,7 +228,8 @@ namespace PRN221_MVC.Controllers {
 
                     // Email confirmation 
                     bool emailStatus = await userManager.IsEmailConfirmedAsync(appUser);
-                    if (emailStatus == false) {
+                    if (emailStatus == false)
+                    {
                         ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                         TempData["LoginError"] = "Email is unconfirmed, please confirm it first";
                     }
@@ -216,13 +243,18 @@ namespace PRN221_MVC.Controllers {
             return RedirectToAction("Login");
         }
         [AllowAnonymous]
-        public async Task<IActionResult> LoginTwoStep(string email) {
+        //public async Task<IActionResult> LoginTwoStep(string email, string returnUrl) {
+        public async Task<IActionResult> LoginTwoStep(string email)
+        {
             var user = await userManager.FindByEmailAsync(email);
             var token = await userManager.GenerateTwoFactorTokenAsync(user, "Email");
 
             HttpContext.Session.SetString("_Name", user.Name);
             HttpContext.Session.SetString("_Email", email);
-
+            var userS = await _dbContext.Users.FirstOrDefaultAsync(x => x.Name == HttpContext.Session.GetString("_Name"));
+            var userRole = await _dbContext.UserRoles.FirstOrDefaultAsync(x => x.UserId == userS.Id);
+            var userRoleName = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Id == userRole.RoleId);
+            HttpContext.Session.SetString("UserRole", userRoleName.NormalizedName);
             EmailHelper emailHelper = new EmailHelper();
             emailHelper.SendEmailTwoFactorCode(user.Email, token);
 
@@ -231,8 +263,11 @@ namespace PRN221_MVC.Controllers {
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginTwoStep(TwoFactor twoFactor) {
-            if (!ModelState.IsValid) {
+        //public async Task<IActionResult> LoginTwoStep(TwoFactor twoFactor, string returnUrl) {
+        public async Task<IActionResult> LoginTwoStep(TwoFactor twoFactor)
+        {
+            if (!ModelState.IsValid)
+            {
                 return View(twoFactor.TwoFactorCode);
             }
             var result = await signInManager.TwoFactorSignInAsync("Email", twoFactor.TwoFactorCode, false, false);
@@ -240,7 +275,9 @@ namespace PRN221_MVC.Controllers {
             // redirect to userInfo View (return user info JSON)
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
-            else {
+            //return Redirect(returnUrl ?? "/");
+            else
+            {
                 // Remove session cookie of user login info
                 HttpContext.Session.Remove("UserInfo.Session");
                 Response.Cookies.Delete("UserInfo.Session");

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using DAL.Entities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using DAL.Entities;
 
 namespace DAL.Repositories.Interface
 {
@@ -21,5 +21,7 @@ namespace DAL.Repositories.Interface
         List<(int Month, int TotalOrders, int TotalProducts)> GetSalesDataMonthly(int year);
         List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId);
         Orders GetOrderById(Guid id);
+        //Get all orders from a user
+        List<Orders> GetOrdersById(Guid id);
     }
 }

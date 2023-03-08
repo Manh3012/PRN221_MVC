@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using BAL;
+﻿using BAL;
 using DAL.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 
@@ -20,6 +20,10 @@ namespace PRN221_MVC.Controllers
         // GET: ShopOwnerController
         public ActionResult IndexShopOwner()
         {
+            if (HttpContext.Session.GetString("Email") == null)
+            {
+                return RedirectToAction("Login","Admin");
+            }
             var totalToday = ordersService.GetTotalOrderToday();
             var totalWeek = ordersService.GetTotalOrdersWeek();
             var total30Days = ordersService.GetTotalOrderLastThirtyDays();
@@ -57,10 +61,14 @@ namespace PRN221_MVC.Controllers
 
             ViewBag.SalesDataInEachMonth = salesDataInEachMonth;
 
-            ViewBag.Email = ViewBag.Email;
-
             return View();
             
+        }
+      
+        public ActionResult LogOutShopOwner()
+        {
+            HttpContext.Session.Remove("Email");
+            return RedirectToAction("Login", "Admin");
         }
 
         public async Task<ActionResult> ShopOwnerProfile()

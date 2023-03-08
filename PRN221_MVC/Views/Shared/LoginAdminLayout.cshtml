@@ -24,6 +24,7 @@
 
 <body class="account-body accountbg">
 
+
     <!-- Log In page -->
     <div class="container">
         <div class="row vh-100 d-flex justify-content-center">
@@ -52,7 +53,7 @@
                                 <!-- Tab panes -->
                                 <div class="tab-content">
                                     <div class="tab-pane active p-3" id="LogIn_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="AsyncLogin">
+                                        <form method="post" class="form-horizontal auth-form" action="AsyncLogin">
                                             @*@using (Html.BeginForm("AsyncLogin", "Admin", FormMethod.Post))
                                             {*@
                                             <div class="form-group mb-2">
@@ -75,10 +76,6 @@
 
                                             <div class="form-group row my-3">
                                                 <div class="col-sm-6">
-                                                    <div class="custom-control custom-switch switch-success">
-                                                        <input type="checkbox" class="custom-control-input" id="customSwitchSuccess">
-                                                        <label class="form-label text-muted" for="customSwitchSuccess">Remember me</label>
-                                                    </div>
                                                 </div><!--end col-->
                                                 <div class="col-sm-6 text-end">
                                                     <a href="@Url.Action("Recover_Password", "Admin")" class="text-muted font-13"><i class="dripicons-lock"></i> Forgot password?</a>
@@ -95,7 +92,7 @@
                                             @*}*@
                                         </form><!--end form-->
                                         <div class="m-3 text-center text-muted">
-                                            <p class="mb-0">Don't have an account ?  <a href="@Url.Action("Create", "Admin")" class="text-primary ms-2">Free Resister</a></p>
+                                            <p class="mb-0">Don't have an account ?  <a href="@Url.Action("Create", "Admin")" class="text-primary ms-2">Free Register</a></p>
                                         </div>
                                         <div class="account-social">
                                             <h6 class="mb-3">Or Login With</h6>
@@ -124,6 +121,11 @@
                                                 <div class="input-group">
                                                     <input type="email" class="form-control" name="useremail" id="useremailRE" placeholder="Enter Email">
                                                 </div>
+                                                @if (ViewBag.CheckErr != null)
+                                                {
+                                                    <div class="error">@ViewBag.CheckErr</div>
+                                                }
+
                                                 <div id="emailerr" class="error"></div>
                                             </div>
 
@@ -131,7 +133,7 @@
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="userpassword">Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="userpassword" id="userpasswordRE" placeholder="Enter password">
+                                                    <input type="password" class="form-control" name="userpassword" id="userpasswordRE" placeholder="Enter password (ex:S2s@ss)">
                                                 </div>
                                                 <div id="passerr" class="error"></div>
                                             </div>
@@ -140,7 +142,7 @@
                                             <div class="form-group mb-2">
                                                 <label class="form-label" for="conf_password">Confirm Password</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" name="conf-password" id="conf_passwordRE" placeholder="Enter Confirm Password">
+                                                    <input type="password" class="form-control" name="conf-password" id="conf_passwordRE" placeholder="Enter Confirm Password (ex:S2s@ss)">
                                                 </div>
                                                 <div id="repasserr" class="error"></div>
                                             </div>
@@ -156,15 +158,6 @@
                                             </div>
 
                                             <!--end form-group-->
-                                            <div class="form-group row my-3">
-                                                <div class="col-sm-12">
-                                                    <div class="custom-control custom-switch switch-success">
-                                                        <input type="checkbox" class="custom-control-input" id="customSwitchSuccess2">
-                                                        <label class="form-label text-muted" for="customSwitchSuccess2">You agree to the Dastone <a href="#" class="text-primary">Terms of Use</a></label>
-                                                    </div>
-                                                </div><!--end col-->
-                                            </div>
-
                                             <!--end form-group-->
                                             <div class="form-group mb-0 row">
                                                 <div class="col-12">
@@ -229,7 +222,7 @@
 
                 var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
                 var phoneRegex = /^\d{10}$/;
-                //var emailRegex = /^\S+@@\S+\.\S+$/;
+                var emailRegex = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 // Check the name field
                 if (nameInput.value == "") {
                     nameInput.classList.add("invalid");
@@ -241,7 +234,7 @@
                 }
 
                 // Check the email field
-                if (!emailInput.checkValidity() || emailInput.value == "") {
+                if (!emailInput.checkValidity() || emailInput.value == "" || !emailRegex.test(emailInput.value)) {
                     isFormValid = false;
                     emailErr.innerHTML = "Email is invalid"
                     emailInput.classList.add("invalid");
@@ -250,16 +243,16 @@
                 }
 
                 // Check the password field
-                if ( passwordInput.value == "") {
+                if (passwordInput.value == "" || !passwordRegex.test(passwordInput.value)) {
                     isFormValid = false;
-                    passErr.innerHTML = "Pass is invalid (Ex: A1a@aa)"
+                    passErr.innerHTML = "Min 6 characters, upper, lower, number, special(Ex: A1a@aa)"
                     passwordInput.classList.add("invalid");
                 } else {
                     passwordInput.classList.remove("invalid");
                     passErr.innerHTML = ""
                 }
 
-                if ( repassInput.value == "" || repassInput.value !== passwordInput.value) {
+                if (repassInput.value == "" || repassInput.value !== passwordInput.value) {
                     isFormValid = false;
                     repassErr.innerHTML = "Invalid, not the same password"
                     repassInput.classList.add("invalid");
@@ -268,7 +261,7 @@
                     repassErr.innerHTML = ""
                 }
 
-                if (phoneInput.value == "" ) {
+                if (phoneInput.value == "" || !phoneRegex.test(phoneInput.value)) {
                     isFormValid = false;
                     phoneErr.innerHTML = "Invalid phone number (10 digits)"
                     phoneInput.classList.add("invalid");

@@ -47,5 +47,30 @@ namespace BAL.Services.Implements
                 return results;
             }
         }
+
+        public List<Product> sortPro(int sortId, List<Product> product)
+        {
+            List<Product> sortList = new List<Product>();
+
+            switch (sortId)
+            {
+                case 1:
+                    sortList = product.OrderBy(p => p.Price).ToList();
+                    break;
+                case 2:
+                    sortList = product.OrderBy(p => p.Name).ToList();
+                    break;
+                case 3:
+                    sortList = product.OrderByDescending(p => p.Price).ToList();
+                    break;
+                case 4:
+                    sortList = product.OrderByDescending(p => p.Name).ToList();
+                    break;
+                default:
+                    sortList = product;
+                    break;
+            }
+            return sortList;
+        }
     }
 }
