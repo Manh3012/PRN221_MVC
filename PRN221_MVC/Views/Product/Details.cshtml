@@ -157,7 +157,8 @@
                             <legend>Write your comment</legend>
                             <div class="form-group required">
                                 <div class="col-md-12 col-xs-12">
-                                    <input type="text" name="name" id="input-name" class="form-control" />
+                                    <input type="hidden" name="productId" value="@Model.ID" />
+                                    <input type="text" name="content" id="input-name" class="form-control" />
                                     <input style="margin:10px 0px; background:blue;" class="btn btn-primary btn-lg" type="submit" value="Send" />
                                 </div>
                             </div>
@@ -168,8 +169,19 @@
                       foreach(var comment in Model.Comments)
                       {
                             <div>@comment.ID + @comment.Content</div>
-                            <a href="#" title="Update" class="btn btn-danger cbt; ">Update</a>
-                            <a href="@Url.Action("DeleteComment","Product")" title="Delete" class="btn btn-danger cbt; ">Delete</a>
+                            <div>
+                                <form action="@Url.Action("Update","Comment")" method="post" autocomplete="off" enctype="multipart/form-data" class="form-horizontal">
+                                        <div class="form-group required">
+                                            <div class="col-md-12 col-xs-12">
+                                                <input type="hidden" name="ID" value="@comment.ID" />
+                                                <input type="hidden" name="productId" value="@Model.ID" />
+                                            <input type="text" value="@comment.Content" name="content" id="input-name" class="form-control" />
+                                                <input style="margin:10px 0px; background:orange;" class="btn btn-primary btn-lg" type="submit" value="Update" />
+                                            <a href="@Url.Action("DeleteComment","Product")" title="Delete" class="btn btn-danger cbt;" style="background:red;">Delete</a>
+                                        </div>
+                                        </div>
+                                </form>
+                            </div>
                       }
                      }
             </div>
