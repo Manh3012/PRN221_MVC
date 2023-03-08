@@ -1,49 +1,37 @@
-﻿using DAL;
-using BAL.Model;
-using System.Data;
-using DAL.Entities;
-using Newtonsoft.Json;
+﻿using BAL.Model;
 using BAL.Services.Implements;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using DAL;
+using DAL.Entities;
 using DAL.Repositories.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
-namespace PRN221_MVC.Controllers
-{
-    public class ProductController : Controller
-    {
+namespace PRN221_MVC.Controllers {
+    public class ProductController : Controller {
         readonly IProductService productService = new ProductService();
         private readonly FRMDbContext _dbContext;
 
-        public ProductController(FRMDbContext dbContext)
-        {
+        public ProductController(FRMDbContext dbContext) {
             _dbContext = dbContext;
         }
 
         // GET: ProductController
-        public ActionResult Index()
-        {
+        public ActionResult Index() {
             return View();
         }
 
-        public ActionResult Details(int id)
-        {
+        public ActionResult Details(int id) {
             var productDetail = _dbContext.Product
                                             .Include(v => v.Comments)
                                             .FirstOrDefault(x => x.ID == id);
-            if (productDetail == null)
-            {
+            if (productDetail == null) {
                 return RedirectToAction("Index", "Home");
             }
             return View(productDetail);
         }
 
-        public ActionResult DeleteComment()
-        {
+        public ActionResult DeleteComment() {
             return RedirectToAction("Details");
         }
 
@@ -51,32 +39,28 @@ namespace PRN221_MVC.Controllers
         public Product Product { get; set; }
 
         [HttpGet]
-        public async Task<IActionResult> ViewProduct(int id)
-        {
+        public async Task<IActionResult> ViewProduct(int id) {
             ViewBag.CategorySelective = _dbContext.Category.ToList();
 
-            var productDetail = await _dbContext.Product.Include(x=>x.Category).FirstOrDefaultAsync(x => x.ID == id);
+            var productDetail = await _dbContext.Product.Include(x => x.Category).FirstOrDefaultAsync(x => x.ID == id);
             return View(productDetail);
         }
 
-        
+
         [HttpPost]
-        public async Task<IActionResult> ViewProduct(Product product)
-        {
-            
+        public async Task<IActionResult> ViewProduct(Product product) {
+
             ViewBag.CategorySelective = _dbContext.Category.ToList();
 
             var productDetail = await _dbContext.Product.FindAsync(product.ID);
-            if (productDetail != null)
-            {
+            if (productDetail != null) {
                 productDetail.Name = product.Name;
                 productDetail.Price = product.Price;
                 productDetail.imgPath = product.imgPath;
                 productDetail.isDeleted = product.isDeleted;
                 productDetail.isAvailable = product.isAvailable;
                 var category = await _dbContext.Category.FindAsync(product.Category.ID);
-                if (category != null)
-                {
+                if (category != null) {
                     productDetail.Category = category;
                 }
                 await _dbContext.SaveChangesAsync();
@@ -84,57 +68,48 @@ namespace PRN221_MVC.Controllers
             return RedirectToAction("ListProduct");
         }
         [HttpGet]
-        public async Task<IActionResult> Delete(Product product)
-        {
+        public async Task<IActionResult> Delete(Product product) {
             var productdetail = await _dbContext.Product.FindAsync(product.ID);
-            if (productdetail != null)
-            {
+            if (productdetail != null) {
                 productdetail.isDeleted = true;
                 _dbContext.Product.Update(productdetail);
                 await _dbContext.SaveChangesAsync();
                 return RedirectToAction("ListProduct");
             }
-            else
-            { return RedirectToAction("ListProduct"); }
+            else { return RedirectToAction("ListProduct"); }
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListProduct()
-        {
-            
-            var productList = await _dbContext.Product.Include(x=>x.Category).ToListAsync();
+        public async Task<IActionResult> ListProduct() {
+
+            var productList = await _dbContext.Product.Include(x => x.Category).ToListAsync();
             return View(productList);
         }
 
         [HttpGet]
-        public IActionResult CreateProduct()
-        {
+        public IActionResult CreateProduct() {
             ViewBag.CategorySelect = _dbContext.Category.ToList();
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(CreateProductModel product)
-        {
+        public async Task<IActionResult> CreateProduct(CreateProductModel product) {
             ViewBag.CategorySelect = _dbContext.Category.ToList();
 
-            if (_dbContext.Product.Any(p => p.Name == product.Name))
-            {
+            if (_dbContext.Product.Any(p => p.Name == product.Name)) {
                 ModelState.AddModelError($"Name", "A product with this name already exists.");
                 return View(product);
             }
-            if (ModelState.IsValid)
-            {
+            if (ModelState.IsValid) {
 
-                Category category=_dbContext.Category.FirstOrDefault(x=>x.ID== product.CategoryID);
-                var products = new Product()
-                {
+                Category category = _dbContext.Category.FirstOrDefault(x => x.ID == product.CategoryID);
+                var products = new Product() {
                     Name = product.Name,
                     Price = product.Price,
                     imgPath = product.imgPath,
                     isAvailable = product.isAvailable,
                     isDeleted = product.isDeleted,
                     Category = category,
-                    
+
                 };
                 await _dbContext.Product.AddAsync(products);
                 await _dbContext.SaveChangesAsync();
@@ -143,48 +118,40 @@ namespace PRN221_MVC.Controllers
             return View(product);
         }
 
-        public ActionResult SearchProduct(string? search)
-        {
+        public ActionResult SearchProduct(string? search) {
             List<Product> items = new List<Product>();
 
-            try
-            {
+            try {
 
                 items = productService.Search(search.Trim());
-                if (items.Count == 0)
-                {
+                if (items.Count == 0) {
                     //ViewBag.Message = "Nothing Found";
                     //TempData["Message"] = ViewBag.Message;
                     //return View("/Views/Home/Index.cshtml");
                     ViewBag.Error = "No Item Found";
                 }
-                else
-                {
+                else {
                     ViewBag.Count = items.Count;
                     ViewBag.Search = items;
                 }
             }
-            catch
-            {
-                items=_dbContext.Product.ToList();
+            catch {
+                items = _dbContext.Product.ToList();
                 ViewBag.Search = items;
                 ViewBag.Count = items.Count;
 
-                return View("Filter",items);
+                return View("Filter", items);
             }
             return View("Filter");
         }
 
-        public ActionResult Filter(int sortId, int id,List<Product> list)
-        {
+        public ActionResult Filter(int sortId, int id, List<Product> list) {
             var products = productService.Filter(id);
-            if (products.Count > 0)
-            {
+            if (products.Count > 0) {
                 ViewBag.Count = products.Count;
                 ViewBag.Show = products;
             }
-            else
-            {
+            else {
                 ViewBag.Error = "No Item Found";
             }
             List<Product> sort = new List<Product>();
@@ -192,12 +159,10 @@ namespace PRN221_MVC.Controllers
             Category category = new Category();
             var cate = _dbContext.Category.FirstOrDefault(x => x.ID == id);
 
-            if (id == 0)
-            {
+            if (id == 0) {
                 return NotFound();
             }
-            switch (sortId)
-            {
+            switch (sortId) {
 
                 case 1:
                     sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).OrderBy(x => x.Name).ToList();
@@ -218,8 +183,7 @@ namespace PRN221_MVC.Controllers
                 default:
                     sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).ToList();
                     category = _dbContext.Category.FirstOrDefault(x => x.ID == id);
-                    foreach (var item in sort)
-                    {
+                    foreach (var item in sort) {
                         item.Category = category;
                     }
                     ViewBag.TotalProduct = sort.Count();
@@ -232,8 +196,7 @@ namespace PRN221_MVC.Controllers
             return View(sort);
         }
         [HttpGet]
-        public IActionResult Sort(int sortId)
-        {
+        public IActionResult Sort(int sortId) {
 
             List<Product> sort = new List<Product>();
             //switch (sortId)
@@ -260,8 +223,7 @@ namespace PRN221_MVC.Controllers
 
 
             //}
-            switch (sortId)
-            {
+            switch (sortId) {
 
                 case 1:
                     sort = _dbContext.Product.OrderBy(x => x.Name).ToList();
@@ -288,11 +250,10 @@ namespace PRN221_MVC.Controllers
             }
             ViewBag.Search = sort;
 
-            return View("Filter",sort);
+            return View("Filter", sort);
         }
 
-        public ActionResult ProSort()
-        {
+        public ActionResult ProSort() {
 
             return View();
         }

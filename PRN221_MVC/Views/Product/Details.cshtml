@@ -152,6 +152,17 @@
         </div>
         <div class="tab-pane" id="tab-review">
             <div>
+                    <form action="@Url.Action("Create","Comment")" method="post" autocomplete="off" enctype="multipart/form-data" class="form-horizontal">
+                        <fieldset id="comment">
+                            <legend>Write your comment</legend>
+                            <div class="form-group required">
+                                <div class="col-md-12 col-xs-12">
+                                    <input type="text" name="name" id="input-name" class="form-control" />
+                                    <input style="margin:10px 0px; background:blue;" class="btn btn-primary btn-lg" type="submit" value="Send" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
                  @if (Model.Comments != null)
                      {
                       foreach(var comment in Model.Comments)
