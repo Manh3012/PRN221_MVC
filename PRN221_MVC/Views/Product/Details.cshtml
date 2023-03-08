@@ -156,79 +156,16 @@
                      {
                       foreach(var comment in Model.Comments)
                       {
-                           <div>@comment.ID</div>    
+                            <div>@comment.ID + @comment.Content</div>
+                            <a href="#" title="Update" class="btn btn-danger cbt; ">Update</a>
+                            <a href="@Url.Action("DeleteComment","Product")" title="Delete" class="btn btn-danger cbt; ">Delete</a>
                       }
                      }
             </div>
         </div>
-        @*<div class="tab-pane" id="tab-review">
-            <form class="" id="form-review">
-                <div id="review"></div>
-                <h2 class="co-heading">Write a review</h2>
-                <div class="form-group required row">
-                    <div class="col-sm-12">
-                        <label class="control-label" for="input-name">Your Name</label>
-                        <input type="text" name="name" value="" id="input-name" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group required row">
-                    <div class="col-sm-12">
-                        <label class="control-label" for="input-review">Your Review</label>
-                        <textarea name="text" rows="5" id="input-review" class="form-control"></textarea>
-                        <!-- <div class="help-block"><span class="text-danger">Note:</span> HTML is not translated!</div> -->
-                    </div>
-                </div>
-                <div class="form-group required">
-
-                    <div class="radi">
-                        <label class="control-label" for="input-review">Rating</label>
-                        <div class="form-rating">
-
-                            <div class="form-rating-container pull-left">
-                                <input id="rating-5" type="radio" name="rating" value="5" />
-                                <label class="fa fa-stack pull-right" for="rating-5">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-4" type="radio" name="rating" value="4" />
-                                <label class="fa fa-stack pull-right" for="rating-4">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-3" type="radio" name="rating" value="3" />
-                                <label class="fa fa-stack pull-right" for="rating-3">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-2" type="radio" name="rating" value="2" />
-                                <label class="fa fa-stack pull-right" for="rating-2">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-1" type="radio" name="rating" value="1" />
-                                <label class="fa fa-stack pull-right" for="rating-1">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="buttons clearfix">
-                    <div class="pull-right">
-                        <button type="button" id="button-review" data-loading-text="Loading..." class="btn btn-primary">Continue</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>*@
 </div>
 <!-- relatedproduct -->
       </div></div>
-    </div>
-</div>
 <script type="text/javascript">
         <!--
     $('select[name=\'recurring_id\'], input[name="quantity"]').change(function () {

@@ -41,6 +41,12 @@ namespace PRN221_MVC.Controllers
             }
             return View(productDetail);
         }
+
+        public ActionResult DeleteComment()
+        {
+            return RedirectToAction("Details");
+        }
+
         [BindProperty]
         public Product Product { get; set; }
 
