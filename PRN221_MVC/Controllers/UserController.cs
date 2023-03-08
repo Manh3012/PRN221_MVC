@@ -20,14 +20,16 @@ namespace PRN221_MVC.Controllers
     public class UserController : Controller
     {
         private UserManager<User> userManager;
+        private RoleManager<IdentityRole> roleManager;
         private SignInManager<User> signInManager;
         private readonly FRMDbContext _dbContext;
 
-        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher, FRMDbContext dbContext)
+        public UserController(UserManager<User> userMgr, SignInManager<User> signinMgr, IPasswordHasher<User> passwordHasher, RoleManager<IdentityRole> roleMgr, FRMDbContext dbContext)
         {
             userManager = userMgr;
             signInManager = signinMgr;
             _dbContext = dbContext;
+            roleManager = roleMgr;
         }
 
         public async Task<IActionResult> Logout()
@@ -72,12 +74,22 @@ namespace PRN221_MVC.Controllers
                 if (result.Succeeded)
                 {
                     // Add role Customer to new User
-                    var userFind = await userManager.FindByNameAsync(user.Username);
-                    await userManager.AddToRoleAsync(userFind, "Customer");
-                    using (var context = new FRMDbContext()) {
-                        // save to db
-                        context.SaveChanges();
+                    //var userFind = await userManager.FindByNameAsync(user.Username);
+                    var userFind = await userManager.FindByEmailAsync(appUser.Email);
+                    if (userFind != null) {
+                        await userManager.AddToRoleAsync(appUser, "Customer");
+                        await userManager.AddClaimAsync(userFind, new Claim(ClaimTypes.Role, "Customer"));
                     }
+
+                    var customerRole = await roleManager.FindByNameAsync("Customer");
+                    await roleManager.AddClaimAsync(customerRole, new Claim(ClaimTypes.Email, appUser.Email));
+                    await roleManager.AddClaimAsync(customerRole, new Claim(ClaimTypes.Role, "Customer"));
+
+                    //var userRoles = await userManager.GetRolesAsync(appUser);
+                    //var authClaims = new List<Claim> { new Claim(ClaimTypes.Email, appUser.Email) };
+                    //foreach (var userRole in userRoles) {
+                    //    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                    //}
 
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
                     var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
@@ -193,6 +205,8 @@ namespace PRN221_MVC.Controllers
                     SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, true);
 
                     if (result.Succeeded) {
+                        HttpContext.Session.SetString("_Name", appUser.Name);
+                        HttpContext.Session.SetString("_Email", appUser.Email);
                         return RedirectToAction("Index", "Home");
                     }
                     else {
@@ -200,9 +214,9 @@ namespace PRN221_MVC.Controllers
                     }
 
                     // Two Factor Authentication
+
                     if (result.RequiresTwoFactor)
                     {
-                        //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
                         return RedirectToAction("LoginTwoStep", new { appUser.Email });
                     }
 
@@ -334,11 +348,12 @@ namespace PRN221_MVC.Controllers
         }
 
         //[AllowAnonymous]
-        [Authorize(Roles = "Customer")]
+        //[Authorize(Roles = "Administrator,Customer")]
+        //[Authorize(Policy = "CustomerRole")]
         public async Task<IActionResult> Detail() {
             string email = HttpContext.Session.GetString("_Email");
-
             User user = await userManager.FindByEmailAsync(email);
+            bool isInRole = await userManager.IsInRoleAsync(user, "Customer");
             EditUserViewModel editUser = new EditUserViewModel {
                 Id = user.Id,
                 Email = user.Email,

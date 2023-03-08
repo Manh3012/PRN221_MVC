@@ -23,9 +23,6 @@ builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
-
-
-//builder.Services.AddScoped<ILogger>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<FRMDbContext>()
@@ -51,18 +48,28 @@ builder.Services.AddAuthentication(options => {
     // default callback uri: /signin-google
 });
 
+builder.Services.AddIdentityCore<User>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<FRMDbContext>();
 builder.Services.AddSession(
     options => {
         options.Cookie.Name = ".AdventureWorks.Session";
         options.Cookie.IsEssential = true;
     });
-
-// Lockout
 builder.Services.Configure<IdentityOptions>(opts => {
+    // Lockout
     opts.Lockout.AllowedForNewUsers = true;
     opts.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(2);
     opts.Lockout.MaxFailedAccessAttempts = 3;
+
+    // User settings.
+    opts.User.RequireUniqueEmail = true;
 });
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("CustomerRole", policy => policy.RequireRole("Customer"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -77,8 +84,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseSession();
 
 app.MapControllerRoute(
