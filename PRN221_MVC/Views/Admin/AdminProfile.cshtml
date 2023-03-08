@@ -114,7 +114,6 @@
                 <li class="dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="#" role="button"
                        aria-haspopup="false" aria-expanded="false">
-                        <span class="ms-1 nav-user-name hidden-sm">Nick</span>
                         <img src="assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -197,7 +196,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <h5 class="dastone-user-name">@ViewBag.User.Name</h5>
+                                                    <h5 class="dastone-user-name">@ViewBag.User.UserName</h5>
                                                 }
                                                 <p class="mb-0 dastone-user-name-post">UI/UX Designer, India</p>
                                             </div>
@@ -210,16 +209,12 @@
                                             {
                                                 <li class=""><i class="ti ti-mobile me-2 text-secondary font-16 align-middle"></i> <b> phone </b> : +91 23456 78910</li>
                                                 <li class="mt-2"><i class="ti ti-email text-secondary font-16 align-middle me-2"></i> <b> Email </b> : mannat.theme@gmail.com</li>
-                                            }else
+                                            }
+                                            else
                                             {
                                                 <li class=""><i class="ti ti-mobile me-2 text-secondary font-16 align-middle"></i> <b> phone </b> : +@ViewBag.User.PhoneNumber</li>
                                                 <li class="mt-2"><i class="ti ti-email text-secondary font-16 align-middle me-2"></i> <b> Email </b> : @ViewBag.User.Email</li>
                                             }
-
-                                            <li class="mt-2">
-                                                <i class="ti ti-world text-secondary font-16 align-middle me-2"></i> <b> Website </b> :
-                                                <a href="https://mannatthemes.com/" class="font-14 text-primary">https://mannatthemes.com</a>
-                                            </li>
                                         </ul>
 
                                     </div><!--end col-->
@@ -1015,84 +1010,7 @@
                         </div>
                         <div class="tab-pane fade" id="Profile_Settings" role="tabpanel" aria-labelledby="settings_detail_tab">
                             <div class="row">
-                                <div class="col-lg-6 col-xl-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <div class="row align-items-center">
-                                                <div class="col">
-                                                    <h4 class="card-title">Personal Information</h4>
-                                                </div><!--end col-->
-                                            </div>  <!--end row-->
-                                        </div><!--end card-header-->
-                                        <div class="card-body">
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">First Name</label>
-                                                <div class="col-lg-9 col-xl-8">
-                                                    <input class="form-control" type="text" value="Rosa">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Last Name</label>
-                                                <div class="col-lg-9 col-xl-8">
-                                                    <input class="form-control" type="text" value="Dodson">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Company Name</label>
-                                                <div class="col-lg-9 col-xl-8">
-                                                    <input class="form-control" type="text" value="MannatThemes">
-                                                    <span class="form-text text-muted font-12">We'll never share your email with anyone else.</span>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Contact Phone</label>
-                                                <div class="col-lg-9 col-xl-8">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><i class="las la-phone"></i></span>
-                                                        <input type="text" class="form-control" value="+123456789" placeholder="Phone" aria-describedby="basic-addon1">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Email Address</label>
-                                                <div class="col-lg-9 col-xl-8">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><i class="las la-at"></i></span>
-                                                        <input type="text" class="form-control" value="rosa.dodson@demo.com" placeholder="Email" aria-describedby="basic-addon1">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Website Link</label>
-                                                <div class="col-lg-9 col-xl-8">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text"><i class="la la-globe"></i></span>
-                                                        <input type="text" class="form-control" value=" https://mannatthemes.com/" placeholder="Email" aria-describedby="basic-addon1">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">USA</label>
-                                                <div class="col-lg-9 col-xl-8">
-                                                    <select class="form-select">
-                                                        <option>London</option>
-                                                        <option>India</option>
-                                                        <option>USA</option>
-                                                        <option>Canada</option>
-                                                        <option>Thailand</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-9 col-xl-8 offset-lg-3">
-                                                    <button type="submit" class="btn btn-sm btn-outline-primary">Submit</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> <!--end col-->
+                                <!--end col-->
                                 <div class="col-lg-6 col-xl-6">
                                     <div class="card">
                                         <div class="card-header">
@@ -1130,7 +1048,14 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <div class="col-lg-9 col-xl-8 offset-lg-3">
-                                                        <input type="hidden" name="idhidden" value="e1b7e721-490b-4801-a855-fa86b513ae08"></input>
+                                                        @if (ViewBag.User != null)
+                                                        {
+                                                            <input type="hidden" name="idhidden" value="@ViewBag.User.Id"></input>
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="hidden" name="idhidden" value="0"></input>
+                                                        }
                                                         <button id="editbtn" onclick="validateform()" type="submit" class="btn btn-sm btn-outline-primary">Change Password</button>
                                                         @*<button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>*@
                                                     </div>
@@ -1141,28 +1066,7 @@
                                         @*}*@
 
                                     </div><!--end card-->
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Other Settings</h4>
-                                        </div><!--end card-header-->
-                                        <div class="card-body">
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="Email_Notifications" checked>
-                                                <label class="form-check-label" for="Email_Notifications">
-                                                    Email Notifications
-                                                </label>
-                                                <span class="form-text text-muted font-12 mt-0">Do you need them?</span>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="API_Access">
-                                                <label class="form-check-label" for="API_Access">
-                                                    API Access
-                                                </label>
-                                                <span class="form-text text-muted font-12 mt-0">Enable/Disable access</span>
-                                            </div>
-                                        </div><!--end card-body-->
-                                    </div><!--end card-->
+                                    
                                 </div> <!-- end col -->
                             </div><!--end row-->
                         </div><!--end tab-pane-->
@@ -1204,6 +1108,7 @@
             var newpassErr = document.getElementById("newpasserr");
             var renewpassErr = document.getElementById("renewpasserr");
 
+            var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
 
             // Check the email field
             if (oldpassInput == "") {
@@ -1215,9 +1120,9 @@
             }
 
             // Check the password field
-            if (passwordInput.value == "") {
+            if (passwordInput.value == "" || !passwordRegex.test(passwordInput)) {
                 isFormValid = false;
-                newpassErr.innerHTML = "Pass is invalid (Ex: A1a@aa)"
+                newpassErr.innerHTML = "Invalid, min 6 characters, upper, lower, number, special(Ex: A1a@aa)"
                 passwordInput.classList.add("invalid");
             } else {
                 passwordInput.classList.remove("invalid");

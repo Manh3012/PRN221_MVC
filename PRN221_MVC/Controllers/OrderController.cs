@@ -1,10 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+
+﻿using DAL.Repositories.Interface;
+﻿using DAL.Entities;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using BAL.Services.Implements;
+using DAL;
+using Microsoft.AspNetCore.Identity;
+using DAL.Entities;
 
 namespace PRN221_MVC.Controllers
 {
     public class OrderController : Controller
     {
+        private readonly IOrdersService _ordersService;
+        private UserManager<User> _userManager;
+
+        FRMDbContext context = new FRMDbContext();
+
+        public OrderController(IOrdersService ordersService, UserManager<User> userManager)
+        {
+            _ordersService = ordersService;
+            _userManager = userManager;
+        }
         // GET: OrderController
         public ActionResult Index()
         {
@@ -12,7 +30,34 @@ namespace PRN221_MVC.Controllers
         }
         public IActionResult WishList()
         {
-            return View();
+            var session = HttpContext.Session;
+
+            // Retrieve the wishlist from session state
+            var wishlistJson = session.GetString("Wishlist");
+            var listProduct = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
+
+            // Pass the wishlist to the view
+            return View(listProduct);
+        }
+        [HttpPost]
+        public IActionResult RemoveFromWishList(int id)
+        {
+            // Retrieve the current wishlist from session state
+            var wishlistJson = HttpContext.Session.GetString("Wishlist");
+            var wishlist = !string.IsNullOrEmpty(wishlistJson) ? JsonConvert.DeserializeObject<List<Product>>(wishlistJson) : new List<Product>();
+
+            // Remove the product with the specified ID from the wishlist
+            var productToRemove = wishlist.FirstOrDefault(p => p.ID == id);
+            if (productToRemove != null)
+            {
+                wishlist.Remove(productToRemove);
+
+                // Store the updated wishlist back in session state
+                HttpContext.Session.SetString("Wishlist", JsonConvert.SerializeObject(wishlist));
+            }
+
+            // Redirect back to the wishlist page
+            return RedirectToAction("WishList");
         }
 
         // GET: OrderController/Details/5
@@ -26,6 +71,20 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+
+        public async Task<ActionResult> OrderList(string id)
+        {
+            var user = context.Users.FirstOrDefault(x => x.Email == id);
+            var getList = _ordersService.GetOrdersById(Guid.Parse(user.Id));
+            if (getList != null)
+            {
+                return View(model: getList);
+            }
+            else
+            {
+                return View();
+        }
+    }
 
         // POST: OrderController/Create
         [HttpPost]
@@ -85,3 +144,4 @@ namespace PRN221_MVC.Controllers
         }
     }
 }
+
