@@ -13,7 +13,7 @@
                         <div id="slideshow0" class="slideshow slider-for">
                             <div class="">
                                 <div class="slideimg">
-                                    <a href="indexedcd.html?route=product/product&amp;path=57&amp;product_id=49"><img src="~/client/image/cache/catalog/slider/slider-1-1920x650.jpg" alt="iPhone 6" class="img-responsive center-block" /></a>
+                                    <img src="~/client/image/cache/catalog/slider/slider-1-1920x650.jpg" alt="iPhone 6" class="img-responsive center-block" />
                                 </div>
                                 <div class="slidertext">
                                     <div class="slideff">
@@ -22,7 +22,7 @@
                                             <h1>Discover new amazing grocery deals</h1>
                                             <p>The most healthy organic food is safe for health. </p>
 
-                                            <a href="indexedcd.html?route=product/product&amp;path=57&amp;product_id=49" class="btn btn-primary">Shop now</a>
+                                          
                                         </div>
                                     </div>
                                 </div>
@@ -38,7 +38,7 @@
                                             <h1>Organic fresh fruits for your health</h1>
                                             <p>Reach For Healthier You With Organic Fresh Foods Our Health Know Your Farmer Know Your Food.</p>
 
-                                            <a href="#" class="btn btn-primary">Shop now</a>
+                                          
                                         </div>
                                     </div>
                                 </div>
@@ -113,69 +113,21 @@
                                     <div class="product-layout col-xs-12 cless">
                                         <div class="product-thumb transition">
                                             <div class="image">
-                                                        <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" alt="Organic Cold Pressed Sunflower Cooking Oil" title="Organic Cold Pressed Sunflower Cooking Oil" class="img-responsive center-block" /></a>
+                                                        <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" width="200px" height="200px" alt="Organic Cold Pressed Sunflower Cooking Oil" title="Organic Cold Pressed Sunflower Cooking Oil" class="img-responsive center-block" /></a>
                                                 <!-- Images Start -->
                                                         <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" class="img-responsive second-img" alt="hover image" /></a>                                           
                                                 <!-- End -->
                                             </div>
 
                                             <div class="caption text-left">
-                                                <h4 class="protitle"><a href="indexbb02.html?route=product/product&amp;product_id=42">@product.Name</a></h4>
+                                                        <h4 class="protitle"><a href="@Url.ActionLink("Details","Product",new { id = product.ID })">@product.Name</a></h4>
                                                 <div class="webi-main">
                                                     <input type="hidden" name="product_id" value="42" />
-                                                    <div class="form-group required  checkbox_input">
-                                                        <label class="control-label">weight</label>
-                                                        <div id="input-option223">
-                                                            <div class="checkbox">
-                                                                <label class="size-option">
-                                                                    <input class="webi-option-click" type="checkbox" name="option[223][]" value="8" data-rawPrice=12 />
-                                                                    <span>1kg</span>
-                                                                </label>
-                                                            </div>
-                                                            <div class="checkbox">
-                                                                <label class="size-option">
-                                                                    <input class="webi-option-click" type="checkbox" name="option[223][]" value="9" data-rawPrice=24 />
-                                                                    <span>2kg</span>
-                                                                </label>
-                                                            </div>
-                                                            <div class="checkbox">
-                                                                <label class="size-option">
-                                                                    <input class="webi-option-click" type="checkbox" name="option[223][]" value="10" data-rawPrice=36 />
-                                                                    <span>3kg</span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
 
                                                 </div>
 
-                                                <div class="rating comments_note wb-list-product-reviews">
-                                                    <span class="or-rate">
-                                                        <span class="fa fa-stack">
-                                                            <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
-                                                        </span>
-
-                                                        <span class="fa fa-stack">
-                                                            <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
-                                                        </span>
-
-                                                        <span class="fa fa-stack">
-                                                            <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
-                                                        </span>
-
-                                                        <span class="fa fa-stack">
-                                                            <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
-                                                        </span>
-
-                                                        <span class="fa fa-stack">
-                                                            <i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i>
-                                                        </span>
-
-                                                    </span>
-
-                                                </div>
                                                 <p class="price">
-                                                    <span data-update='price-42' class="price">@product.Price</span>
+                                                    <span data-update='price-42' class="price">$@product.Price </span>
 
                                                 </p>
 

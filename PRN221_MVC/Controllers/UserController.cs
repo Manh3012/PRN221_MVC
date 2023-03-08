@@ -31,9 +31,14 @@ namespace PRN221_MVC.Controllers {
 
             HttpContext.Session.Remove("UserInfo.Session");
             HttpContext.Session.Remove("user");
+
             Response.Cookies.Delete("UserInfo.Session");
             ISession session = HttpContext.Session;
             session.Remove(".AdventureWorks.Session");
+            session.Remove("UserInfo.Session");
+            session.Remove("user");
+
+
             session.Clear();
 
             return RedirectToAction("Index", "Home");

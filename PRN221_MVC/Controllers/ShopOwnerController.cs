@@ -21,7 +21,7 @@ namespace PRN221_MVC.Controllers {
             var totalWeek = ordersService.GetTotalOrdersWeek();
             var total30Days = ordersService.GetTotalOrderLastThirtyDays();
             var countOrders30Days = ordersService.CountOrderLastThirtyDays();
-            var monthLySalesData = ordersService.GetMonthlySalesData(2022);
+            var monthLySalesData = ordersService.GetMonthlySalesData(2023);
             var topSellingProductByMonth = ordersService.GetTopSellingProductsByMonth();
             var topSellingProductByWeek = ordersService.GetTopSellingProductsByWeek();
             var orderValuesInEachMonth = ordersService.GetOrderValuesInEachMonth();
