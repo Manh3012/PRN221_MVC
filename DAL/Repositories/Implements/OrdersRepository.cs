@@ -3,11 +3,11 @@ using System.Linq;
 using System.Text;
 using DAL.Entities;
 using DAL.Infacstucture;
+using System.Globalization;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DAL.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
 
 namespace DAL.Repositories.Implements
 {
@@ -169,10 +169,16 @@ namespace DAL.Repositories.Implements
                         .FirstOrDefault(o => o.ID == id);
             return order;
         }
-
+        
         public Orders SaveOrder(Orders orders)
         {
             return _dbSet.Add(orders).Entity;
+        }
+        //Get all orders from a user
+        public List<Orders> GetOrdersById(Guid id)
+        {
+            var orders = _dbContext.Orders.Where(x => x.UserId == id.ToString());
+            return orders.ToList();
         }
     }
 }

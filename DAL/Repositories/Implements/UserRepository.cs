@@ -33,6 +33,11 @@ namespace DAL.Repositories.Implements
         public async Task<User?> GetUserByEmail(string email)
         {
             return await _dbSet.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
+            
+        public async Task<User> GetUserbyUserEmail(string userEmail)
+        {
+            var user = await _dbContext.Users.SingleOrDefaultAsync(u => u.Email == userEmail);
+            return user;
         }
     }
 }

@@ -124,7 +124,7 @@
                 <li class="dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="#" role="button"
                        aria-haspopup="false" aria-expanded="false">
-                        <span class="ms-1 nav-user-name hidden-sm">Nick</span>
+                        <span class="ms-1 nav-user-name hidden-sm">@Accessor.HttpContext.Session.GetString("Email")</span>
                         <img src="~/admin/assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -165,16 +165,6 @@
                                     <li class="breadcrumb-item"><a href="javascript:void(0);">Dastone</a></li>
                                     <li class="breadcrumb-item active">Dashboard</li>
                                 </ol>
-                            </div><!--end col-->
-                            <div class="col-auto align-self-center">
-                                <a href="#" class="btn btn-sm btn-outline-primary" id="Dash_Date">
-                                    <span class="ay-name" id="Day_Name">Today:</span>&nbsp;
-                                    <span class="" id="Select_date">Jan 11</span>
-                                    <i data-feather="calendar" class="align-self-center icon-xs ms-1"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-outline-primary">
-                                    <i data-feather="download" class="align-self-center icon-xs"></i>
-                                </a>
                             </div><!--end col-->
                         </div><!--end row-->
                     </div><!--end page-title-box-->
@@ -335,7 +325,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="media">
-                                                                <img src="@item.Product.imgPath" height="30" class="me-3 align-self-center rounded" alt="...">
+                                                                <img src="@Url.Content(item.Product.imgPath)" height="30" class="me-3 align-self-center rounded" alt="...">
                                                                 <div class="media-body align-self-center">
                                                                     <h6 class="m-0">@item.Product.Name</h6>
                                                                     <a href="#" class="font-12 text-primary">ID: @item.Product.ID</a>
@@ -398,7 +388,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="media">
-                                                                <img src="@item.Product.imgPath" height="30" class="me-3 align-self-center rounded" alt="...">
+                                                                <img src="@Url.Content(item.Product.imgPath)" height="30" class="me-3 align-self-center rounded" alt="...">
                                                                 <div class="media-body align-self-center">
                                                                     <h6 class="m-0">@item.Product.Name</h6>
                                                                     <a href="#" class="font-12 text-primary">ID: @item.Product.ID</a>

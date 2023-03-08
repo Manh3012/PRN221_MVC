@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DAL.Repositories.Interface;
 using System.Collections.Generic;
 using DAL.Entities;
+using DAL;
 
 namespace BAL.Services.Implements
 {
@@ -113,6 +114,12 @@ namespace BAL.Services.Implements
         public Orders GetOrderById(Guid id)
         {
             return _ordersRepository.GetOrderById(id);
+        }
+
+        //Get all orders from a user
+        public List<Orders> GetOrdersById(Guid id)
+        {
+            return _ordersRepository.GetOrdersById(id);
         }
     }
 }

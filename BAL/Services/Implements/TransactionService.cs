@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using DAL.Infacstucture;
-using System.Threading.Tasks;
+﻿using DAL.Infacstucture;
 using DAL.Repositories.Interface;
 using System.Collections.Generic;
 using DAL.Entities;

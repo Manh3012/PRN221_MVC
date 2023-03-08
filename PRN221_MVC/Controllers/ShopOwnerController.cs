@@ -1,37 +1,33 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using BAL;
-using DAL.Entities;
+﻿using DAL.Entities;
 using DAL.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
-namespace PRN221_MVC.Controllers
-{
-    public class ShopOwnerController : Controller
-    {
+namespace PRN221_MVC.Controllers {
+    public class ShopOwnerController : Controller {
         private UserManager<User> _userManager;
         private readonly IOrdersService ordersService;
-        public ShopOwnerController(IOrdersService ordersService, UserManager<User> userManager)
-        {
+        public ShopOwnerController(IOrdersService ordersService, UserManager<User> userManager) {
             this.ordersService = ordersService;
             _userManager = userManager;
         }
 
         // GET: ShopOwnerController
-        public ActionResult IndexShopOwner()
-        {
+        public ActionResult IndexShopOwner() {
+            if (HttpContext.Session.GetString("Email") == null) {
+                return RedirectToAction("Login", "Admin");
+            }
             var totalToday = ordersService.GetTotalOrderToday();
             var totalWeek = ordersService.GetTotalOrdersWeek();
             var total30Days = ordersService.GetTotalOrderLastThirtyDays();
             var countOrders30Days = ordersService.CountOrderLastThirtyDays();
-            var monthLySalesData = ordersService.GetMonthlySalesData(2022);
+            var monthLySalesData = ordersService.GetMonthlySalesData(2023);
             var topSellingProductByMonth = ordersService.GetTopSellingProductsByMonth();
             var topSellingProductByWeek = ordersService.GetTopSellingProductsByWeek();
             var orderValuesInEachMonth = ordersService.GetOrderValuesInEachMonth();
             var salesDataInEachMonth = ordersService.GetSalesDataMonthly(2023);
 
-            foreach (var item in orderValuesInEachMonth)
-            {
+            foreach (var item in orderValuesInEachMonth) {
                 Console.WriteLine("Month | Total Amount | Total Quantity");
 
                 Console.WriteLine(item.Key);
@@ -57,14 +53,16 @@ namespace PRN221_MVC.Controllers
 
             ViewBag.SalesDataInEachMonth = salesDataInEachMonth;
 
-            ViewBag.Email = ViewBag.Email;
-
             return View();
-            
+
         }
 
-        public async Task<ActionResult> ShopOwnerProfile()
-        {
+        public ActionResult LogOutShopOwner() {
+            HttpContext.Session.Remove("Email");
+            return RedirectToAction("Login", "Admin");
+        }
+
+        public async Task<ActionResult> ShopOwnerProfile() {
             string? email = HttpContext.Session.GetString("Email");
             User appUser = await _userManager.FindByEmailAsync(email);
             Console.WriteLine(appUser.Email);
@@ -72,8 +70,7 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        public ActionResult OrderHistory()
-        {
+        public ActionResult OrderHistory() {
 
             var orders = ordersService.GetOrders();
 
@@ -83,13 +80,11 @@ namespace PRN221_MVC.Controllers
             return View();
         }
 
-        public ActionResult OrderDetails(Guid id)
-        {
+        public ActionResult OrderDetails(Guid id) {
             var orderDetails = ordersService.GetOrderDetailsByOrderId(id);
             var order = ordersService.GetOrderById(id);
             float subtotals = 0;
-            foreach (var item in orderDetails)
-            {
+            foreach (var item in orderDetails) {
                 subtotals += +item.Product.Price * item.Quantity;
             }
 
@@ -101,70 +96,57 @@ namespace PRN221_MVC.Controllers
         }
 
         // GET: ShopOwnerController/Details/5
-        public ActionResult Details(int id)
-        {
+        public ActionResult Details(int id) {
             return View();
         }
 
         // GET: ShopOwnerController/Create
-        public ActionResult Create()
-        {
+        public ActionResult Create() {
             return View();
         }
 
         // POST: ShopOwnerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
+        public ActionResult Create(IFormCollection collection) {
+            try {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
+            catch {
                 return View();
             }
         }
 
         // GET: ShopOwnerController/Edit/5
-        public ActionResult Edit(int id)
-        {
+        public ActionResult Edit(int id) {
             return View();
         }
 
         // POST: ShopOwnerController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
+        public ActionResult Edit(int id, IFormCollection collection) {
+            try {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
+            catch {
                 return View();
             }
         }
 
         // GET: ShopOwnerController/Delete/5
-        public ActionResult Delete(int id)
-        {
+        public ActionResult Delete(int id) {
             return View();
         }
 
         // POST: ShopOwnerController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
+        public ActionResult Delete(int id, IFormCollection collection) {
+            try {
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
+            catch {
                 return View();
             }
         }
