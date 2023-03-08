@@ -81,6 +81,25 @@ namespace PRN221_MVC.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            // Remove session cookie of user login info
+
+            HttpContext.Session.Remove("UserInfo.Session");
+            HttpContext.Session.Remove("user");
+
+            Response.Cookies.Delete("UserInfo.Session");
+            ISession session = HttpContext.Session;
+            session.Remove(".AdventureWorks.Session");
+            session.Remove("UserInfo.Session");
+            session.Remove("user");
+
+
+            session.Clear();
+
+            return RedirectToAction("Login");
+        }
         [HttpPost]
         public async Task<ActionResult> AsyncLogin(LoginUserViewModel login)
         {
