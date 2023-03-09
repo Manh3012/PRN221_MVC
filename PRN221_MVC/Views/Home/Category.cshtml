@@ -291,6 +291,16 @@
                                                                     // Reload the page after the popup is closed
                                                                     location.reload();
                                                                 });
+                                                            } else {
+                                                                // Handle error response
+                                                                response.json().then(function (data) {
+                                                                    var errorMessages = Object.values(data.errors).join('<br>');
+                                                                    Swal.fire({
+                                                                        icon: 'error',
+                                                                        title: 'Error',
+                                                                        html: errorMessages
+                                                                    });
+                                                                });
                                                             }
                                                         });
                                                 }

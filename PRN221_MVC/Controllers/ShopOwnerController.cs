@@ -1,12 +1,16 @@
-﻿using DAL.Entities;
+﻿using DAL;
+using BAL.Model;
+using DAL.Entities;
+using Microsoft.AspNetCore.Mvc;
 using DAL.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace PRN221_MVC.Controllers {
     public class ShopOwnerController : Controller {
         private UserManager<User> _userManager;
         private readonly IOrdersService ordersService;
+        FRMDbContext context=new FRMDbContext();
         public ShopOwnerController(IOrdersService ordersService, UserManager<User> userManager) {
             this.ordersService = ordersService;
             _userManager = userManager;
@@ -56,6 +60,101 @@ namespace PRN221_MVC.Controllers {
             return View();
 
         }
+        [HttpGet]
+
+        public async Task<ActionResult> ProductList()
+        {
+            var productList = await context.Product.Include(x => x.Category).ToListAsync();
+            return View(productList);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateProduct()
+        {
+            var category = await context.Category.ToListAsync();
+            ViewBag.ErrorMessage = "A product with this name already exists.";
+            ViewBag.Category = category;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct(CreateProductModel product)
+        {
+            ViewBag.Category = context.Category.ToList();
+
+            if (context.Product.Any(p => p.Name == product.Name))
+            {
+                ModelState.AddModelError("Name", "A product with this name already exists.");
+                ViewBag.ErrorMessage = "A product with this name already exists.";
+                return View();
+            }
+            if (ModelState.IsValid)
+            {
+
+                Category category = context.Category.FirstOrDefault(x => x.ID == product.CategoryID);
+                var products = new Product()
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    imgPath = "~/client/image/cache/catalog/product/" + product.imgPath,
+                    isAvailable = product.isAvailable,
+                    isDeleted = product.isDeleted,
+                    Category = category,
+
+                };
+                await context.Product.AddAsync(products);
+                await context.SaveChangesAsync();
+                return RedirectToAction("CreateProduct");
+            }
+            return View(product);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ProductDetail(int id)
+        {
+            ViewBag.CategorySelective = context.Category.ToList();
+
+            var productDetail = await context.Product.Include(x => x.Category).FirstOrDefaultAsync(x => x.ID == id);
+            return View(productDetail);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ProductDetail(Product product)
+        {
+
+            ViewBag.CategorySelective = context.Category.ToList();
+
+            var productDetail = await context.Product.FindAsync(product.ID);
+            if (productDetail != null)
+            {
+                productDetail.Name = product.Name;
+                productDetail.Price = product.Price;
+                productDetail.imgPath = "~/client/image/cache/catalog/product/" +product.imgPath;
+                productDetail.isDeleted = product.isDeleted;
+                productDetail.isAvailable = product.isAvailable;
+                var category = await context.Category.FindAsync(product.Category.ID);
+                if (category != null)
+                {
+                    productDetail.Category = category;
+                }
+                await context.SaveChangesAsync();
+            }
+            return RedirectToAction("ProductList");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Delete(Product product)
+        {
+            var productdetail = await context.Product.FindAsync(product.ID);
+            if (productdetail != null)
+            {
+                productdetail.isDeleted = true;
+                context.Product.Update(productdetail);
+                await context.SaveChangesAsync();
+                return RedirectToAction("ProductList");
+            }
+            else { return RedirectToAction("ProductList"); }
+        }
+
+
 
         public ActionResult LogOutShopOwner() {
             HttpContext.Session.Remove("Email");

@@ -1,11 +1,13 @@
-﻿using BAL.Model;
-using BAL.Services.Implements;
-using DAL;
-using DAL.Entities;
-using DAL.Repositories.Interface;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using DAL;
+using BAL.Model;
+using PagedList;
 using System.Data;
+using DAL.Entities;
+using BAL.Services.Implements;
+using System.Drawing.Printing;
+using Microsoft.AspNetCore.Mvc;
+using DAL.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace PRN221_MVC.Controllers {
     public class ProductController : Controller {
@@ -38,85 +40,7 @@ namespace PRN221_MVC.Controllers {
         [BindProperty]
         public Product Product { get; set; }
 
-        [HttpGet]
-        public async Task<IActionResult> ViewProduct(int id) {
-            ViewBag.CategorySelective = _dbContext.Category.ToList();
-
-            var productDetail = await _dbContext.Product.Include(x => x.Category).FirstOrDefaultAsync(x => x.ID == id);
-            return View(productDetail);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> ViewProduct(Product product) {
-
-            ViewBag.CategorySelective = _dbContext.Category.ToList();
-
-            var productDetail = await _dbContext.Product.FindAsync(product.ID);
-            if (productDetail != null) {
-                productDetail.Name = product.Name;
-                productDetail.Price = product.Price;
-                productDetail.imgPath = product.imgPath;
-                productDetail.isDeleted = product.isDeleted;
-                productDetail.isAvailable = product.isAvailable;
-                var category = await _dbContext.Category.FindAsync(product.Category.ID);
-                if (category != null) {
-                    productDetail.Category = category;
-                }
-                await _dbContext.SaveChangesAsync();
-            }
-            return RedirectToAction("ListProduct");
-        }
-        [HttpGet]
-        public async Task<IActionResult> Delete(Product product) {
-            var productdetail = await _dbContext.Product.FindAsync(product.ID);
-            if (productdetail != null) {
-                productdetail.isDeleted = true;
-                _dbContext.Product.Update(productdetail);
-                await _dbContext.SaveChangesAsync();
-                return RedirectToAction("ListProduct");
-            }
-            else { return RedirectToAction("ListProduct"); }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ListProduct() {
-
-            var productList = await _dbContext.Product.Include(x => x.Category).ToListAsync();
-            return View(productList);
-        }
-
-        [HttpGet]
-        public IActionResult CreateProduct() {
-            ViewBag.CategorySelect = _dbContext.Category.ToList();
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> CreateProduct(CreateProductModel product) {
-            ViewBag.CategorySelect = _dbContext.Category.ToList();
-
-            if (_dbContext.Product.Any(p => p.Name == product.Name)) {
-                ModelState.AddModelError($"Name", "A product with this name already exists.");
-                return View(product);
-            }
-            if (ModelState.IsValid) {
-
-                Category category = _dbContext.Category.FirstOrDefault(x => x.ID == product.CategoryID);
-                var products = new Product() {
-                    Name = product.Name,
-                    Price = product.Price,
-                    imgPath = product.imgPath,
-                    isAvailable = product.isAvailable,
-                    isDeleted = product.isDeleted,
-                    Category = category,
-
-                };
-                await _dbContext.Product.AddAsync(products);
-                await _dbContext.SaveChangesAsync();
-                return RedirectToAction("CreateProduct");
-            }
-            return View(product);
-        }
+        
 
         public ActionResult SearchProduct(string? search) {
             List<Product> items = new List<Product>();
@@ -158,7 +82,6 @@ namespace PRN221_MVC.Controllers {
             List<Product> listProduct = _dbContext.Product.ToList();
             Category category = new Category();
             var cate = _dbContext.Category.FirstOrDefault(x => x.ID == id);
-
             if (id == 0) {
                 return NotFound();
             }
