@@ -202,36 +202,39 @@
                                     {
                                         foreach (var Data in Model)
                                         {
-                                            <tr>
-                                                <td>@Data.Name</td>
-                                                <td>@Data.DoB</td>
-                                                <td>@Data.Address</td>
-                                                <td>
-                                                    @if (Data.Gender.Equals("1"))
-                                                    {
-                                                        @Html.Raw("Male")
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.Raw("Female")
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @if (Data.isDeleted == false)
-                                                    {
-                                                        @Html.Raw("No")
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.Raw("Yes")
-                                                    }
-                                                </td>
-                                                <td>@Data.Orders</td>
-                                                <td>
-                                                    <a href="~/Admin/UserDetail?id=@Data.Id" class="btn btn-sm btn-outline-primary">View</a>
-                                            <a href="~/Admin/Delete?id=@Data.Id" class="btn btn-sm btn-outline-primary">Delete</a>
-                                                </td>
-                                            </tr>
+                                            if (Data.isDeleted == false)
+                                            {
+                                                <tr>
+                                                    <td>@Data.Name</td>
+                                                    <td>@Data.DoB</td>
+                                                    <td>@Data.Address</td>
+                                                    <td>
+                                                        @if (Data.Gender.Equals("1"))
+                                                        {
+                                                            @Html.Raw("Male")
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw("Female")
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (Data.isDeleted == false)
+                                                        {
+                                                            @Html.Raw("No")
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw("Yes")
+                                                        }
+                                                    </td>
+                                                    <td>@Data.Orders</td>
+                                                    <td>
+                                                        <a href="~/Admin/UserDetail?id=@Data.Id" class="btn btn-sm btn-outline-primary">View</a>
+                                                        <a href="~/Admin/Delete?id=@Data.Id" class="btn btn-sm btn-outline-primary">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            }
                                         }
                                     }
                                 }

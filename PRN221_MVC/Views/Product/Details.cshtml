@@ -1,8 +1,16 @@
-﻿@using DAL.Entities
+﻿@using DAL
 @model DAL.Entities.Product
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
+}
+@functions {
+    public string GetUserName(string userId)
+    {
+        FRMDbContext _dbContext = new FRMDbContext();
+        var user = _dbContext.Users.Where(x => x.Id == userId).FirstOrDefault();
+        return user.Name;
+    }
 }
 <div class="container">
     <div class="row">
@@ -152,26 +160,38 @@
                             </div>
                         </fieldset>
                     </form>
-                 @if (Model.Comments != null)
-                     {
-                      foreach(var comment in Model.Comments)
-                      {
-                            <div>@comment.UserId</div>
-                            <div>
-                                <form action="@Url.Action("Update","Comment")" method="post" autocomplete="off" enctype="multipart/form-data" class="form-horizontal">
+                            @if (Model.Comments != null)
+                            {
+                                foreach (var comment in Model.Comments)
+                                {
+                                    if (comment.isDeleted == false)
+                                    {
+                                <div>@GetUserName(comment.UserId)</div>
+                                <div>
+                                    <form action="@Url.Action("Update","Comment")" method="post" autocomplete="off" enctype="multipart/form-data" class="form-horizontal">
                                         <div class="form-group required">
                                             <div class="col-md-12 col-xs-12">
                                                 <input type="hidden" name="ID" value="@comment.ID" />
                                                 <input type="hidden" name="productId" value="@Model.ID" />
-                                            <input type="text" value="@comment.Content" name="content" id="input-name" class="form-control" />
+                                                <input type="text" value="@comment.Content" name="content" id="input-name" class="form-control" />
                                                 <input style="margin:10px 0px; background:orange;" class="btn btn-primary btn-lg" type="submit" value="Update" />
-                                            <a href="@Url.Action("DeleteComment","Product")" title="Delete" class="btn btn-danger cbt;" style="background:red;">Delete</a>
+                                                        @*<a href="@Url.Action("DeleteComment","Product")" title="Delete" class="btn btn-danger cbt;" style="background:red;">Delete</a>*@
+                                                <span id="confirmDeleteSpan_@comment.ID" style="display:none">
+                                                    <span>Are you sure you want to delete?</span>
+                                                    <a href="@Url.Action("DeleteComment","Comment", new{commentId = comment.ID, productId = comment.ProductId})" title="Delete" class="btn btn-danger cbt;" style="background:red;">Yes</a>
+                                                    <button type="button" class="btn btn-primary" onclick="confirmDelete('@comment.ID',false)">No</button>
+                                                </span>
+                                                <span id="deleteSpan_@comment.ID">
+                                                    <button type="button" style="background:red;" class="btn btn-primary btn-lg" onclick="confirmDelete('@comment.ID',true)">Delete</button>
+                                                </span>
+                                            </div>
                                         </div>
-                                        </div>
-                                </form>
-                            </div>
-                      }
-                     }
+                                    </form>
+                                </div>
+                                    }
+
+                                }
+                            }
             </div>
         </div>
 </div>

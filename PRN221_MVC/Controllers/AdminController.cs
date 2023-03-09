@@ -269,7 +269,8 @@ namespace PRN221_MVC.Controllers {
             var user = await _userService.GetById(id.ToString());
             if (user != null) {
                 var db = new FRMDbContext();
-                db.Users.Remove(user);
+                user.isDeleted = true;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("UserList");
             }
