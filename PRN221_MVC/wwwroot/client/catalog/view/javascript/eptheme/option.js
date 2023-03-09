@@ -35,7 +35,7 @@ $(document).ready(function() {
 	
 	$('.webi-cart').on('click', function() {
 		$.ajax({
-			url: 'index.php?route=checkout/cart/add',
+			url: '/Cart/Add',
 			type: 'post',
 			data: $(this).parent().parent().parent().find('input[type=\'text\'], input[type=\'hidden\'], input[type=\'radio\']:checked, input[type=\'checkbox\']:checked, select'),
 			dataType: 'json',
@@ -79,7 +79,8 @@ $(document).ready(function() {
 				}
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				//alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				alert("Unimplemented method. option.js");
 			}
 		});
 	});

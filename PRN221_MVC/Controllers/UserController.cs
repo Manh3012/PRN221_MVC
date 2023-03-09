@@ -31,9 +31,14 @@ namespace PRN221_MVC.Controllers {
 
             HttpContext.Session.Remove("UserInfo.Session");
             HttpContext.Session.Remove("user");
+
             Response.Cookies.Delete("UserInfo.Session");
             ISession session = HttpContext.Session;
             session.Remove(".AdventureWorks.Session");
+            session.Remove("UserInfo.Session");
+            session.Remove("user");
+
+
             session.Clear();
 
             return RedirectToAction("Index", "Home");
@@ -309,13 +314,17 @@ namespace PRN221_MVC.Controllers {
             return View("/Views/Client/User/ResetPasswordConfirmation.cshtml");
         }
 
-        //[AllowAnonymous]
-        //[Authorize(Roles = "Administrator,Customer")]
-        //[Authorize(Policy = "CustomerRole")]
+
         public async Task<IActionResult> Detail() {
             string email = HttpContext.Session.GetString("_Email");
+            if (email == null) {
+                return RedirectToAction("Login", "User");
+            }
             User user = await userManager.FindByEmailAsync(email);
-            bool isInRole = await userManager.IsInRoleAsync(user, "Customer");
+            bool isInRoleCustomer = await userManager.IsInRoleAsync(user, "Customer");
+            if (!isInRoleCustomer) {
+                return View("/Views/Shared/Error401.cshtml", new ErrorViewModel { RequestId = "401" });
+            }
             EditUserViewModel editUser = new EditUserViewModel {
                 Id = user.Id,
                 Email = user.Email,
@@ -332,7 +341,14 @@ namespace PRN221_MVC.Controllers {
         [AllowAnonymous]
         public async Task<IActionResult> Edit() {
             string email = HttpContext.Session.GetString("_Email");
+            if (email == null) {
+                return RedirectToAction("Login", "User");
+            }
             User user = await userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await userManager.IsInRoleAsync(user, "Customer");
+            if (!isInRoleCustomer) {
+                return View("/Views/Shared/Error401.cshtml", new ErrorViewModel { RequestId = "401" });
+            }
             EditUserViewModel editUser = new EditUserViewModel {
                 Id = user.Id,
                 Email = user.Email,
@@ -350,10 +366,14 @@ namespace PRN221_MVC.Controllers {
         public async Task<IActionResult> Edit(EditUserViewModel editUser) {
             if (!ModelState.IsValid)
                 return View("/Views/Client/User/Edit.cshtml", editUser);
-            User user = await userManager.FindByEmailAsync(editUser.Email);
-            if (user == null) {
-                ModelState.AddModelError("", "User Not Found");
-                return RedirectToAction("Edit", "User");
+            string email = HttpContext.Session.GetString("_Email");
+            if (email == null) {
+                return RedirectToAction("Login", "User");
+            }
+            User user = await userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await userManager.IsInRoleAsync(user, "Customer");
+            if (!isInRoleCustomer) {
+                return View("/Views/Shared/Error401.cshtml", new ErrorViewModel { RequestId = "401" });
             }
             else {
                 user.Name = editUser.Name;

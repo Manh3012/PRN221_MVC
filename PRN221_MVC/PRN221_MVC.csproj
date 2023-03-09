@@ -522,6 +522,9 @@
     <None Include="wwwroot\client\image\catalog\icon\thumb-up-button.png" />
     <None Include="wwwroot\client\image\catalog\loader.gif" />
     <None Include="wwwroot\client\image\catalog\logo.png" />
+	<None Include="wwwroot\client\custom\javascript\cart.js" />
+	<None Include="wwwroot\client\custom\css\cart.css" />
+	<None Include="wwwroot\client\custom\javascript\checkout.js" />
   </ItemGroup>
 
   <ItemGroup>

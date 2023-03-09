@@ -22,6 +22,8 @@ namespace DAL {
         public DbSet<Transaction> TransactionShared { get; set; }
         public DbSet<Comment> Comment { get; set; }
 
+        public DbSet<Cart> Cart { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
                 IConfiguration config = new ConfigurationBuilder()
@@ -48,6 +50,10 @@ namespace DAL {
             #endregion
             #region Transaction
             modelBuilder.Entity<Transaction>().Property(x => x.ID).HasDefaultValueSql("NEWID()");
+            #endregion
+
+            #region Cart
+            modelBuilder.Entity<Cart>().Property(x => x.ID).HasDefaultValueSql("NEWID()");
             #endregion
 
             //configuration for relationship entitu

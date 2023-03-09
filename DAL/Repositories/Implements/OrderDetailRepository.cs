@@ -16,5 +16,10 @@ namespace DAL.Repositories.Implements
         {
             _dbContext = dbFactory.Init();
         }
+
+        public void SaveList(List<OrderDetail> orderDetails)
+        {
+            _dbSet.AddRange(orderDetails);
+        }
     }
 }
