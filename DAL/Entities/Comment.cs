@@ -7,5 +7,7 @@ namespace DAL.Entities {
         [Required]
         public string Content { get; set; }
         public bool isDeleted { get; set; }
+        public string UserId { get; set; }
+        public long ProductId { get; set; }
     }
 }
