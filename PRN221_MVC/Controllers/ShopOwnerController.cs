@@ -1,6 +1,7 @@
 ﻿using DAL;
 using BAL.Model;
 using DAL.Entities;
+using PRN221_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using DAL.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
@@ -64,6 +65,18 @@ namespace PRN221_MVC.Controllers {
 
         public async Task<ActionResult> ProductList()
         {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+
             var productList = await context.Product.Include(x => x.Category).ToListAsync();
             return View(productList);
         }
@@ -71,6 +84,17 @@ namespace PRN221_MVC.Controllers {
         [HttpGet]
         public async Task<IActionResult> CreateProduct()
         {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var category = await context.Category.ToListAsync();
             ViewBag.ErrorMessage = "A product with this name already exists.";
             ViewBag.Category = category;
@@ -79,6 +103,18 @@ namespace PRN221_MVC.Controllers {
         [HttpPost]
         public async Task<IActionResult> CreateProduct(CreateProductModel product)
         {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login","Admin");
+            }
+
             ViewBag.Category = context.Category.ToList();
 
             if (context.Product.Any(p => p.Name == product.Name))
@@ -110,6 +146,17 @@ namespace PRN221_MVC.Controllers {
         [HttpGet]
         public async Task<IActionResult> ProductDetail(int id)
         {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             ViewBag.CategorySelective = context.Category.ToList();
 
             var productDetail = await context.Product.Include(x => x.Category).FirstOrDefaultAsync(x => x.ID == id);
@@ -120,6 +167,17 @@ namespace PRN221_MVC.Controllers {
         [HttpPost]
         public async Task<IActionResult> ProductDetail(Product product)
         {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
 
             ViewBag.CategorySelective = context.Category.ToList();
 
@@ -143,6 +201,17 @@ namespace PRN221_MVC.Controllers {
         [HttpGet]
         public async Task<IActionResult> Delete(Product product)
         {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var productdetail = await context.Product.FindAsync(product.ID);
             if (productdetail != null)
             {
