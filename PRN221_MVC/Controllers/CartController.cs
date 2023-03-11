@@ -43,9 +43,15 @@ namespace PRN221_MVC.Controllers
         [HttpPost]
         public JsonResult Add()
         {
+            User? user = null;
             if (HttpContext.Session.GetString("_Email") == null)
             {
                 return Json(new { Status = "Error", Message = "Please login again to continue." });
+            }
+            else
+            {
+                string email = HttpContext.Session.GetString("_Email")!;
+                user = UserService.GetUserByEmail(email);
             }
             MemoryStream stream = new MemoryStream();
             Request.Body.CopyTo(stream);
@@ -55,31 +61,22 @@ namespace PRN221_MVC.Controllers
                 string requestBody = reader.ReadToEnd();
                 if (requestBody.Length > 0)
                 {
-                    string email = HttpContext.Session.GetString("_Email") ?? "anhthuyn2412@gmail.com";
                     var cartModel = JsonConvert.DeserializeObject<CartViewModel>(requestBody);
                     Product product = ProductService.GetProductById(cartModel.ProductID);
-                    User user = UserService.GetUserByEmail(cartModel.UserEmail);
-                    if (user != null)
+                    Cart cart = CartService.GetCartByProductAndUser(product, user);
+                    if (cart != null)
                     {
-                        Cart cart = CartService.GetCartByProductAndUser(product, user);
-                        if (cart != null)
-                        {
-                            CartService.UpdateQuantity(cart, cart.Quantity + cartModel.Quantity);
-                        }
-                        else
-                        {
-                            cart = new Cart();
-                            cart.Quantity = cartModel.Quantity;
-                            cart.User = user;
-                            cart.Product = product;
-                            CartService.AddItem(cart);
-                        }
-                        return Json(new { Status = "Success", Message = product.Name + " has been added to your cart" });
+                        CartService.UpdateQuantity(cart, cart.Quantity + cartModel.Quantity);
                     }
                     else
                     {
-                        return Json(new {Status="Error", Message="You need to login first to use this function."});
+                        cart = new Cart();
+                        cart.Quantity = cartModel.Quantity;
+                        cart.User = user;
+                        cart.Product = product;
+                        CartService.AddItem(cart);
                     }
+                    return Json(new { Status = "Success", Message = product.Name + " has been added to your cart" });
                 }
             }
             return Json(new { Status = "Error", Message = "Something went wrong. Please try again" });
@@ -88,23 +85,32 @@ namespace PRN221_MVC.Controllers
         [HttpGet]
         public JsonResult InCart()
         {
+            User? user = null;
             if (HttpContext.Session.GetString("_Email") == null)
             {
                 return Json(new { Status = "Error", Message = "Please login again to continue." });
             }
-            User user = new User();
-            user.Email = HttpContext.Session.GetString("_Email");
-            Console.WriteLine(HttpContext.User.ToString());
-            var carts = CartService.GetCartList(user);
+            else
+            {
+                string email = HttpContext.Session.GetString("_Email")!;
+                user = UserService.GetUserByEmail(email);
+            }
+            var carts = CartService.GetCartList(user!);
             return Json(carts);
         }
 
         [HttpPost]
         public ActionResult Delete()
         {
+            User? user = null;
             if (HttpContext.Session.GetString("_Email") == null)
             {
                 return Json(new { Status = "Error", Message = "Please login again to continue." });
+            }
+            else
+            {
+                string email = HttpContext.Session.GetString("_Email")!;
+                user = UserService.GetUserByEmail(email);
             }
             MemoryStream stream = new MemoryStream();
             Request.Body.CopyTo(stream);
@@ -117,23 +123,26 @@ namespace PRN221_MVC.Controllers
                     //TODO - to be updated
                     try
                     {
-                        string email = HttpContext.Session.GetString("_Email") ?? "anhthuyn2412@gmail.com";
                         var cartModel = JsonConvert.DeserializeObject<CartViewModel>(requestBody);
-                        Product product = ProductService.GetProductById(cartModel.ProductID);
-                        User user = UserService.GetUserByEmail(cartModel.UserEmail);
                         if (cartModel != null)
                         {
+                            Product product = ProductService.GetProductById(cartModel.ProductID);
+                            if (product == null) { throw new Exception("Product not found. Please try again."); }
                             Cart cart = CartService.GetCartByProductAndUser(product, user);
                             if (cart != null)
                             {
                                 CartService.DeleteItem(cart);
                                 return Json(new { Status = "Success", Message = "Deleted successful" });
                             }
+                            else
+                            {
+                                throw new Exception("Cart item not found.Please try again later");
+                            }
                         }
                     }
-                    catch (Exception e )
+                    catch (Exception e)
                     {
-                        Console.WriteLine(e.Message);
+                        return Json(new { Status = "Error", e.Message });
                     }
                 }
             }
@@ -141,10 +150,17 @@ namespace PRN221_MVC.Controllers
         }
 
         [HttpPatch]
-        public ActionResult Update() {
+        public ActionResult Update()
+        {
+            User? user = null;
             if (HttpContext.Session.GetString("_Email") == null)
             {
                 return Json(new { Status = "Error", Message = "Please login again to continue." });
+            }
+            else
+            {
+                string email = HttpContext.Session.GetString("_Email")!;
+                user = UserService.GetUserByEmail(email);
             }
             MemoryStream stream = new MemoryStream();
             Request.Body.CopyTo(stream);
@@ -154,19 +170,28 @@ namespace PRN221_MVC.Controllers
                 string requestBody = reader.ReadToEnd();
                 if (requestBody.Length > 0)
                 {
-                    //TODO - to be updated
-                    string email = HttpContext.Session.GetString("_Email") ?? "anhthuyn2412@gmail.com";
-                    var cartModel = JsonConvert.DeserializeObject<CartViewModel>(requestBody);
-                    Product product = ProductService.GetProductById(cartModel.ProductID);
-                    User user = UserService.GetUserByEmail(cartModel.UserEmail);
-                    if (cartModel != null)
+                    try
                     {
-                        Cart cart = CartService.GetCartByProductAndUser(product, user);
-                        if (cart != null)
+                        var cartModel = JsonConvert.DeserializeObject<CartViewModel>(requestBody);
+                        if (cartModel != null)
                         {
-                            CartService.UpdateQuantity(cart, cartModel.Quantity);
-                            return Json(new { Status = "Success", Message = "Updated successful" });
+                            Product product = ProductService.GetProductById(cartModel.ProductID);
+                            if (product == null) { throw new Exception("Product not found. Please try again later"); }
+                            Cart cart = CartService.GetCartByProductAndUser(product, user);
+                            if (cart != null)
+                            {
+                                CartService.UpdateQuantity(cart, cartModel.Quantity);
+                                return Json(new { Status = "Success", Message = "Updated successful" });
+                            }
+                            else
+                            {
+                                throw new Exception("Cart item not found. Please try again later.");
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        return Json(new { Status = "Error", e.Message});
                     }
                 }
             }
