@@ -28,7 +28,7 @@
                     {
                         <div class="allcart">
                             <div class="cart-img">
-                                <a href="@Url.Action("Index", "Product", cart.Product.ID)"><img src="@cart.Product.imgPath.Replace("~", "")" height="150px" width="150px" alt="@cart.Product.Name" title="@cart.Product.Name" class="img-thumbnail" /></a>
+                                <a href="@Url.Action("Details", "Product", cart.Product.ID)"><img src="@cart.Product.imgPath.Replace("~", "")" height="150px" width="150px" alt="@cart.Product.Name" title="@cart.Product.Name" class="img-thumbnail" /></a>
                             </div>
                             <div class="cart-des">
                                 <a class="cart-des-name" href="@Url.Action("Index", "Product", cart.Product.ID)">@cart.Product.Name</a>
@@ -36,7 +36,7 @@
                                 <div class="input-group btn-block" style="max-width: 200px;">
                                     <input type="text" name="quantity" value="@cart.Quantity" size="1" class="form-control" id="quantity-item-cart-@cart.ID" />
                                     <span class="input-group-btn cartpsp">
-                                        <button type="button" data-toggle="tooltip" title="Update" class="btn btn-danger cbt" onclick="updateCart('@cart.ID', 'quantity-item-cart-@cart.ID')"><i class="fa fa-refresh"></i></button>
+                                        <button type="button" data-toggle="tooltip" title="Update" class="btn btn-danger cbt" onclick="updateCart('@cart.ID', 'quantity-item-cart-', true)"><i class="fa fa-refresh"></i></button>
                                         <button type="button" data-toggle="tooltip" title="Remove" class="btn btn-danger cbt" onclick="deleteItem('@cart.ID', true)"><i class="fa fa-times-circle"></i></button>
                                     </span>
                                 </div>
