@@ -156,8 +156,11 @@ namespace DAL.Repositories.Implements
 
         public List<OrderDetail> GetOrderDetailsByOrderId(Guid orderId)
         {
+
+            Orders order = GetOrderById(orderId);
+
             return _dbContext.OrderDetail
-                .Where(od => od.Order.ID == orderId)
+                .Where(od => od.Order == order)
                 .Include(od => od.Product)
                 .ToList();
         }

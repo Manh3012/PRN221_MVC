@@ -130,7 +130,7 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="@Url.Action("ShopOwnerProfile", "ShopOwner")"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
                         <div class="dropdown-divider mb-0"></div>
-                        <a class="dropdown-item" href="@Url.Action("Login", "Admin")"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
+                        <a class="dropdown-item" href="@Url.Action("Logout", "Admin")"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
                     </div>
                 </li>
             </ul><!--end topbar-nav-->
@@ -141,11 +141,8 @@
                         <i data-feather="menu" class="align-self-center topbar-icon"></i>
                     </button>
                 </li>
-                <li class="creat-btn">
-                    <div class="nav-link">
-                        <a class=" btn btn-sm btn-soft-primary" href="#" role="button"><i class="fas fa-plus me-2"></i>New Task</a>
-                    </div>
-                </li>
+                
+
             </ul>
         </nav>
         <!-- end navbar-->
@@ -259,7 +256,20 @@
                                 <div class="card-header">
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <h4 class="card-title">Earnings Reports</h4>
+                                            <h4 class="card-title">Earnings Reports
+                                                <form action="@Url.Action("IndexShopOwner", "ShopOwner")" method="get">
+                                                    <label class="mb-3" for="year">Select a year:</label>
+                                                    <select name="year" id="year" required class="select2 form-control mb-3 custom-select" style="width:fit-content; height:36px;">
+                                                        @for (int i = DateTime.Now.Year; i >= 2020; i--)
+                                                        {
+                                                            <option value="@i">@i</option>
+                                                        }
+                                                    </select>
+                                                    <button type="submit" class="btn btn-soft-primary btn-sm">Submit</button>
+                                                </form>
+
+                                            </h4>
+
                                         </div><!--end col-->
                                     </div>  <!--end row-->
                                 </div><!--end card-header-->
