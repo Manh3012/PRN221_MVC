@@ -18,15 +18,23 @@ namespace PRN221_MVC.Controllers {
         }
 
         // GET: ShopOwnerController
-        public ActionResult IndexShopOwner() {
-            if (HttpContext.Session.GetString("Email") == null) {
+        public async Task<ActionResult> IndexShopOwner(int year) {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
                 return RedirectToAction("Login", "Admin");
             }
             var totalToday = ordersService.GetTotalOrderToday();
             var totalWeek = ordersService.GetTotalOrdersWeek();
             var total30Days = ordersService.GetTotalOrderLastThirtyDays();
             var countOrders30Days = ordersService.CountOrderLastThirtyDays();
-            var monthLySalesData = ordersService.GetMonthlySalesData(2023);
+            var monthLySalesData = ordersService.GetMonthlySalesData(year: year);
             var topSellingProductByMonth = ordersService.GetTopSellingProductsByMonth();
             var topSellingProductByWeek = ordersService.GetTopSellingProductsByWeek();
             var orderValuesInEachMonth = ordersService.GetOrderValuesInEachMonth();
@@ -61,6 +69,7 @@ namespace PRN221_MVC.Controllers {
             return View();
 
         }
+
         [HttpGet]
 
         public async Task<ActionResult> ProductList()
@@ -186,7 +195,13 @@ namespace PRN221_MVC.Controllers {
             {
                 productDetail.Name = product.Name;
                 productDetail.Price = product.Price;
-                productDetail.imgPath = "~/client/image/cache/catalog/product/" +product.imgPath;
+                if (product.imgPath == null)
+                {
+                    productDetail.imgPath = productDetail.imgPath;
+                }else
+                {
+                    productDetail.imgPath = "~/client/image/cache/catalog/product/" + product.imgPath;
+                }
                 productDetail.isDeleted = product.isDeleted;
                 productDetail.isAvailable = product.isAvailable;
                 var category = await context.Category.FindAsync(product.Category.ID);
@@ -231,15 +246,36 @@ namespace PRN221_MVC.Controllers {
         }
 
         public async Task<ActionResult> ShopOwnerProfile() {
-            string? email = HttpContext.Session.GetString("Email");
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             User appUser = await _userManager.FindByEmailAsync(email);
             Console.WriteLine(appUser.Email);
             ViewBag.User = appUser;
             return View();
         }
 
-        public ActionResult OrderHistory() {
+        public async Task<ActionResult> OrderHistory() {
 
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var orders = ordersService.GetOrders();
 
 
@@ -248,7 +284,18 @@ namespace PRN221_MVC.Controllers {
             return View();
         }
 
-        public ActionResult OrderDetails(Guid id) {
+        public async Task<ActionResult> OrderDetails(Guid id) {
+            string email = HttpContext.Session.GetString("Email");
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
+            User user = await _userManager.FindByEmailAsync(email);
+            bool isInRoleCustomer = await _userManager.IsInRoleAsync(user, "ShopOwner");
+            if (!isInRoleCustomer)
+            {
+                return RedirectToAction("Login", "Admin");
+            }
             var orderDetails = ordersService.GetOrderDetailsByOrderId(id);
             var order = ordersService.GetOrderById(id);
             float subtotals = 0;
