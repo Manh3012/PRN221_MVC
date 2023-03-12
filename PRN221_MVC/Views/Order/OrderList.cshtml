@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "WishList";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
-    string[] table_header = new string[]{ "Order ID","Created Date", "Total Amount", "Status", "Action" };
+    string[] table_header = new string[]{ "Order ID","Created Date", "Total Amount", "Action" };
 }
 <div class="breadbg">
     <div class="container">
@@ -40,7 +40,6 @@
                                             <td>@Data.ID</td>
                                             <td>@Data.CreatedDate</td>
                                             <td>@Data.Total</td>
-                                            <td>@Data.isDeleted</td>
                                             <td class="text-center valign">
                                                 <a href="@Url.Action("Details","OrderDetail",new {id=Data.ID})" data-toggle="tooltip" title="View Order" class="btn btn-info"><i class="fa fa-shopping-cart"></i></a>
                                                 <a href="#" data-toggle="tooltip" title="Remove Order" class="btn btn-danger"><i class="fa fa-times"></i></a>
