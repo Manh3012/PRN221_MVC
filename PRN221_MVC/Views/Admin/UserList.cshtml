@@ -1,4 +1,5 @@
-﻿@model List<DAL.Entities.User>
+﻿ư@using DAL
+@model List<DAL.Entities.User>
 @{
     ViewData["Title"] = "UserList";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,7 +9,6 @@
     "Date Of Birth",
     "Address",
     "Gender",
-    "Deleted",
     "Orders",
     "Action"
     };
@@ -202,36 +202,44 @@
                                     {
                                         foreach (var Data in Model)
                                         {
-                                            <tr>
-                                                <td>@Data.Name</td>
-                                                <td>@Data.DoB</td>
-                                                <td>@Data.Address</td>
-                                                <td>
-                                                    @if (Data.Gender.Equals("1"))
-                                                    {
-                                                        @Html.Raw("Male")
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.Raw("Female")
-                                                    }
-                                                </td>
-                                                <td>
-                                                    @if (Data.isDeleted == false)
-                                                    {
-                                                        @Html.Raw("No")
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.Raw("Yes")
-                                                    }
-                                                </td>
-                                                <td>@Data.Orders</td>
-                                                <td>
-                                                    <a href="~/Admin/UserDetail?id=@Data.Id" class="btn btn-sm btn-outline-primary">View</a>
-                                            <a href="~/Admin/Delete?id=@Data.Id" class="btn btn-sm btn-outline-primary">Delete</a>
-                                                </td>
-                                            </tr>
+                                            if (Data.isDeleted == false)
+                                            {
+                                                <tr>
+                                                    <td>@Data.Name</td>
+                                                    <td>@Data.DoB</td>
+                                                    <td>@Data.Address</td>
+                                                    <td>@if (Data.Gender.Equals("F"))
+                                                        {
+                                                            @Html.Raw("Female")
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw("Male")
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (Data.Orders.Where(x=>x.UserId == Data.Id).Count() == 0)
+                                                        {
+                                                            @Html.Raw("This user doesn't have any order yet.")
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Raw("This user has " + Data.Orders.Where(x=>x.UserId == Data.Id).Count() + " order(s).")
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a href="@Url.Action("UserDetail","Admin",new{id=Data.Id})" class="btn btn-sm btn-outline-primary">View</a>
+                                                        <span id="confirmDeleteSpan_@Data.Id" style="display:none">
+                                                            <span>Are you sure you want to delete?</span>
+                                                            <a href="@Url.Action("Delete","Admin",new{id=Data.Id})" class="btn btn-sm btn-outline-primary">Yes</a>
+                                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="confirmDelete('@Data.Id',false)">No</button>
+                                                        </span>
+                                                        <span id="deleteSpan_@Data.Id">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="confirmDelete('@Data.Id',true)">Delete</button>
+                                                        </span>
+                                                        </td>
+                                                </tr>
+                                            }
                                         }
                                     }
                                 }
@@ -253,5 +261,19 @@
     </div>
     <!-- end page content -->
 </div>
+<!-- Related Product-->
+<script type="text/javascript"> // Used to appear warning when delete an account
+    function confirmDelete(uniqueId, isDeleteClicked) {
+        var deleteSpan = 'deleteSpan_' + uniqueId;
+        var confirmDeleteSpan = 'confirmDeleteSpan_' + uniqueId;
 
+        if (isDeleteClicked) {
+            $('#' + deleteSpan).hide();
+            $('#' + confirmDeleteSpan).show();
+        } else {
+            $('#' + deleteSpan).show();
+            $('#' + confirmDeleteSpan).hide();
+        }
+    }
+</script>
 

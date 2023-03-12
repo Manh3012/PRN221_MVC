@@ -261,15 +261,11 @@ namespace PRN221_MVC.Controllers {
 
         // GET: AdminController/Delete/5
         public async Task<ActionResult> Delete(Guid id) {
-            //var db = new FRMDbContext();
-            //var model = db.Users.Find(id.ToString());
-            //db.Users.Remove(model);
-            //db.SaveChanges();
-            //return RedirectToAction("UserList");
             var user = await _userService.GetById(id.ToString());
             if (user != null) {
                 var db = new FRMDbContext();
-                db.Users.Remove(user);
+                user.isDeleted = true;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("UserList");
             }
