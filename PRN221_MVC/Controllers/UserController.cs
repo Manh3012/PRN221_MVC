@@ -59,7 +59,7 @@ namespace PRN221_MVC.Controllers {
                     Name = user.Name,
                     UserName = user.Username,
                     Email = user.Email,
-                    TwoFactorEnabled = true,
+                    //TwoFactorEnabled = true,
                     isDeleted = false
                 };
 
@@ -150,10 +150,10 @@ namespace PRN221_MVC.Controllers {
                             // save to db
                             context.SaveChanges();
                         }
-                        EmailHelper emailHelper = new EmailHelper();
-                        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
-                        emailHelper.SendEmail(email, confirmationLink);
+                        //EmailHelper emailHelper = new EmailHelper();
+                        //var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                        //var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
+                        //emailHelper.SendEmail(email, confirmationLink);
                         return RedirectToAction("Index", "Home");
                     }
                 }
