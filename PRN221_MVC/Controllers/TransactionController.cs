@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DAL.Entities;
+using Newtonsoft.Json;
+using PRN221_MVC.Models;
+using BAL.Services.Interface;
+using BAL.Services.Implements;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
-using BAL.Services.Interface;
-using DAL.Entities;
-using PRN221_MVC.Models;
-using Newtonsoft.Json;
-using BAL.Services.Implements;
 
 namespace PRN221_MVC.Controllers
 {
@@ -27,7 +27,8 @@ namespace PRN221_MVC.Controllers
         }
         public IActionResult CheckOut()
         {
-            User User = UserService.GetUserByEmail("anhthuyn2412@gmail.com")!;
+            string email = HttpContext.Session.GetString("_Email")!;
+            User User = UserService.GetUserByEmail(email)!;
             Models.CheckoutViewModel.AccountData account = new Models.CheckoutViewModel.AccountData(User.Name, User.Email, User.Address);
             var orderDetails = CartService.GetCartList(User).ConvertAll((cart) => new Models.CheckoutViewModel.OrderDetail(cart.Product.ID,cart.Product.Name, cart.Quantity, cart.Product.Price));
             var checkoutModel = new Models.CheckoutViewModel(account, orderDetails);
