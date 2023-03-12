@@ -31,9 +31,14 @@ namespace PRN221_MVC.Controllers {
 
             HttpContext.Session.Remove("UserInfo.Session");
             HttpContext.Session.Remove("user");
+
             Response.Cookies.Delete("UserInfo.Session");
             ISession session = HttpContext.Session;
             session.Remove(".AdventureWorks.Session");
+            session.Remove("UserInfo.Session");
+            session.Remove("user");
+
+
             session.Clear();
 
             return RedirectToAction("Index", "Home");
@@ -72,12 +77,6 @@ namespace PRN221_MVC.Controllers {
                     var customerRole = await roleManager.FindByNameAsync("Customer");
                     await roleManager.AddClaimAsync(customerRole, new Claim(ClaimTypes.Email, appUser.Email));
                     await roleManager.AddClaimAsync(customerRole, new Claim(ClaimTypes.Role, "Customer"));
-
-                    //var userRoles = await userManager.GetRolesAsync(appUser);
-                    //var authClaims = new List<Claim> { new Claim(ClaimTypes.Email, appUser.Email) };
-                    //foreach (var userRole in userRoles) {
-                    //    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                    //}
 
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(appUser);
                     var confirmationLink = Url.Action("ConfirmEmail", "Email", new { token, email = user.Email }, Request.Scheme);
@@ -145,7 +144,6 @@ namespace PRN221_MVC.Controllers {
                     identResult = await userManager.AddLoginAsync(user, info);
                     if (identResult.Succeeded) {
                         await signInManager.SignInAsync(user, false);
-                        //var userFind = await userManager.FindByNameAsync(user.Username);
                         // Add role customer
                         await userManager.AddToRoleAsync(user, "Customer");
                         using (var context = new FRMDbContext()) {

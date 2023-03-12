@@ -119,7 +119,7 @@
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="@Url.Action("AdminProfile", "Admin")"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
                         <div class="dropdown-divider mb-0"></div>
-                        <a class="dropdown-item" href="@Url.Action("Login", "Admin")"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
+                        <a class="dropdown-item" href="@Url.Action("Logout", "Admin")"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
                     </div>
                 </li>
             </ul><!--end topbar-nav-->
@@ -1056,18 +1056,23 @@
                                                         {
                                                             <input type="hidden" name="idhidden" value="0"></input>
                                                         }
-                                                        <button id="editbtn" onclick="validateform()" type="submit" class="btn btn-sm btn-outline-primary">Change Password</button>
+                                                        <button id="editbtn" onclick="validateform()" type="submit" class="btn btn-sm btn-outline-primary" >Change Password</button>
                                                         @*<button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>*@
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
+                             
                                         <!--end card-body-->
                                         @*}*@
 
                                     </div><!--end card-->
+                                   
+
+
                                     
                                 </div> <!-- end col -->
+                                  
                             </div><!--end row-->
                         </div><!--end tab-pane-->
                     </div><!--end tab-content-->
@@ -1120,7 +1125,7 @@
             }
 
             // Check the password field
-            if (passwordInput.value == "" || !passwordRegex.test(passwordInput)) {
+            if (passwordInput.value == "" || !passwordRegex.test(passwordInput.value)) {
                 isFormValid = false;
                 newpassErr.innerHTML = "Invalid, min 6 characters, upper, lower, number, special(Ex: A1a@aa)"
                 passwordInput.classList.add("invalid");
@@ -1144,14 +1149,24 @@
                 submitButton.disabled = false;
             } else {
                 submitButton.disabled = false;
-                form.submit(); // submit the form
-            }
+              Swal.fire({
+          title: "Success!",
+          text: "Password changed successfully.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(() => {
+          // Submit the form after the delay
+          form.submit();
+        });
+      }
         });
     }
 
 
 </script>
-
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+                                                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 <style>
     .error {
         color: red;

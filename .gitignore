@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+#ignore migration folder to prevent conflicts when create pull request
+#This required run Remove and Add database again everytime we merge code from other branches
+DAL/Migrations
+
 # User-specific files
 *.rsuser
 *.suo

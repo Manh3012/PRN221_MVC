@@ -27,7 +27,7 @@
                         foreach(var Data in Model){
                             <div class="allcart">
                                 <div class="cart-img">
-                                    <a href="#"><img src="@Data.Product.imgPath" alt="@Data.Product.Name" title="@Data.Product.Name" class="img-thumbnail" /></a>
+                                    <a href="#"><img src="@Url.Content(Data.Product.imgPath)" alt="@Data.Product.Name" title="@Data.Product.Name" class="img-thumbnail" /></a>
                                 </div>
                                  <div class="cart-des">
                                         <a class="cart-des-name" href="#">@Data.Product.Name</a>
@@ -44,35 +44,27 @@
                         }
                     }
                       </form>
-            <h1>What would you like to do next?</h1>
-      <p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
        <br />
       <div class="row">
         <div class="col-lg-8 col-xs-12 col-md-6"></div>
         <div class="col-lg-4 col-xs-12 col-sm-12 col-md-6">
           <table class="table table-bordered">
                         <tr>
-              <td class="text-right"><strong>Sub-Total:</strong></td>
-              <td class="text-right">$1,429.99</td>
-            </tr>
-                        <tr>
-              <td class="text-right"><strong>Eco Tax (-2.00):</strong></td>
-              <td class="text-right">$4.00</td>
-            </tr>
-                        <tr>
-              <td class="text-right"><strong>VAT (20%):</strong></td>
-              <td class="text-right">$286.00</td>
-            </tr>
-                        <tr>
               <td class="text-right"><strong>Total:</strong></td>
-              <td class="text-right">$1,719.99</td>
-            </tr>
+                                @if (Model != null)
+                                {
+                                    float value = 0;
+                                    foreach(var Data in Model)
+                                    {
+                                        value += Data.Price * Data.Quantity;
+                                    }
+                                    <td class="text-right">$@value</td>
+                                }
                       </table>
         </div>
       </div>
       <div class="buttons clearfix">
-        <div class="pull-left"><a href="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=common/home" class="btn btn-primary">Continue Shopping</a></div>
-        <div class="pull-right"><a href="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=checkout/checkout" class="btn btn-primary">Checkout</a></div>
+        <div class="pull-right"><a href="@Url.Action("Index","Home")" class="btn btn-primary">Continue Shopping</a></div>
       </div>
       </div></div>
     </div>

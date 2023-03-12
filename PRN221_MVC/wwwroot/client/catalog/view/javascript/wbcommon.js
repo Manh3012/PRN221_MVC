@@ -170,7 +170,7 @@ $(document).ready(function() {
 var cart = {
 	'add': function(product_id, quantity) {
 		$.ajax({
-			url: 'index.php?route=checkout/cart/add',
+			url: '/Cart/Add',
 			type: 'post',
 			data: 'product_id=' + product_id + '&quantity=' + (typeof(quantity) != 'undefined' ? quantity : 1),
 			dataType: 'json',
@@ -199,7 +199,8 @@ var cart = {
                 }
             },
 			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				//alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				alert("Unimplemented method!")
 			}
 		});
 	},

@@ -11,6 +11,7 @@ namespace DAL.Repositories.Interface
     {
         List<Product> Search(string searchItems);
         List<Product> Filter(int id);
+        Product? GetProductById(long id);
         List<Product> sortPro(int sortId, List<Product> product);
     }
 }

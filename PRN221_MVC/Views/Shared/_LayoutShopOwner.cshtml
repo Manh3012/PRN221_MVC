@@ -26,9 +26,10 @@
     <link href="~/admin/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
     <link href="~/admin/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
+
 </head>
 
-<body class="">
+<body class="" style="display: block">
     <!-- Left Sidenav -->
     <div class="left-sidenav">
         <!-- LOGO -->
@@ -49,12 +50,14 @@
             <ul class="metismenu left-sidenav-menu">
                 <li class="menu-label mt-0">Main</li>
                 <li>
-                    <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Dashboard</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-                    <ul class="nav-second-level" aria-expanded="false">
+                    <a href="@Url.Action("IndexShopOwner", "ShopOwner")"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Dashboard</span></a>
+                    <a href="@Url.Action("ProductList", "ShopOwner")"> <i data-feather="box" class="align-self-center menu-icon"></i><span>Product List</span></a>
+                    <a href="@Url.Action("OrderHistory", "ShopOwner")"> <i data-feather="file-text" class="align-self-center menu-icon"></i><span>Order History</span></a>
+                    @*<ul class="nav-second-level" aria-expanded="false">
                         <li class="nav-item"><a class="nav-link" href="@Url.Action("IndexShopOwner", "ShopOwner")"><i class="ti-control-record"></i>Analytics</a></li>
                         
                         <li class="nav-item"><a class="nav-link" href="@Url.Action("OrderHistory", "ShopOwner")"><i class="ti-control-record"></i>Order History</a></li>
-                    </ul>
+                    </ul>*@
                 </li>
 
                 @*<li>
@@ -98,9 +101,14 @@
     <script src="~/admin/plugins/jvectormap/jquery-jvectormap-us-aea-en.js"></script>
     <script src="~/admin/assets/pages/jquery.analytics_dashboard.init.js"></script>
 
+    <!-- Required datatable js -->
+    <script src="~/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/admin/plugins/datatables/dataTables.bootstrap5.min.js"></script>
+
 
     <!-- App js -->
     <script src="~/admin/assets/js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 </body>
 

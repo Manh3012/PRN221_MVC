@@ -1,35 +1,26 @@
-﻿using DAL;
-using BAL.Model;
-using System.Linq;
+﻿using BAL.Model;
+using DAL;
 using DAL.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PRN221_MVC.Models;
 using System.Diagnostics;
-using Microsoft.CodeAnalysis;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Evaluation;
-using Microsoft.EntityFrameworkCore;
-using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http.Extensions;
 
-namespace PRN221_MVC.Controllers
-{
-    public class HomeController : Controller
-    {
+namespace PRN221_MVC.Controllers {
+    public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
         private readonly FRMDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger, FRMDbContext _dbContext)
-        {
+        public HomeController(ILogger<HomeController> logger, FRMDbContext _dbContext) {
             this._dbContext = _dbContext;
             _logger = logger;
         }
 
-        public IActionResult Index()
-        {
+        public IActionResult Index() {
             CateAndProductViewModel model = new CateAndProductViewModel();
-            model.Products =_dbContext.Product.ToList();
+            model.Products = _dbContext.Product.ToList();
             model.Categories = _dbContext.Category.ToList();
             string name = HttpContext.Session.GetString("_Name");
             string email = HttpContext.Session.GetString("_Email");
@@ -38,49 +29,40 @@ namespace PRN221_MVC.Controllers
             ViewData["_Email"] = email;
             return View(model);
         }
-        public IActionResult Register()
-        {
+        public IActionResult Register() {
             return View();
         }
-        public IActionResult ForgotPassword()
-        {
+        public IActionResult ForgotPassword() {
             return View();
         }
-        public IActionResult LoginClient()
-        {
+        public IActionResult LoginClient() {
             return View();
         }
         [HttpPost]
-        public IActionResult AddToWishList(int id)
-        {
+        public IActionResult AddToWishList(int id) {
 
             var product = _dbContext.Product.Include(x => x.Category).FirstOrDefault(x => x.ID == id);
-            if (product == null)
-            {
+            if (product == null) {
                 return NotFound();
             }
 
             // Get the existing wishlist from the session, or create a new one if it doesn't exist
             List<Product> wishlist;
             var wishlistJson = HttpContext.Session.GetString("Wishlist");
-            if (wishlistJson == null)
-            {
+            if (wishlistJson == null) {
                 wishlist = new List<Product>();
             }
-            else
-            {
+            else {
                 wishlist = JsonConvert.DeserializeObject<List<Product>>(wishlistJson);
             }
 
             // Check if the product is already in the wishlist
-            if (wishlist.Any(p => p.ID == product.ID))
-            {
+            if (wishlist.Any(p => p.ID == product.ID)) {
                 return RedirectToAction("Category", new { id = product.Category.ID });
             }
 
             // Add the product to the wishlist
-            var wishlistProduct = new Product
-            {
+            var wishlistProduct = new Product {
                 ID = product.ID,
                 Name = product.Name,
                 Price = product.Price,
@@ -98,17 +80,14 @@ namespace PRN221_MVC.Controllers
 
 
         [HttpGet]
-        public IActionResult Category(int sortId, int id)
-        {
+        public IActionResult Category(int sortId, int id) {
             List<Product> sort = new List<Product>();
             Category category = new Category();
 
-            if (id == 0)
-            {
+            if (id == 0) {
                 return RedirectToAction("Index");
             }
-            switch (sortId)
-            {
+            switch (sortId) {
 
                 case 1:
                     sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).OrderBy(x => x.Name).ToList();
@@ -129,8 +108,7 @@ namespace PRN221_MVC.Controllers
                 default:
                     sort = _dbContext.Product.Include(x => x.Category).Where(x => x.Category.ID == id).ToList();
                     category = _dbContext.Category.FirstOrDefault(x => x.ID == id);
-                    foreach (var item in sort)
-                    {
+                    foreach (var item in sort) {
                         item.Category = category;
                     }
                     ViewBag.TotalProduct = sort.Count();
@@ -143,18 +121,15 @@ namespace PRN221_MVC.Controllers
             return View(sort);
         }
 
-        public IActionResult Privacy()
-        {
+        public IActionResult Privacy() {
             return View();
         }
-        public IActionResult Details(int id)
-        {
+        public IActionResult Details(int id) {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
+        public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

@@ -8,9 +8,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DAL.Entities
 {
-    [Keyless]
     public class OrderDetail
     {
+        [Key]
+        public Guid ID { get; set; }
         public virtual Orders Order { get; set; }
         public virtual Product Product { get; set; }
         public float Price { get; set; }

@@ -522,6 +522,9 @@
     <None Include="wwwroot\client\image\catalog\icon\thumb-up-button.png" />
     <None Include="wwwroot\client\image\catalog\loader.gif" />
     <None Include="wwwroot\client\image\catalog\logo.png" />
+	<None Include="wwwroot\client\custom\javascript\cart.js" />
+	<None Include="wwwroot\client\custom\css\cart.css" />
+	<None Include="wwwroot\client\custom\javascript\checkout.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -539,6 +542,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.12" />
+    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

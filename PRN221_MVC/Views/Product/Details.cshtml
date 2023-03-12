@@ -1,7 +1,16 @@
-﻿@model DAL.Entities.Product
+﻿@using DAL
+@model DAL.Entities.Product
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
+}
+@functions {
+    public string GetUserName(string userId)
+    {
+        FRMDbContext _dbContext = new FRMDbContext();
+        var user = _dbContext.Users.Where(x => x.Id == userId).FirstOrDefault();
+        return user.Name;
+    }
 }
 <div class="container">
     <div class="row">
@@ -51,7 +60,8 @@
                                 <ul class="list-unstyled">
 
                                     <li>
-                                        <h2 data-update='price-44' class="price">@Model.Price</h2>
+                                        <span class="text-decor">Price:</span>
+                                        <h2 data-update='price-44' class="price">$@Model.Price</h2>
                                     </li>
 
 
@@ -67,9 +77,8 @@
                     <ul class="list-unstyled">
                         <div class="row rless">
                             <div class="col-md-8 col-sm-8 col-xs-12 cless prod-detail">
-                        <li><span class="text-decor">Brand:</span><a href="index98fa.html?route=product/manufacturer/info&amp;manufacturer_id=8" class="textdeb">Apple</a></li>
-                        <li><span class="text-decor">Product Code:</span> Product 17</li>
-                        <li><span class="text-decor">Reward Points:</span> 700</li>
+                       
+                       
                         <li class="stock_bg">
                             <span class="text-decor">Availability:</span>
                                         @if (Model.isAvailable == true)
@@ -94,37 +103,71 @@
 
             <div id="product">
                 <div class="webi-main">
-                    <h3>Available Options</h3>
-                    <div class="form-group required  checkbox_input">
-                        <label class="control-label text-decorop">weight</label>
-                        <div id="input-option236">
-                            <div class="checkbox">
-                                <label class="size-option">
-                                    <input class="webi-option-click" type="checkbox" name="option[236][]" value="37" />
-                                    <span>4kg</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="form-group pro-qty">
                         <div class="row">
                             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 op-box qty-plus-minus">
                                 <button type="button" class="form-control pull-left btn-number btnminus" disabled="disabled" data-type="minus" data-field="quantity">
                                     <span class="glyphicon glyphicon-minus"></span>
                                 </button>
-                                <input id="input-quantity" type="text" name="quantity" value="1" size="2" id="input-quantity" class="form-control input-number pull-left" />
-                                <input type="hidden" name="product_id" value="44" />
+                                <input type="number" name="quantity" value="1" size="2" id="input-quantity-@Model.ID" class="form-control input-number pull-left" />
+                                <input type="hidden" name="product_id" value="@Model.ID" />
                                 <button type="button" class="form-control pull-left btn-number btnplus" data-type="plus" data-field="quantity">
                                     <span class="glyphicon glyphicon-plus"></span>
                                 </button>
                             </div>
-                            <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 product-btn text-right">
-                                <button type="button" id="button-cart" data-loading-text="Loading..." class="btn pcrt add-to-cart btn-primary">add to cart</button>
-                                <button type="button" class="btn pcrt btn-primary" onclick="wishlist.add('44');"><svg width="18px" height="17px"><use xlink:href="#heart" /></svg></button>
-                                <button type="button" class="btn pcrt  btn-primary" onclick="compare.add('44');"><svg width="18px" height="17px"><use xlink:href="#compare" /></svg></button>
+                                <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 product-btn text-right">
+                                <div class="button-group">
+                                    <div class="absbtn">
+                                            <button type="button" data-loading-text="Loading..." class="btn pcrt add-to-cart btn-primary" onclick="addToCart(@Model.ID)">add to cart</button>
+                                                                                            <form width="5px" method="post" asp-action="AddToWishList" asp-controller="Home" id="addToWishListForm">
+                                                            <input type="hidden" name="id" value="@Model.ID" />
+                                                <button type="submit" class="btn pcrt btn-primary" onclick="submitForm(event)"><svg width="18px" height="17px"><use xlink:href="#heart" /></svg></button>
+                                                        </form>
+
+
+
+
+
+
+
+
+
+                                    </div>
+                                    <script>
+                                        function submitForm(event) {
+                                            event.preventDefault();
+                                            var form = event.target.closest('form');
+                                            var formData = new FormData(form);
+                                            fetch(form.action, {
+                                                method: 'POST',
+                                                body: formData
+                                            })
+                                                .then(function (response) {
+                                                    if (response.ok) {
+                                                        // Show success message as a popup
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Item added to Wish List!',
+                                                            showConfirmButton: false,
+                                                            timer: 1500
+                                                        }).then(function () {
+                                                            // Reload the page after the popup is closed
+                                                            location.reload();
+                                                        });
+                                                    }
+                                                });
+                                        }
+                                    </script>
+
+                                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+                                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+
+
+                                </div>
+                                </div>
+
+
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -136,11 +179,11 @@
         <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
             @if (Model.Comments == null)
                 {
-                    <li><a href="#tab-review" data-toggle="tab">Reviews (0) </a></li>
+                    <li><a href="#tab-review" data-toggle="tab">Comments (0) </a></li>
                 }
             else
                 {
-                    <li><a href="#tab-review" data-toggle="tab">Reviews (@Model.Comments.Count()) </a></li>
+                <li><a href="#tab-review" data-toggle="tab">Reviews (@Model.Comments.Count(x => x.isDeleted==false)) </a></li>
                 }
             
     </ul>
@@ -152,83 +195,72 @@
         </div>
         <div class="tab-pane" id="tab-review">
             <div>
-                 @if (Model.Comments != null)
-                     {
-                      foreach(var comment in Model.Comments)
-                      {
-                           <div>@comment.ID</div>    
-                      }
-                     }
+                    <form action="@Url.Action("Create","Comment")" method="post" autocomplete="off" enctype="multipart/form-data" class="form-horizontal">
+                        <fieldset id="comment">
+                            <legend>Write your comment</legend>
+                            <div class="form-group required">
+                                <div class="col-md-12 col-xs-12">
+                                    <input type="hidden" name="productId" value="@Model.ID" />
+                                    <input type="text" name="content" id="input-name" class="form-control" />
+                                    <input style="margin:10px 0px; background:blue;" class="btn btn-primary btn-lg" type="submit" value="Send" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                            @if (Model.Comments != null)
+                            {
+                                foreach (var comment in Model.Comments)
+                                {
+                                    if (comment.isDeleted == false)
+                                    {
+                                        <div>@GetUserName(comment.UserId)</div>
+                                            <div> 
+                                                <form action="@Url.Action("Update","Comment")" method="post" autocomplete="off" enctype="multipart/form-data" class="form-horizontal">
+                                                <div class="form-group required">
+                                                <div class="col-md-12 col-xs-12">
+                                                <input type="hidden" name="ID" value="@comment.ID" />
+                                                <input type="hidden" name="productId" value="@Model.ID" />
+                                                <input type="text" value="@comment.Content" name="content" id="input-name" class="form-control" />
+                                                @if (GetUserName(comment.UserId)==Accessor.HttpContext.Session.GetString("_Name"))
+                                                {
+                                                <input style="margin:10px 0px; background:orange;" class="btn btn-primary btn-lg" type="submit" value="Update" />
+                                                <span id="confirmDeleteSpan_@comment.ID" style="display:none">
+                                                    <span>Are you sure you want to delete?</span>
+                                                    <a href="@Url.Action("DeleteComment","Comment", new{commentId = comment.ID, productId = comment.ProductId})" title="Delete" class="btn btn-danger cbt;" style="background:red;">Yes</a>
+                                                    <button type="button" class="btn btn-primary" onclick="confirmDelete('@comment.ID',false)">No</button>
+                                                </span>
+                                                <span id="deleteSpan_@comment.ID">
+                                                    <button type="button" style="background:red;" class="btn btn-primary btn-lg" onclick="confirmDelete('@comment.ID',true)">Delete</button>
+                                                </span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                    }
+
+                                }
+                            }
             </div>
         </div>
-        @*<div class="tab-pane" id="tab-review">
-            <form class="" id="form-review">
-                <div id="review"></div>
-                <h2 class="co-heading">Write a review</h2>
-                <div class="form-group required row">
-                    <div class="col-sm-12">
-                        <label class="control-label" for="input-name">Your Name</label>
-                        <input type="text" name="name" value="" id="input-name" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group required row">
-                    <div class="col-sm-12">
-                        <label class="control-label" for="input-review">Your Review</label>
-                        <textarea name="text" rows="5" id="input-review" class="form-control"></textarea>
-                        <!-- <div class="help-block"><span class="text-danger">Note:</span> HTML is not translated!</div> -->
-                    </div>
-                </div>
-                <div class="form-group required">
-
-                    <div class="radi">
-                        <label class="control-label" for="input-review">Rating</label>
-                        <div class="form-rating">
-
-                            <div class="form-rating-container pull-left">
-                                <input id="rating-5" type="radio" name="rating" value="5" />
-                                <label class="fa fa-stack pull-right" for="rating-5">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-4" type="radio" name="rating" value="4" />
-                                <label class="fa fa-stack pull-right" for="rating-4">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-3" type="radio" name="rating" value="3" />
-                                <label class="fa fa-stack pull-right" for="rating-3">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-2" type="radio" name="rating" value="2" />
-                                <label class="fa fa-stack pull-right" for="rating-2">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                                <input id="rating-1" type="radio" name="rating" value="1" />
-                                <label class="fa fa-stack pull-right" for="rating-1">
-                                    <i class="fa fa-star fa-stack-1x"></i>
-                                    <i class="fa fa-star-o fa-stack-1x"></i>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="buttons clearfix">
-                    <div class="pull-right">
-                        <button type="button" id="button-review" data-loading-text="Loading..." class="btn btn-primary">Continue</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>*@
 </div>
 <!-- relatedproduct -->
       </div></div>
-    </div>
-</div>
+<script type="text/javascript">
+    // Used to appear warning when delete a comment
+    function confirmDelete(uniqueId, isDeleteClicked){
+        var deleteSpan = 'deleteSpan_' + uniqueId;
+        var confirmDeleteSpan = 'confirmDeleteSpan_' + uniqueId;
+
+        if(isDeleteClicked){
+            $('#' + deleteSpan).hide();
+            $('#' + confirmDeleteSpan).show();
+        } else{
+            $('#' + deleteSpan).show();
+            $('#' + confirmDeleteSpan).hide();
+        }
+    }
+</script>
 <script type="text/javascript">
         <!--
     $('select[name=\'recurring_id\'], input[name="quantity"]').change(function () {

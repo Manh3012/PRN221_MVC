@@ -1,100 +1,93 @@
-﻿using BAL;
-using DAL;
-using System.Text;
+﻿using DAL;
 using DAL.Entities;
-using DAL.Entities;
-using DAL.Entities;
-using System.Data.OleDb;
-using PRN221_MVC.Models;
-using System.Text.Unicode;
-using NuGet.Protocol.Plugins;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using DAL.Repositories.Interface;
-using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Specialized;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PRN221_MVC.Models;
+using System.Security.Cryptography;
+using System.Text;
 
-namespace PRN221_MVC.Controllers
-{
+namespace PRN221_MVC.Controllers {
     //[Authorize(Roles = "Administrator")]
-    public class AdminController : Controller
-    {
+    public class AdminController : Controller {
         private readonly IUserService _userService;
         private UserManager<User> _userManager;
         private SignInManager<User> signInManager;
 
         FRMDbContext context = new FRMDbContext();
-        public AdminController(IUserService userService, UserManager<User> userManager, SignInManager<User> signInManager)
-        {
+        public AdminController(IUserService userService, UserManager<User> userManager, SignInManager<User> signInManager) {
             _userService = userService;
             _userManager = userManager;
             this.signInManager = signInManager;
         }
         // GET: AdminController
-        public ActionResult Index()
-        {
-            if (HttpContext.Session.GetString("user") == null)
-            {
+        public ActionResult Index() {
+            if (HttpContext.Session.GetString("user") == null) {
                 return RedirectToAction("Login");
             }
-            else
-            {
+            else {
                 return View();
             }
         }
 
-        public ActionResult Login()
-        {
+        public ActionResult Login() {
             return View();
         }
 
         public List<User> users { get; set; }
 
         // GET: AdminController/Details/5
-        public ActionResult Details(int id)
-        {
+        public ActionResult Details(int id) {
             return View();
         }
 
         // GET: AdminController/Create
-        public ActionResult Create()
-        {
+        public ActionResult Create() {
             return View();
         }
 
-        public ActionResult ErrAdd()
-        {
+        public ActionResult ErrAdd() {
             ViewBag.CheckErr = "Email is already existed";
             return View("Create");
         }
-        public async Task<ActionResult> UserList()
-        {
+        public async Task<ActionResult> UserList() {
             List<User> users = await _userService.GetAll();
             return View(model: users);
         }
-        public ActionResult Users()
-        {
+        public ActionResult Users() {
             return View();
         }
-        [HttpPost]
-        public async Task<ActionResult> AsyncLogin(LoginUserViewModel login)
+        public async Task<IActionResult> Logout()
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
+            await signInManager.SignOutAsync();
+            // Remove session cookie of user login info
+
+            HttpContext.Session.Remove("UserInfo.Session");
+            HttpContext.Session.Remove("user");
+
+            Response.Cookies.Delete("UserInfo.Session");
+            ISession session = HttpContext.Session;
+            session.Remove(".AdventureWorks.Session");
+            session.Remove("UserInfo.Session");
+            session.Remove("user");
+
+
+            session.Clear();
+
+            return RedirectToAction("Login");
+        }
+        [HttpPost]
+        public async Task<ActionResult> AsyncLogin(LoginUserViewModel login) {
+            if (ModelState.IsValid) {
+                try {
                     User appUser = await _userManager.FindByEmailAsync(login.Email);
                     var roleStore = new RoleStore<IdentityRole>(context);
                     var roles = roleStore.Roles.ToList();
 
 
-                    if (appUser != null)
-                    {
+                    if (appUser != null) {
                         var role = await _userManager.GetRolesAsync(appUser);
 
                         var matchingRole = roles.FirstOrDefault(r => role.Contains(r.Name)).Name;
@@ -102,17 +95,14 @@ namespace PRN221_MVC.Controllers
                         await signInManager.SignOutAsync();
                         Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(appUser, login.Password, false, false);
 
-                        if (result.Succeeded)
-                        {
-                            if (matchingRole != null && matchingRole.Equals("Administrator"))
-                            {
+                        if (result.Succeeded) {
+                            if (matchingRole != null && matchingRole.Equals("Administrator")) {
                                 //ViewBag.User = appUser;
                                 HttpContext.Session.SetString("user", appUser.Id.ToString());
                                 return RedirectToAction("AdminProfile");
                             }
 
-                            if (matchingRole != null && matchingRole.Equals("ShopOwner"))
-                            {
+                            if (matchingRole != null && matchingRole.Equals("ShopOwner")) {
                                 HttpContext.Session.SetString("Email", appUser.Email);
                                 return RedirectToAction("IndexShopOwner", "ShopOwner");
                             }
@@ -121,16 +111,14 @@ namespace PRN221_MVC.Controllers
                         //return Redirect(login.ReturnUrl ?? "/");
 
                         // Two Factor Authentication
-                        if (result.RequiresTwoFactor)
-                        {
+                        if (result.RequiresTwoFactor) {
                             //return RedirectToAction("LoginTwoStep", new { appUser.Email, login.ReturnUrl });
                             return RedirectToAction("LoginTwoStep", new { appUser.Email });
                         }
 
                         // Email confirmation 
                         bool emailStatus = await _userManager.IsEmailConfirmedAsync(appUser);
-                        if (emailStatus == false)
-                        {
+                        if (emailStatus == false) {
                             ModelState.AddModelError(nameof(login.Email), "Email is unconfirmed, please confirm it first");
                         }
                         // https://www.yogihosting.com/aspnet-core-identity-user-lockout/
@@ -139,8 +127,7 @@ namespace PRN221_MVC.Controllers
                     }
                     ModelState.AddModelError(nameof(login.Email), "Login Failed: Invalid Email or password");
                 }
-                catch
-                {
+                catch {
                     //var err = "Email is already existed";
                     //return RedirectToAction("Create", new {value = err});
                     Console.WriteLine("Error Email");
@@ -149,82 +136,64 @@ namespace PRN221_MVC.Controllers
             }
             return RedirectToAction("Login");
         }
-        public ActionResult Recover_Password()
-        {
+        public ActionResult Recover_Password() {
             return View();
         }
 
-        public async Task<ActionResult> UserDetail(Guid id)
-        {
+        public async Task<ActionResult> UserDetail(Guid id) {
             var user = await _userService.GetById(id.ToString());
-            if (user != null)
-            {
+            if (user != null) {
                 return View(model: user);
             }
-            else
-            {
+            else {
                 return View();
             }
         }
-        public ActionResult Error()
-        {
+        public ActionResult Error() {
             return View();
         }
 
-        public async Task<ActionResult> AdminProfile()
-        {
-            try
-            {
+        public async Task<ActionResult> AdminProfile() {
+            try {
                 var user = await _userService.GetById(HttpContext.Session.GetString("user"));
-                if (user != null)
-                {
+                if (user != null) {
                     ViewBag.User = user;
                     return View();
                 }
-                else
-                {
+                else {
                     return RedirectToAction("Login");
                 }
             }
-            catch
-            {
-                    return RedirectToAction("Login");
+            catch {
+                return RedirectToAction("Login");
 
             }
         }
-        public ActionResult Sales_Analytics()
-        {
+        public ActionResult Sales_Analytics() {
             return View();
         }
 
         // POST: AdminController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
-        {
-            try
-            {
+        public async Task<ActionResult> Create(IFormCollection collection) {
+            try {
                 return RedirectToAction("Index");
             }
-            catch
-            {
+            catch {
                 return View();
             }
         }
 
-        public async Task<IActionResult> UserAdd()
-        {
-            try
-            {
+        public async Task<IActionResult> UserAdd() {
+            try {
                 string getemail = HttpContext.Request.Form["useremail"];
                 var checkEmail = await context.Users.SingleOrDefaultAsync(u => u.Email == getemail);
-                if (checkEmail != null)
-                {
+                if (checkEmail != null) {
                     return RedirectToAction("ErrAdd");
                 }
                 string password = HttpContext.Request.Form["userpassword"];
-                var newUser = new User
-                {
+                var newUser = new User {
                     UserName = HttpContext.Request.Form["username"],
                     Email = HttpContext.Request.Form["useremail"],
                     PhoneNumber = HttpContext.Request.Form["mobilenumber"],
@@ -241,16 +210,14 @@ namespace PRN221_MVC.Controllers
                 await _userManager.AddToRoleAsync(newUser, "Administrator");
                 return RedirectToAction("Index");
             }
-            catch
-            {
+            catch {
                 Console.WriteLine("Error");
                 return View();
             }
         }
 
         // GET: AdminController/Edit/5
-        public ActionResult Edit(int id)
-        {
+        public ActionResult Edit(int id) {
             return View();
         }
 
@@ -258,23 +225,18 @@ namespace PRN221_MVC.Controllers
         // POST: AdminController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, IFormCollection collection)
-        {
-            try
-            {
+        public async Task<ActionResult> Edit(string id, IFormCollection collection) {
+            try {
 
                 return View();
             }
-            catch
-            {
+            catch {
                 return View();
             }
         }
 
-        public async Task<IActionResult> ChangePass()
-        {
-            try
-            {
+        public async Task<IActionResult> ChangePass() {
+            try {
                 string userid = HttpContext.Request.Form["idhidden"];
                 var user = await _userManager.FindByIdAsync(userid);
                 string currentPass = HttpContext.Request.Form["oldpass"];
@@ -283,72 +245,57 @@ namespace PRN221_MVC.Controllers
                 string decodeHash = base64Decode(user.PasswordHash);
 
                 string newHashPassword = _userManager.PasswordHasher.HashPassword(user, newPass);
-                if (user == null)
-                {
+                if (user == null) {
                     return BadRequest("User not found");
                 }
                 var result = await _userManager.ChangePasswordAsync(user, currentPass, newPass);
-                if (!result.Succeeded)
-                {
+                if (!result.Succeeded) {
                     return BadRequest(result.Errors);
                 }
                 return RedirectToAction("Index");
             }
-            catch
-            {
+            catch {
                 return View();
             }
         }
 
         // GET: AdminController/Delete/5
-        public async Task<ActionResult> Delete(Guid id)
-        {
-            //var db = new FRMDbContext();
-            //var model = db.Users.Find(id.ToString());
-            //db.Users.Remove(model);
-            //db.SaveChanges();
-            //return RedirectToAction("UserList");
+        public async Task<ActionResult> Delete(Guid id) {
             var user = await _userService.GetById(id.ToString());
-            if (user != null)
-            {
+            if (user != null) {
                 var db = new FRMDbContext();
-                db.Users.Remove(user);
+                user.isDeleted = true;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("UserList");
             }
             else {
                 return RedirectToAction("UserList");
             }
-            
+
         }
 
         // POST: AdminController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
+        public ActionResult Delete(int id, IFormCollection collection) {
+            try {
                 var getUserbyId = users.FirstOrDefault(u => Int32.Parse(u.Id) == id);
-                if (getUserbyId != null)
-                {
-                    using (var db = new FRMDbContext())
-                    {
+                if (getUserbyId != null) {
+                    using (var db = new FRMDbContext()) {
                         db.Users.Remove(getUserbyId);
                         db.SaveChanges();
                     }
                 }
                 return RedirectToAction("UserList");
             }
-            catch
-            {
+            catch {
                 return View();
             }
         }
 
 
-        public string hashPassword(string password)
-        {
+        public string hashPassword(string password) {
             var sha = SHA256.Create();
             var asByteArray = Encoding.Default.GetBytes(password);
             var hashedPass = sha.ComputeHash(asByteArray);
@@ -357,8 +304,7 @@ namespace PRN221_MVC.Controllers
 
         public static string base64Decode(string sData) //Decode
         {
-            try
-            {
+            try {
                 var encoder = new System.Text.UTF8Encoding();
                 System.Text.Decoder utf8Decode = encoder.GetDecoder();
                 byte[] todecodeByte = Convert.FromBase64String(sData);
@@ -368,8 +314,7 @@ namespace PRN221_MVC.Controllers
                 string result = new String(decodedChar);
                 return result;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 throw new Exception("Error in base64Decode" + ex.Message);
             }
         }

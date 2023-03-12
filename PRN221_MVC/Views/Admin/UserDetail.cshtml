@@ -150,21 +150,13 @@
                     <div class="page-title-box">
                         <div class="row">
                             <div class="col">
-                                <h4 class="page-title">Procuct Detail</h4>
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="javascript:void(0);">Dastone</a></li>
-                                    <li class="breadcrumb-item"><a href="javascript:void(0);">Ecommerce</a></li>
-                                    <li class="breadcrumb-item active">Detail</li>
-                                </ol>
+                                <h4 class="page-title">User Detail</h4>
                             </div><!--end col-->
                             <div class="col-auto align-self-center">
                                 <a href="#" class="btn btn-sm btn-outline-primary" id="Dash_Date">
                                     <span class="day-name" id="Day_Name">Today:</span>&nbsp;
                                     <span class="" id="Select_date">Jan 11</span>
                                     <i data-feather="calendar" class="align-self-center icon-xs ms-1"></i>
-                                </a>
-                                <a href="#" class="btn btn-sm btn-outline-primary">
-                                    <i data-feather="download" class="align-self-center icon-xs"></i>
                                 </a>
                             </div><!--end col-->
                         </div><!--end row-->
@@ -178,69 +170,53 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-6 align-self-center">
-                                    <img src="assets/images/products/04.png" alt="" class=" mx-auto  d-block" height="300">
-                                </div><!--end col-->
-                                <div class="col-lg-6 align-self-center">
                                     <div class="single-pro-detail">
                                         <table>
                                             <tr>
-                                                <td>@Html.DisplayNameFor(model => model.Name)</td>
-                                                <td>:</td>
-                                                <td>@Html.DisplayFor(model => model.Name)</td>
+                                                <td style="font-size:large;font-weight:bold">@Html.DisplayNameFor(model => model.Name)</td>
+                                                <td style="font-size:large;font-weight:bold">:</td>
+                                                <td style="font-size:large">@Html.DisplayFor(model => model.Name)</td>
                                             </tr>
                                             <tr>
-                                                <td>@Html.DisplayNameFor(model => model.DoB)</td>
-                                                <td>:</td>
-                                                <td>@Html.DisplayFor(model => model.DoB,"{0:dd-MM-yyyy}")</td>
+                                                <td style="font-size:large;font-weight:bold">@Html.DisplayNameFor(model => model.DoB)</td>
+                                                <td style="font-size:large;font-weight:bold">:</td>
+                                                <td style="font-size:large">@Html.DisplayFor(model => model.DoB,"{0:dd-MM-yyyy}")</td>
                                             </tr>
                                             <tr>
-                                                <td>@Html.DisplayNameFor(model => model.Address)</td>
-                                                <td>:</td>
-                                                <td>@Html.DisplayFor(model => model.Address)</td>
+                                                <td style="font-size:large;font-weight:bold">@Html.DisplayNameFor(model => model.Address)</td>
+                                                <td style="font-size:large;font-weight:bold">:</td>
+                                                <td style="font-size:large">@Html.DisplayFor(model => model.Address)</td>
                                             </tr>
                                                 <tr>
-                                                <td>@Html.DisplayNameFor(model => model.Gender)</td>
-                                                <td>:</td>
-                                                <td>@if (Model.Gender.Equals("1"))
-                                                    { 
-                                                        @Html.Raw("Male")
-                                                    }
-                                                    else if (Model.Gender.Equals("0"))
+                                                <td style="font-size:large;font-weight:bold">@Html.DisplayNameFor(model => model.Gender)</tdstyle>
+                                                <td style="font-size:large;font-weight:bold">:</td>
+                                                <td style="font-size:large">
+                                                    @if (Model.Gender.Equals("F"))
                                                     {
                                                         @Html.Raw("Female")
                                                     }
-                                            </td>
-                                                </tr>                    
-                                            <tr>
-                                                <td>@Html.Raw("Deleted")</td>
-                                                <td>:</td>
-                                                <td>
-                                                    @if (Model.isDeleted == false)
-                                                    {
-                                                        @Html.Raw("No")
-                                                    }
                                                     else
                                                     {
-                                                        @Html.Raw("Yes")
+                                                        @Html.Raw("Male")
                                                     }
                                                 </td>
-                                            </tr>
+                                                </tr>                    
                                             <tr>
-                                                <td>@Html.DisplayNameFor(model => model.Orders)</td>
-                                                <td>:</td>
-                                                    @if (Model.Orders != null)
+                                                <td style="font-size:large;font-weight:bold">@Html.DisplayNameFor(model => model.Orders)</td>
+                                                <td style="font-size:large;font-weight:bold">:</td>
+                                                    @if (Model.Orders.Count() >0)
                                                     {
-                                                        <td><a href="#">Orders</a></td>
+                                                    <td style="font-size:large"><a href="#">Orders</a></td>
                                                     }
                                                     else
                                                     {
-                                                        <td>This user has no order</td>
+                                                    <td style="font-size:large">This user has no order</td>
                                                     }
                                                 
                                             </tr>
                                             <tr>
-                                                <td><a href="~/Admin/Edit?id=@Model.Id" class="btn btn-sm btn-outline-primary">Edit</a></td>
-                                            <td><a href="~/Admin/Delete?id=@Model.Id" class="btn btn-sm btn-outline-primary">Delete?</a></td>
+                                                <td style="font-size:large"><a href="@Url.Action("Edit","Admin",new{id = Model.Id})" class="btn btn-sm btn-outline-primary">Edit</a></td>
+                                                <td style="font-size:large"><a href="@Url.Action("Delete","Admin",new{id = Model.Id})" class="btn btn-sm btn-outline-primary">Delete?</a></td>
                                             </tr>
                                         </table> 
                                     </div>

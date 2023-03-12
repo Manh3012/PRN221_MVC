@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "WishList";
     Layout = "~/Views/Shared/LayoutClient.cshtml";
-    string[] table_header = new string[]{ "Order ID","Created Date", "Total Amount", "Status", "Action" };
+    string[] table_header = new string[]{ "Order ID","Created Date", "Total Amount", "Action" };
 }
 <div class="breadbg">
     <div class="container">
@@ -31,21 +31,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @* <tr>
-                                <td class="text-left valign"><a href="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=product/product&amp;product_id=44"><strong>Chakki-Fresh-Wheat-Atta/Godihittu - Fortified</strong></a></td>
-                                <td class="text-left valign">Product 17</td>
-                                <td class="text-left valign">In Stock</td>
-                                <td class="text-left valign">
-                                    <div class="price">
-                                        $1,202.00
-                                    </div>
-                                </td>
-                                <td class="text-center valign">
-                                    <button type="button" onclick="cart.add('44');" data-toggle="tooltip" title="add to cart" class="btn btn-info"><i class="fa fa-shopping-cart"></i></button>
-                                    <a href="https://opencart.dostguru.com/FD04/upbasket_01/index.php?route=account/wishlist&amp;remove=44" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-times"></i></a>
-                                </td>
-                                </tr>*@
                             @{
                                 if (Model != null)
                                 {
@@ -55,7 +40,6 @@
                                             <td>@Data.ID</td>
                                             <td>@Data.CreatedDate</td>
                                             <td>@Data.Total</td>
-                                            <td>@Data.isDeleted</td>
                                             <td class="text-center valign">
                                                 <a href="@Url.Action("Details","OrderDetail",new {id=Data.ID})" data-toggle="tooltip" title="View Order" class="btn btn-info"><i class="fa fa-shopping-cart"></i></a>
                                                 <a href="#" data-toggle="tooltip" title="Remove Order" class="btn btn-danger"><i class="fa fa-times"></i></a>
