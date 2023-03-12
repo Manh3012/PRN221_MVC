@@ -27,7 +27,7 @@
                         foreach(var Data in Model){
                             <div class="allcart">
                                 <div class="cart-img">
-                                    <a href="#"><img src="@Data.Product.imgPath" alt="@Data.Product.Name" title="@Data.Product.Name" class="img-thumbnail" /></a>
+                                    <a href="#"><img src="@Url.Content(Data.Product.imgPath)" alt="@Data.Product.Name" title="@Data.Product.Name" class="img-thumbnail" /></a>
                                 </div>
                                  <div class="cart-des">
                                         <a class="cart-des-name" href="#">@Data.Product.Name</a>
