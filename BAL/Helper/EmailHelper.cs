@@ -46,7 +46,7 @@ namespace BAL.Helpers {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse("learning.fpt.edu@gmail.com"));
             email.To.Add(MailboxAddress.Parse(userEmail));
-            email.Subject = "Comfirm your email";
+            email.Subject = "Confirm your email";
             email.Body = new TextPart(TextFormat.Html) {
                 Text = "<h1>Welcome to my store</h1>" +
                 "<span> Click this link to confirm your email: </span>" +

@@ -41,7 +41,7 @@
                             }
                         }
 
-                        <form asp-controller="User" asp-action="Login" method="post" enctype="multipart/form-data">
+                        <form asp-controller="User" asp-action="Login" method="post" onSubmit="document.getElementById('submit').disabled=true;" enctype="multipart/form-data">
                             <div class="form-group required">
                                 <label class="control-label" asp-for="Email">E-Mail</label>
                                 <input type="email" name="email" value="" asp-for="Email" placeholder="E-Mail" id="input-email" class="form-control" />
@@ -50,7 +50,7 @@
                                 <label class="control-label" asp-for="Password">Password</label>
                                 <input type="password" name="password" asp-for="Password" value="" placeholder="Password" id="input-password" class="form-control" />
                             </div>
-                            <input type="submit" value="Login" class="btn btn-primary" />
+                            <input id="submit" type="submit" value="Login" class="btn btn-primary" />
                             <a class="btn btn-primary" href="@Url.Action("GoogleLogin", "User")">Log In With Google</a>
                         </form>
                     </div>
@@ -64,7 +64,7 @@
                 <h3><svg class="" width="20px" height="20px"> <use xlink:href="#acluser"></use> </svg>ACCOUNT SETTINGS</h3>
                 <a href="@Url.Action("Login", "User")" class="list-group-item">Login</a> 
                 <a href="@Url.Action("Register","User")" class="list-group-item">Register</a> 
-                <a href="@Url.Action("ForgotPassword","User")" class="list-group-item">Forgotten Password</a>
+                <a href="@Url.Action("ForgotPassword","User")" class="list-group-item">Forgot Password</a>
                 <a href="@Url.Action("Detail","User")" class="list-group-item">My Account</a>
 
             </div>
