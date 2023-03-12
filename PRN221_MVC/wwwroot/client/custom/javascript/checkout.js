@@ -16,6 +16,10 @@
             data: JSON.stringify(checkoutModel),
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
+            beforeSend: () => {
+                $('button#button-confirm').prop('disabled', true);
+                $('button#button-confirm').text("Loading...");
+            },
             success: (json) => {
                 if (json.status === 'Success') {
                     $(".infobg").html(`
@@ -29,10 +33,14 @@
                 }
                 else {
                     alert('Error: ' + json['message']);
+                    $('button#button-confirm').prop('disabled', false);
+                    $('button#button-confirm').text("Confirm order");
                 }
             },
             error: (xhr, ajaxOptions, thrownError) => {
                 alert("Something went wrong. Please try again later");
+                $('button#button-confirm').prop('disabled', false);
+                $('button#button-confirm').text("Confirm order");
             }
         });
     } else {

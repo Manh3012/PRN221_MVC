@@ -37,15 +37,15 @@ async function fetchCart() {
             localStorage.setItem(cart.id, JSON.stringify({ProductID: cart.product.id, Quantity: cart.quantity, UserEmail: cart.user.email}));
             data.push(` 
             <li id="cart-list-item">
-                <img src="${cart.product.imgPath.replace("~/", "")}" alt="${cart.product.imgPath}" height="100%" width="auto">
+                <img src="${cart.product.imgPath.replace("~/", "/")}" alt="${cart.product.imgPath.replace("~","")}" height="100%" width="auto">
                 <div id="cart-item-label">
                     <a href="javascript:void(0)"><strong>${cart.product.name}</strong></a>
                     <br/>
                     <p>Quantity: ${cart.quantity} - Total: $${cart.product.price * cart.quantity}</p>
                         <div class="input-group btn-block" style="max-width: 100px;">
-                            <input type="text" name="quantity-${index}" value="${cart.quantity}" size="1" style="with: 60px" class="form-control" id="quantity-popup-cart-${index}"/>
+                            <input type="text" name="quantity-${index}" value="${cart.quantity}" size="1" style="with: 60px" class="form-control" id="quantity-popup-cart-${cart.id}"/>
                             <span class="input-group-btn cartpsp" style="padding: 0 1.5rem;">
-                                <button type="button" data-toggle="tooltip" title="Update" class="btn btn-danger cbt" onclick="updateCart('${cart.id}', 'quantity-popup-cart-${index}')"><i class="fa fa-refresh"></i></button>
+                                <button type="button" data-toggle="tooltip" title="Update" class="btn btn-danger cbt" onclick="updateCart('${cart.id}', 'quantity-popup-cart-')"><i class="fa fa-refresh"></i></button>
                             </span>
                         </div>
                     <!--<div class="homeqt">
@@ -73,11 +73,10 @@ async function fetchCart() {
     $("span#cart-total > strong").text('$' + (Math.round(total * 100) / 100).toFixed(2));
 }
 
-function addToCart(product, quantityInput, email) {
+function addToCart(productID, inputID = 'input-quantity-') {
     var data = {
-        'ProductID': product,
-        'Quantity': +($('input#' + quantityInput).val()),
-        'UserEmail': email,
+        'ProductID': productID,
+        'Quantity': +($('input#' + inputID + productID).val())
     };
     $.ajax({
         url: '/Cart/Add',
@@ -113,9 +112,9 @@ function addToCart(product, quantityInput, email) {
     });
 }
 
-function updateCart(cartID, cartInputName) {
-    let cartObject = JSON.parse(localStorage.getItem(cartID));
-    cartObject.Quantity = +($('#' + cartInputName).val());
+function updateCart(ID, inputID = 'input-quantity-', refresh = false) {
+    let cartObject = JSON.parse(localStorage.getItem(ID));
+    cartObject.Quantity = +($('input#' + inputID + ID).val());
     $.ajax({
         url: '/Cart/Update',
         type: 'patch',
@@ -124,7 +123,9 @@ function updateCart(cartID, cartInputName) {
         dataType: 'json',
         success: (json) => {
             if (json.status === 'Success') {
-                fetchCart();
+                if (refresh) {
+                    window.location.reload();
+                }
             }
             else {
                 alert('Error: ' + json.message);

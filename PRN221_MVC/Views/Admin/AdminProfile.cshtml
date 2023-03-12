@@ -1056,18 +1056,23 @@
                                                         {
                                                             <input type="hidden" name="idhidden" value="0"></input>
                                                         }
-                                                        <button id="editbtn" onclick="validateform()" type="submit" class="btn btn-sm btn-outline-primary">Change Password</button>
+                                                        <button id="editbtn" onclick="validateform()" type="submit" class="btn btn-sm btn-outline-primary" >Change Password</button>
                                                         @*<button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>*@
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
+                             
                                         <!--end card-body-->
                                         @*}*@
 
                                     </div><!--end card-->
+                                   
+
+
                                     
                                 </div> <!-- end col -->
+                                  
                             </div><!--end row-->
                         </div><!--end tab-pane-->
                     </div><!--end tab-content-->
@@ -1144,14 +1149,24 @@
                 submitButton.disabled = false;
             } else {
                 submitButton.disabled = false;
-                form.submit(); // submit the form
-            }
+              Swal.fire({
+          title: "Success!",
+          text: "Password changed successfully.",
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(() => {
+          // Submit the form after the delay
+          form.submit();
+        });
+      }
         });
     }
 
 
 </script>
-
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+                                                            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 <style>
     .error {
         color: red;

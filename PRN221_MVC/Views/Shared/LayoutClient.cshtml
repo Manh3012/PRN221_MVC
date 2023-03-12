@@ -777,7 +777,7 @@
     </symbol>
 
 </svg>
-<body>
+<body style="display : block">
 
 
     <header>
@@ -943,18 +943,7 @@
                             jQuery(window).scroll(function () { headermenu(); });
                         </script>
                     </div>
-                    <div id="right-colume-1" class="clo-lg-7 col-md-7 col-sm-7 col-xs-5 rightmenu text-left">
-                        <ul class="sblock">
-                            @{
-                                var userRoleJson= Accessor.HttpContext.Session.GetString("UserRole");
-                                if (userRoleJson == "SHOPOWNER")
-                                {
-                            <li><a href="@Url.ActionLink("CreateProduct","Product")">Create Product</a></li>
-                            <li><a href="@Url.ActionLink("ListProduct","Product")">List Product</a></li>
-                                }
-                                }
-                        </ul>
-                    </div>
+                
                 </div>
             </div>
         </div>
@@ -964,7 +953,7 @@
     @RenderBody()
 </div>
 <footer>
-    <div class="middle-footer">
+    <div class="middle-footer"  >
       <div class="container">
         <div class="row">
     <aside id="column-left1" class="col-sm-3 col-md-3 col-xs-12">

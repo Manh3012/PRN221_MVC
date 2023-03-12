@@ -1,16 +1,16 @@
-using BAL.Services.Implements;
-using BAL.Services.Interface;
 using DAL;
+using System.Text;
 using DAL.Entities;
 using DAL.Infacstucture;
-using DAL.Repositories.Implements;
+using BAL.Services.Interface;
+using BAL.Services.Implements;
 using DAL.Repositories.Interface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DAL.Repositories.Implements;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 

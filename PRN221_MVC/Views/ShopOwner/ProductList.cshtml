@@ -1,7 +1,9 @@
-﻿@{
-    ViewData["Title"] = "OrderHistory";
+﻿@model IEnumerable<DAL.Entities.Product>
+@{
+    ViewData["Title"] = "ProductList";
     Layout = "~/Views/Shared/_LayoutShopOwner.cshtml";
 }
+ 
 <div class="page-wrapper">
     <!-- Top Bar Start -->
     <div class="topbar">
@@ -110,21 +112,19 @@
                     </div>
                 </li>
 
-                <li class="dropdown">
+                                <li class="dropdown">
                     <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="#" role="button"
                        aria-haspopup="false" aria-expanded="false">
                         <span class="ms-1 nav-user-name hidden-sm">@Accessor.HttpContext.Session.GetString("Email")</span>
-                        <img src="assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
+                        <img src="~/admin/assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="@Url.ActionLink("ShopOwnerProfile","ShopOwner")"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
-
-
+                        <a class="dropdown-item" href="@Url.Action("ShopOwnerProfile", "ShopOwner")"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
                         <div class="dropdown-divider mb-0"></div>
-                        <a class="dropdown-item" href="@Url.ActionLink("Logout","Admin") "><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
-
+                        <a class="dropdown-item" href="@Url.Action("Logout", "Admin")"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
                     </div>
                 </li>
+
             </ul><!--end topbar-nav-->
 
             <ul class="list-unstyled topbar-nav mb-0">
@@ -135,7 +135,7 @@
                 </li>
                 <li class="creat-btn">
                     <div class="nav-link">
-                        <a class=" btn btn-sm btn-soft-primary" href="#" role="button"><i class="fas fa-plus me-2"></i>New Task</a>
+                        <a class=" btn btn-sm btn-soft-primary" href="@Url.ActionLink("CreateProduct","ShopOwner")" role="button"><i class="fas fa-plus me-2"></i>New Task</a>
                     </div>
                 </li>
             </ul>
@@ -148,101 +148,76 @@
         <div class="container-fluid">
             <!-- Page-Title -->
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-12">
                     <div class="page-title-box">
                         <div class="row">
                             <div class="col">
-                                <h4 class="page-title">Order History</h4>
-
+                                <h4 class="page-title">Product List</h4>
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="javascript:void(0);">Dastone</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript:void(0);">Ecommerce</a></li>
+                                    <li class="breadcrumb-item active">List</li>
+                                </ol>
                             </div><!--end col-->
+                            
                         </div><!--end row-->
                     </div><!--end page-title-box-->
                 </div><!--end col-->
             </div><!--end row-->
             <!-- end page title end breadcrumb -->
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h4 class="card-title">Order History</h4>
-                                </div><!--end col-->
-                            </div>  <!--end row-->
-                        </div><!--end card-header-->
-                        <div class="card-body">
-                            <div class="table-responsive browser_users">
-                                <table class="table mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Order ID</th>
-                                            <th>Total </th>
-                                            <th>User</th>
-                                            <th>Create Date</th>
-                                            <th>Action</th>
-                                        </tr><!--end tr-->
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in ViewBag.Orders)
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table id="datatable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Delete</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        <img src="@Url.Content(item.imgPath)" alt="" height="40">
+                                        <p class="d-inline-block align-middle mb-0">
+                                            <a href="#" class="d-inline-block align-middle mb-0 product-name">@item.Name</a>
+                                        </p>
+                                    </td>
+                                    <td>@item.Category.Name</td>
+                                    <td>$@item.Price</td>
+                                        @if (item.isAvailable == true)
                                         {
+                                            <td><span class="badge badge-soft-warning">Stock</span></td>
+                                        }else
+                                        {
+                                            <td><span class="badge badge-soft-danger">Out of Stock</span></td>
 
-                                        <tr>
-                                            <td>@item.ID</td>
-                                            <td>@item.Total</td>
-                                            <td>@item.User.Name</td>
-                                            <td>@item.CreatedDate</td>
-                                            <td><a class="nav-link" href="@Url.Action("OrderDetails", "ShopOwner", new { id = item.ID.ToString("D") })">View</a></td>
-                                        </tr>
-
-                                        <!--end tr-->
                                         }
-                                    </tbody>
-                                </table> <!--end table-->
-                            </div><!--end /div-->
-                        </div><!--end card-body-->
-                    </div><!--end card-->
-                </div> <!--end col-->
-                @*<div class="col-12">
-                <div>
-                <div class="card">
-                <div class="card-header">
-                <div class="row align-items-center">
-                <div class="col">
-                <h4 class="card-title">Order History</h4>
-                </div><!--end col-->
-                </div>  <!--end row-->
-                </div><!--end card-header-->
-                <div class="card-body">
-                <div class="table-responsive browser_users">
-                <table class="table mb-0">
-                <thead class="table-light">
-                <tr>
-                <th>Order ID</th>
-                <th>Total </th>
-                <th>User</th>
-                <th>Create Date</th>
-                </tr><!--end tr-->
-                </thead>
-                <tbody>
-                @foreach (var item in ViewBag.Orders)
-                {
-                <tr>
-                <td>@item.ID</td>
-                <td>@item.Total</td>
-                <td>@item.User.Name</td>
-                <td>@item.CreatedDate</td>
-                </tr>
+                                        <td>@item.isDeleted</td>
 
-                <!--end tr-->
-                }
-                </tbody>
-                </table> <!--end table-->
-                </div><!--end /div-->
-                </div><!--end card-body-->
-                </div><!--end card-->
-                </div>
+                                    <td>
+                                            <a asp-action="ProductDetail" asp-route-id="@item.ID">
+                                            <i class="las la-pen text-secondary font-16"></i>
 
-                </div> <!-- end col -->*@
+                                            </a>
+
+                                            <a asp-action="Delete" asp-route-id="@item.ID"><i class="las la-trash-alt text-secondary font-16"></i></a>
+
+                                        
+                                    </td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- end col -->
             </div> <!-- end row -->
 
         </div><!-- container -->
@@ -257,4 +232,18 @@
     </div>
     <!-- end page content -->
 </div>
+<!-- end page-wrapper -->
 
+<script src="~/admin/assets/js/jquery.min.js"></script>
+
+<!-- Required datatable js -->
+
+<script src="~/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/admin/plugins/datatables/dataTables.bootstrap5.min.js"></script>
+
+<script src="~/admin/assets/js/app.js"></script>
+
+
+<script>
+    $('#datatable').DataTable();
+</script>

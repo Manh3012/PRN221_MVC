@@ -22,7 +22,7 @@
                                             <h1>Discover new amazing grocery deals</h1>
                                             <p>The most healthy organic food is safe for health. </p>
 
-                                          
+
                                         </div>
                                     </div>
                                 </div>
@@ -38,7 +38,7 @@
                                             <h1>Organic fresh fruits for your health</h1>
                                             <p>Reach For Healthier You With Organic Fresh Foods Our Health Know Your Farmer Know Your Food.</p>
 
-                                          
+
                                         </div>
                                     </div>
                                 </div>
@@ -68,32 +68,32 @@
                     <h1 class="heading text-left"><span>Our category</span><p>Do not miss the current offers until the end of March.</p></h1>
                     <div class="row rless">
                         <div class="cat-img">
-                            @foreach(var category in Model.Categories)
+                            @foreach (var category in Model.Categories)
                             {
-                            <div class="block-cat-wr col-xs-12 cless">
-                                <div class="categorybr">
-                                    <a href="@Url.Action("Filter", "Product", new {id = category.ID})">
-                                        <img src="~/client/image/cache/catalog/category/5-120x120.png" class="img-responsive center-block" alt="">
+                                <div class="block-cat-wr col-xs-12 cless">
+                                    <div class="categorybr">
+                                        <a href="@Url.Action("Filter", "Product", new {id = category.ID})">
+                                            <img src="~/client/image/cache/catalog/category/5-120x120.png" class="img-responsive center-block" alt="">
 
-                                        <div class="catcontent">
-                                            <h2><span class="categorybor">@category.Name</span></h2>
-                                            <h6 class="catepro"> </h6>
-                                        </div>
-                                    </a>
+                                            <div class="catcontent">
+                                                <h2><span class="categorybor">@category.Name</span></h2>
+                                                <h6 class="catepro"> </h6>
+                                            </div>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
                             }
-                           
+
                         </div>
                     </div>
                 </div>
             </div>
 
-           
 
 
 
-           
+
+
 
 
             <div class="pro-img">
@@ -105,51 +105,45 @@
 
                         <div class="row rless">
                             <div class="feature">
-                                @foreach ( var product in Model.Products)
+                                @foreach (var product in Model.Products)
                                 {
-                                    if(product.isDeleted==false)
-                                {
-                                    <div class="multi-row">
-                                    <div class="product-layout col-xs-12 cless">
-                                        <div class="product-thumb transition">
-                                            <div class="image">
+                                    if (product.isDeleted == false)
+                                    {
+                                        <div class="multi-row">
+                                            <div class="product-layout col-xs-12 cless">
+                                                <div class="product-thumb transition">
+                                                    <div class="image">
                                                         <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" width="200px" height="200px" alt="Organic Cold Pressed Sunflower Cooking Oil" title="Organic Cold Pressed Sunflower Cooking Oil" class="img-responsive center-block" /></a>
-                                                <!-- Images Start -->
-                                                        <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" class="img-responsive second-img" alt="hover image" /></a>                                           
-                                                <!-- End -->
-                                            </div>
-
-                                            <div class="caption text-left">
-                                                        <h4 class="protitle"><a href="@Url.ActionLink("Details","Product",new { id = product.ID })">@product.Name</a></h4>
-                                                <div class="webi-main">
-                                                    <input type="hidden" name="product_id" value="42" />
-
-                                                </div>
-
-                                                <p class="price">
-                                                    <span data-update='price-42' class="price">$@product.Price </span>
-
-                                                </p>
-
-
-
-                                                <div class="homeqtinner">
-                                                    <div class="homeqt">
-
-
-                                                        <button type="button" onclick="qty.minus('42')" class="form-control pull-left btn-number btnminus dis-42" disabled="disabled">
-                                                            <span class="glyphicon glyphicon-minus"></span>
-                                                        </button>
-                                                        <input name="quantity" class="addhqty" type="text" value="1" size="2" min="1" max="999" id="input-quantity-42" class="form-control input-number pull-left" />
-                                                        <button type="button" onclick="qty.plus('42')" class="form-control pull-left btn-number btnplus">
-                                                            <span class="glyphicon glyphicon-plus"></span>
-                                                        </button>
+                                                        <!-- Images Start -->
+                                                        <a href="@Url.ActionLink("Details","Product",new { id = product.ID })"><img src="@Url.Content(product.imgPath)" class="img-responsive second-img" alt="hover image" /></a>
+                                                        <!-- End -->
                                                     </div>
-                                                    <input type="hidden" name="product_id" value="42" />
-                                                    @*@Html.ActionLink("Add","Add","Cart",new {ProductId="1",Quantity=1,},new { @class = "cartb add-to-cart", style = "color: white;"})*@
-                                                    <button type="button" class="cartb add-to-cart" onclick="addToCart(1,'input-quantity-42', '@Accessor.HttpContext.Session.GetString("_Email")')"><svg><use xlink:href="#pcart"></use></svg></button>
-                                                    <input type="hidden" name="hid-qty-msg" value="Quantity At Least One or More">
-                                                </div>
+
+                                                    <div class="caption text-left">
+                                                        <h4 class="protitle"><a href="@Url.ActionLink("Details","Product",new { id = product.ID })">@product.Name</a></h4>
+                                                        <div class="webi-main">
+                                                            <input type="hidden" name="product_id" value="42" />
+
+                                                        </div>
+                                                        <p class="price">
+                                                            <span data-update='price-42' class="price">$@product.Price </span>
+                                                        </p>
+                                                        <div class="homeqtinner">
+                                                            <div class="homeqt">
+                                                                <button type="button" onclick="qty.minus('@product.ID')" class="form-control pull-left btn-number btnminus dis-42" disabled="disabled">
+                                                                    <span class="glyphicon glyphicon-minus"></span>
+                                                                </button>
+                                                                <input name="quantity" class="addhqty" type="text" value="1" size="2" min="1" max="999" id="input-quantity-@product.ID" class="form-control input-number pull-left" />
+                                                                <button type="button" onclick="qty.plus('@product.ID')" class="form-control pull-left btn-number btnplus">
+                                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                                </button>
+
+                                                            </div>
+                                                            <input type="hidden" name="product_id" value="42" />
+                                                            @*@Html.ActionLink("Add","Add","Cart",new {ProductId="1",Quantity=1,},new { @class = "cartb add-to-cart", style = "color: white;"})*@
+                                                            <button type="button" class="cartb add-to-cart" onclick="addToCart(@product.ID)"><svg><use xlink:href="#pcart"></use></svg></button>
+                                                            <input type="hidden" name="hid-qty-msg" value="Quantity At Least One or More">
+                                                        </div>
                                                         <div class="button-group">
                                                             <div class="absbtn">
                                                                 <form method="post" asp-action="AddToWishList" asp-controller="Home" id="addToWishListForm">
@@ -183,40 +177,16 @@
                                                                             });
                                                                     }
                                                                 </script>
-
-
-
-
-
-
-
-
                                                             </div>
                                                             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
                                                             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
-
-
                                                         </div>
-
-
-
-
-
-
-
-
-
-
+                                                    </div>
+                                                </div>
                                             </div>
-
                                         </div>
-                                    </div>
-
-                                </div>
+                                    }
                                 }
-                            
-                                }
-
                             </div>
                         </div>
                     </div>
@@ -228,10 +198,10 @@
 
 
 
-          
+
 
             <script type="text/javascript">
-                                                                <!--
+                                                                                <!--
                 $("#newsletter_63f78f1b621c6").webiNewsletter().work('Email is not valid!');
                 --></script>
         </div>
