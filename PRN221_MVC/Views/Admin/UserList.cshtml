@@ -208,11 +208,19 @@
                                                     <td>@Data.Name</td>
                                                     <td>@Data.DoB</td>
                                                     <td>@Data.Address</td>
-                                                    <td>@if (Data.Gender.Equals("F"))
+                                                    <td>
+                                                        @try
                                                         {
-                                                            @Html.Raw("Female")
-                                                        }
-                                                        else
+                                                            @if (Data.Gender.Equals("M") || Data.Gender.Equals("") || Data.Gender == null)
+                                                            {
+                                                                @Html.Raw("Male")
+                                                            }
+                                                            else if (Data.Gender.Equals("F"))
+                                                            {
+                                                                @Html.Raw("FeMale")
+                                                            }
+
+                                                        }catch
                                                         {
                                                             @Html.Raw("Male")
                                                         }
