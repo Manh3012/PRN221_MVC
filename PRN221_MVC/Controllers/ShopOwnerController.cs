@@ -38,7 +38,7 @@ namespace PRN221_MVC.Controllers {
             var topSellingProductByMonth = ordersService.GetTopSellingProductsByMonth();
             var topSellingProductByWeek = ordersService.GetTopSellingProductsByWeek();
             var orderValuesInEachMonth = ordersService.GetOrderValuesInEachMonth();
-            var salesDataInEachMonth = ordersService.GetSalesDataMonthly(2023);
+            var salesDataInEachMonth = ordersService.GetSalesDataMonthly(year: year);
 
             foreach (var item in orderValuesInEachMonth) {
                 Console.WriteLine("Month | Total Amount | Total Quantity");

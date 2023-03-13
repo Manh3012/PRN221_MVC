@@ -22,7 +22,7 @@ namespace DAL.Repositories.Implements
         public List<Orders> GetTotalOrderToday()
         {
             DateTime today = DateTime.Today;
-
+            
             var orders = _dbContext.Orders.Where(o => o.CreatedDate == today);
             return orders.ToList();
         }
